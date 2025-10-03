@@ -1,0 +1,1134 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\..\FrameXML\UI.xsd">
+    <Script file="SlackSpotter.lua"/>
+    
+    <!-- Tab Button Template -->
+    <Button name="SS_TabTemplate" inherits="CharacterFrameTabButtonTemplate" virtual="true">
+        <Size>
+            <AbsDimension x="100" y="32"/>
+        </Size>        
+        <Scripts>
+            <OnClick>
+                PlaySound("igCharacterInfoTab")
+            </OnClick>
+        </Scripts>
+    </Button>
+    
+    <!-- Main Frame -->
+    <Frame name="SS_Frame" enableMouse="true" toplevel="true" parent="UIParent" hidden="true" movable="true">
+        <Size>
+            <AbsDimension x="840" y="840"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER"/>
+        </Anchors>
+        <HitRectInsets>
+            <AbsInset left="0" right="36" top="0" bottom="54"/>
+        </HitRectInsets>
+        <Layers>
+            <Layer level="BORDER">
+                <Texture file="Interface\PaperDollInfoFrame\UI-Character-General-TopLeft">
+                    <Size>
+                        <AbsDimension x="540" y="420"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="5" y="-2"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Texture>
+                <Texture file="Interface\PaperDollInfoFrame\UI-Character-General-TopRight">
+                    <Size>
+                        <AbsDimension x="300" y="420"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOPRIGHT">
+                            <Offset>
+                                <AbsDimension x="5" y="-2"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Texture>
+                <Texture file="Interface\TalentFrame\UI-TalentFrame-BotLeft">
+                    <Size>
+                        <AbsDimension x="540" y="420"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT">
+                            <Offset>
+                                <AbsDimension x="5" y="-2"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Texture>
+                <Texture file="Interface\TalentFrame\UI-TalentFrame-BotRight">
+                    <Size>
+                        <AbsDimension x="300" y="420"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="5" y="-2"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture name="SS_Frame_CustomBG" file="Interface\AddOns\SlackSpotter\SlackerBG">
+                    <Size>
+                        <AbsDimension x="690" y="548"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER">
+                            <Offset>
+                                <AbsDimension x="-25" y="22"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture name="SS_Frame_CustomIcon" file="Interface\AddOns\SlackSpotter\SlackerIconCircle">
+                    <Size>
+                        <AbsDimension x="96" y="96"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="30" y="-10"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Texture>
+                <FontString name="SS_Frame_TitleText" inherits="GameFontNormal" text="|cff00ff00SlackSpotter|r" font="Fonts\MORPHEUS.ttf">
+                    <FontHeight>
+                        <AbsValue val="70"/>
+                    </FontHeight>
+                    <Anchors>  
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="0" y="-25"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+                <FontString name="SS_Frame_SubtitleText1" inherits="GameFontNormal" text="|cffc0c0c0Slackers raid with empty hands, No flasks, no food, no battle plans.|r">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="25" y="-72"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+                <FontString name="SS_Frame_SubtitleText2" inherits="GameFontNormal" text="|cffc0c0c0They ride the parse, then dodge the blame— But logs reveal their silent shame!|r">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="25" y="-90"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>				
+                <FontString name="SS_Frame_BottomLeftText" inherits="GameFontNormal" text="Made by:     |cffffffffGahanaho|r from |cff00ff00-ERROR-|r     Tel'Abim |cffff0000Horde|r">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT">
+                            <Offset>
+                                <AbsDimension x="92" y="144"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+                <FontString name="SS_Frame_BottomRightText" inherits="GameFontNormal" text="V0.36 - 30th Sep 25">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-85" y="144"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <!-- Close Button -->
+            <Button name="SS_Frame_CloseButton" inherits="UIPanelCloseButton">
+                <Size>
+                    <AbsDimension x="54" y="49"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="CENTER" relativePoint="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-81" y="-41"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_Frame:Hide()
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- Tab Buttons -->
+            <Button name="SS_Tab1" inherits="SS_TabTemplate" text="Consumes/Buffs">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="30" y="95"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectTab(1)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="SS_Tab2" inherits="SS_TabTemplate" text="Shoutouts">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="SS_Tab1" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="-15" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectTab(2)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="SS_Tab3" inherits="SS_TabTemplate" text="Assignments">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="SS_Tab2" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="-15" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectTab(3)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="SS_Tab4" inherits="SS_TabTemplate" text="Tactics">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="SS_Tab3" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="-15" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectTab(4)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="SS_Tab5" inherits="SS_TabTemplate" text="Config Specs">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="SS_Tab4" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="-15" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectTab(5)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="SS_Tab6" inherits="SS_TabTemplate" text="Config Consumes">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="SS_Tab5" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="-15" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectTab(6)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- ========================================== -->
+            <!-- TAB 1: RAID BUFF CHECK PANEL (TOP-LEFT) -->
+            <!-- ========================================== -->
+            <Frame name="SS_Tab1_RaidBuffCheckPanel">
+                <Size>
+                    <AbsDimension x="240" y="140"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="30" y="-130"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Frames>
+                    <!-- Thorns Checkbox -->
+                    <CheckButton name="SS_Tab1_RaidBuffCheckPanel_ThornsCheckbox" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset><AbsDimension x="10" y="-10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>SS_Tab1_RaidBuffCheckPanel_ThornsCheckbox_OnClick()</OnClick>
+                        </Scripts>
+                    </CheckButton>
+                    <!-- Shadow Prot Checkbox -->
+                    <CheckButton name="SS_Tab1_RaidBuffCheckPanel_ShadowProtCheckbox" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_ThornsCheckbox" relativePoint="BOTTOMLEFT">
+                                <Offset><AbsDimension x="0" y="-5"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>SS_Tab1_RaidBuffCheckPanel_ShadowProtCheckbox_OnClick()</OnClick>
+                        </Scripts>
+                    </CheckButton>
+                    <!-- Emerald Bless Checkbox -->
+                    <CheckButton name="SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_ShadowProtCheckbox" relativePoint="BOTTOMLEFT">
+                                <Offset><AbsDimension x="0" y="-5"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox_OnClick()</OnClick>
+                        </Scripts>
+                    </CheckButton>
+                    <!-- Raid Buff Check Button -->
+                    <Button name="SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton" inherits="UIPanelButtonTemplate" text="Raid Buff Check">
+                        <Size><AbsDimension x="110" y="25"/></Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox" relativePoint="BOTTOMLEFT">
+                                <Offset><AbsDimension x="0" y="-10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                    <!-- Consume Check Button -->
+                    <Button name="SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton" inherits="UIPanelButtonTemplate" text="Consume Check">
+                        <Size><AbsDimension x="110" y="25"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                </Frames>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="SS_Tab1_RaidBuffCheckPanel_ThornsLabel" inherits="GameFontNormal" text="Thorns">
+                            <Anchors>
+                                <Anchor point="LEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_ThornsCheckbox" relativePoint="RIGHT">
+                                    <Offset><AbsDimension x="5" y="0"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab1_RaidBuffCheckPanel_ShadowProtLabel" inherits="GameFontNormal" text="Shadow Protection">
+                            <Anchors>
+                                <Anchor point="LEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_ShadowProtCheckbox" relativePoint="RIGHT">
+                                    <Offset><AbsDimension x="5" y="0"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab1_RaidBuffCheckPanel_EmeraldBlessLabel" inherits="GameFontNormal" text="Emerald Blessing">
+                            <Anchors>
+                                <Anchor point="LEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox" relativePoint="RIGHT">
+                                    <Offset><AbsDimension x="5" y="0"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+            
+            <!-- ========================================== -->
+            <!-- TAB 1: PROTECTION POTION PANEL (MIDDLE-LEFT) -->
+            <!-- ========================================== -->
+            <Frame name="SS_Tab1_ProtectionPotionPanel">
+                <Size>
+                    <AbsDimension x="240" y="130"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="-10"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Frames>
+                    <!-- Protection Potion Buttons (2 rows of 3) -->
+                    <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotArcaneButton" inherits="UIPanelButtonTemplate" text="Arcane">
+                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset><AbsDimension x="10" y="-10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotArcaneButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotFireButton" inherits="UIPanelButtonTemplate" text="Fire">
+                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotArcaneButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotFireButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotFrostButton" inherits="UIPanelButtonTemplate" text="Frost">
+                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotFireButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotFrostButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotNatureButton" inherits="UIPanelButtonTemplate" text="Nature">
+                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotArcaneButton" relativePoint="BOTTOMLEFT">
+                                <Offset><AbsDimension x="0" y="-5"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotNatureButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotShadowButton" inherits="UIPanelButtonTemplate" text="Shadow">
+                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotNatureButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotShadowButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotHolyButton" inherits="UIPanelButtonTemplate" text="Holy">
+                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotShadowButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotHolyButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                    <!-- List Everyone Checkbox -->
+                    <CheckButton name="SS_Tab1_ProtectionPotionPanel_ListEveryoneCheckbox" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotNatureButton" relativePoint="BOTTOMLEFT">
+                                <Offset><AbsDimension x="0" y="-10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>SS_Tab1_ProtectionPotionPanel_ListEveryoneCheckbox_OnClick()</OnClick>
+                        </Scripts>
+                    </CheckButton>
+                </Frames>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="SS_Tab1_ProtectionPotionPanel_ListEveryoneLabel" inherits="GameFontNormal" text="List everyone">
+                            <Anchors>
+                                <Anchor point="LEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ListEveryoneCheckbox" relativePoint="RIGHT">
+                                    <Offset><AbsDimension x="5" y="0"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+            
+            <!-- ========================================== -->
+            <!-- TAB 1: STATS PANEL (BOTTOM-LEFT) -->
+            <!-- ========================================== -->
+            <Frame name="SS_Tab1_StatsPanel">
+                <Size>
+                    <AbsDimension x="240" y="260"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ProtectionPotionPanel" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="-10"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="SS_Tab1_StatsPanel_TotalChecksLabel" inherits="GameFontNormal" text="Total Checks: 0">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="10" y="-10"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab1_StatsPanel_TotalFoundLabel" inherits="GameFontNormal" text="Found: 0">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeTo="SS_Tab1_StatsPanel_TotalChecksLabel" relativePoint="BOTTOMLEFT">
+                                    <Offset><AbsDimension x="0" y="-5"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab1_StatsPanel_TotalMissingLabel" inherits="GameFontNormal" text="Missing: 0">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeTo="SS_Tab1_StatsPanel_TotalFoundLabel" relativePoint="BOTTOMLEFT">
+                                    <Offset><AbsDimension x="0" y="-5"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab1_StatsPanel_MostFailedLabel" inherits="GameFontNormal" text="Most Failed:">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeTo="SS_Tab1_StatsPanel_TotalMissingLabel" relativePoint="BOTTOMLEFT">
+                                    <Offset><AbsDimension x="0" y="-10"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab1_StatsPanel_MostFailedList" inherits="GameFontNormal" text="">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeTo="SS_Tab1_StatsPanel_MostFailedLabel" relativePoint="BOTTOMLEFT">
+                                    <Offset><AbsDimension x="0" y="-5"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <!-- Three buttons in horizontal row -->
+                    <Button name="SS_Tab1_StatsPanel_RepPlusButton" inherits="UIPanelButtonTemplate" text="Rep+">
+                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="BOTTOMLEFT">
+                                <Offset><AbsDimension x="10" y="10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_StatsPanel_RepPlusButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab1_StatsPanel_RepMinusButton" inherits="UIPanelButtonTemplate" text="Rep-">
+                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab1_StatsPanel_RepPlusButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_StatsPanel_RepMinusButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab1_StatsPanel_ResetButton" inherits="UIPanelButtonTemplate" text="Reset Stats">
+                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab1_StatsPanel_RepMinusButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_StatsPanel_ResetButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+            
+            <!-- ========================================== -->
+            <!-- TAB 1: RAID LIST PANEL (RIGHT-SIDE) -->
+            <!-- ========================================== -->
+            <Frame name="SS_Tab1_RaidListPanel">
+                <Size>
+                    <AbsDimension x="520" y="590"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-40" y="-130"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="SS_Tab1_RaidListPanel_Header" inherits="GameFontNormalLarge" text="Overview Raid">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="15" y="-10"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab1_RaidListPanel_TableHeader" inherits="GameFontNormal" text="Raidmembers | Raidbuffs | Consumes">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="15" y="-50"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Button name="SS_Tab1_RaidListPanel_RefreshButton" inherits="UIPanelButtonTemplate" text="Refresh">
+                        <Size><AbsDimension x="80" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="TOPRIGHT">
+                                <Offset><AbsDimension x="-15" y="-10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_RaidListPanel_RefreshButton_OnClick()</OnClick></Scripts>
+                    </Button>
+                    
+                    <!-- Scroll Frame for Raid List -->
+                    <ScrollFrame name="SS_Tab1_RaidListPanel_ScrollFrame" inherits="FauxScrollFrameTemplate">
+                        <Size>
+                            <AbsDimension x="480" y="500"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset><AbsDimension x="15" y="-70"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnVerticalScroll>
+                                FauxScrollFrame_OnVerticalScroll(20, SS_Tab1_RaidListPanel_ScrollFrame_Update)
+                            </OnVerticalScroll>
+                        </Scripts>
+                    </ScrollFrame>
+                    
+                    <!-- Content Frame (25 dynamic rows created in Lua) -->
+                    <Frame name="SS_Tab1_RaidListPanel_Content">
+                        <Size>
+                            <AbsDimension x="480" y="500"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidListPanel_ScrollFrame">
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                    </Frame>
+                </Frames>
+            </Frame>
+            
+            <!-- ========================================== -->
+            <!-- TAB 5: CONFIG SPECS PANELS -->
+            <!-- ========================================== -->
+            
+            <!-- Left Panel: Buttons -->
+            <Frame name="SS_Tab5_ButtonPanel">
+                <Size>
+                    <AbsDimension x="180" y="100"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="30" y="-130"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Frames>
+                    <Button name="SS_Tab5_ButtonPanel_RefreshButton" inherits="UIPanelButtonTemplate" text="Refresh">
+                        <Size><AbsDimension x="100" y="25"/></Size>
+                        <Anchors>
+                            <Anchor point="TOP">
+                                <Offset><AbsDimension x="0" y="-15"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConfigSpecs_RefreshRaid()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab5_ButtonPanel_SaveButton" inherits="UIPanelButtonTemplate" text="Save Guild Specs">
+                        <Size><AbsDimension x="140" y="25"/></Size>
+                        <Anchors>
+                            <Anchor point="TOP" relativeTo="SS_Tab5_ButtonPanel_RefreshButton" relativePoint="BOTTOM">
+                                <Offset><AbsDimension x="0" y="-10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConfigSpecs_SaveGuildSpecs()</OnClick></Scripts>
+                    </Button>
+                </Frames>
+            </Frame>      			
+            <!-- Right Panel: Raid List (BIGGER) -->
+            <Frame name="SS_Tab5_RaidListPanel">
+                <Size>
+                    <AbsDimension x="580" y="590"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-40" y="-130"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="SS_Tab5_RaidListPanel_Header" inherits="GameFontNormalLarge" text="Raid Members">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="15" y="-10"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab5_RaidListPanel_TableHeader" inherits="GameFontNormal" text="Raidmember                    Chosen Spec">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="15" y="-35"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <!-- Scroll Frame -->
+                    <ScrollFrame name="SS_Tab5_RaidListPanel_ScrollFrame" inherits="FauxScrollFrameTemplate">
+                        <Size>
+                            <AbsDimension x="480" y="500"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset><AbsDimension x="15" y="-55"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnVerticalScroll>
+                                FauxScrollFrame_OnVerticalScroll(20, SS_ConfigSpecs_UpdateDisplay)
+                            </OnVerticalScroll>
+                        </Scripts>
+                    </ScrollFrame>
+                    
+                    <!-- Content Frame -->
+                    <Frame name="SS_Tab5_RaidListPanel_Content">
+                        <Size>
+                            <AbsDimension x="480" y="500"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab5_RaidListPanel_ScrollFrame">
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                    </Frame>
+                </Frames>
+            </Frame>
+			
+			<!-- ========================================== -->
+            <!-- TAB 6: CONSUME CONFIG PANELS -->
+            <!-- ========================================== -->
+            
+            <!-- Left Panel: Controls -->
+            <Frame name="SS_Tab6_ControlPanel">
+                <Size>
+                    <AbsDimension x="380" y="590"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="30" y="-130"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="SS_Tab6_RaidLabel" inherits="GameFontNormal" text="Raid:">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="15" y="-15"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab6_SpecLabel" inherits="GameFontNormal" text="Spec:">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="15" y="-95"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab6_MinRequiredLabel" inherits="GameFontNormal" text="Any X Consume:">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="15" y="-200"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <!-- Raid Buttons (2 rows of 5) -->
+                    <Button name="SS_Tab6_RaidButton_MC" inherits="UIPanelButtonTemplate" text="MC">
+                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-35"/></Offset></Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("MC")</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_RaidButton_BWL" inherits="UIPanelButtonTemplate" text="BWL">
+                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_MC" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("BWL")</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_RaidButton_AQ40" inherits="UIPanelButtonTemplate" text="AQ40">
+                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_BWL" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("AQ40")</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_RaidButton_Naxx" inherits="UIPanelButtonTemplate" text="Naxx">
+                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_AQ40" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("Naxx")</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_RaidButton_Kara40" inherits="UIPanelButtonTemplate" text="Kara40">
+                        <Size><AbsDimension x="60" y="20"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_Naxx" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("Kara40")</OnClick></Scripts>
+                    </Button>
+                    
+                    <!-- Second Row -->
+                    <Button name="SS_Tab6_RaidButton_Kara10" inherits="UIPanelButtonTemplate" text="Kara10">
+                        <Size><AbsDimension x="60" y="20"/></Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab6_RaidButton_MC" relativePoint="BOTTOMLEFT">
+                                <Offset><AbsDimension x="0" y="-5"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("Kara10")</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_RaidButton_ES" inherits="UIPanelButtonTemplate" text="ES">
+                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_Kara10" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("ES")</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_RaidButton_AQ20" inherits="UIPanelButtonTemplate" text="AQ20">
+                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_ES" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("AQ20")</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_RaidButton_ZG" inherits="UIPanelButtonTemplate" text="ZG">
+                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_AQ20" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("ZG")</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_RaidButton_Ony" inherits="UIPanelButtonTemplate" text="Ony">
+                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_ZG" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("Ony")</OnClick></Scripts>
+                    </Button>
+                    
+                    <!-- Spec Buttons Container (created dynamically in Lua) -->
+                    <Frame name="SS_Tab6_SpecButtonContainer">
+                        <Size><AbsDimension x="350" y="90"/></Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset><AbsDimension x="15" y="-115"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                    </Frame>
+                    
+                    <!-- Spec Buttons (3 rows) - Will be created dynamically in Lua -->
+                    
+                    <!-- Min Required Checkboxes (1-4) -->
+                    <CheckButton name="SS_Tab6_MinRequiredCheckbox1" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-220"/></Offset></Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_MinRequiredCheckbox_OnClick(1)</OnClick></Scripts>
+                    </CheckButton>
+                    <CheckButton name="SS_Tab6_MinRequiredCheckbox2" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_MinRequiredCheckbox1" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="30" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_MinRequiredCheckbox_OnClick(2)</OnClick></Scripts>
+                    </CheckButton>
+                    <CheckButton name="SS_Tab6_MinRequiredCheckbox3" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_MinRequiredCheckbox2" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="30" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_MinRequiredCheckbox_OnClick(3)</OnClick></Scripts>
+                    </CheckButton>
+                    <CheckButton name="SS_Tab6_MinRequiredCheckbox4" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_MinRequiredCheckbox3" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="30" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_MinRequiredCheckbox_OnClick(4)</OnClick></Scripts>
+                    </CheckButton>
+                    
+					<!-- Min Required Labels -->
+                    <Frame name="SS_Tab6_MinRequiredLabels">
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <FontString inherits="GameFontNormalSmall" text="1">
+                                    <Anchors>
+                                        <Anchor point="LEFT" relativeTo="SS_Tab6_MinRequiredCheckbox1" relativePoint="RIGHT">
+                                            <Offset><AbsDimension x="5" y="0"/></Offset>
+                                        </Anchor>
+                                    </Anchors>
+                                </FontString>
+                                <FontString inherits="GameFontNormalSmall" text="2">
+                                    <Anchors>
+                                        <Anchor point="LEFT" relativeTo="SS_Tab6_MinRequiredCheckbox2" relativePoint="RIGHT">
+                                            <Offset><AbsDimension x="5" y="0"/></Offset>
+                                        </Anchor>
+                                    </Anchors>
+                                </FontString>
+                                <FontString inherits="GameFontNormalSmall" text="3">
+                                    <Anchors>
+                                        <Anchor point="LEFT" relativeTo="SS_Tab6_MinRequiredCheckbox3" relativePoint="RIGHT">
+                                            <Offset><AbsDimension x="5" y="0"/></Offset>
+                                        </Anchor>
+                                    </Anchors>
+                                </FontString>
+                                <FontString inherits="GameFontNormalSmall" text="4">
+                                    <Anchors>
+                                        <Anchor point="LEFT" relativeTo="SS_Tab6_MinRequiredCheckbox4" relativePoint="RIGHT">
+                                            <Offset><AbsDimension x="5" y="0"/></Offset>
+                                        </Anchor>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                    </Frame>
+					
+                    <!-- Action Buttons -->
+                    <Button name="SS_Tab6_SaveButton" inherits="UIPanelButtonTemplate" text="Save">
+                        <Size><AbsDimension x="80" y="25"/></Size>
+                        <Anchors>
+                            <Anchor point="BOTTOMLEFT"><Offset><AbsDimension x="15" y="15"/></Offset></Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_Save()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_LoadButton" inherits="UIPanelButtonTemplate" text="Load">
+                        <Size><AbsDimension x="80" y="25"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_SaveButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_Load()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_DeleteButton" inherits="UIPanelButtonTemplate" text="Delete">
+                        <Size><AbsDimension x="80" y="25"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_LoadButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_Delete()</OnClick></Scripts>
+                    </Button>
+                    <Button name="SS_Tab6_LoadPresetsButton" inherits="UIPanelButtonTemplate" text="Load Presets">
+                        <Size><AbsDimension x="100" y="25"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab6_DeleteButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_LoadPresets()</OnClick></Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+            
+            <!-- Right Panel: Consume List -->
+            <Frame name="SS_Tab6_ConsumeListPanel">
+                <Size>
+                    <AbsDimension x="380" y="590"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-40" y="-130"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+				<Scripts>
+                    <OnLoad>
+                        this:EnableMouseWheel(1)
+                    </OnLoad>
+                    <OnMouseWheel>
+                        if arg1 > 0 then
+                            SS_ConsumeConfig_ScrollUp()
+                        else
+                            SS_ConsumeConfig_ScrollDown()
+                        end
+                    </OnMouseWheel>
+                </Scripts>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="SS_Tab6_ConsumeListHeader" inherits="GameFontNormalLarge" text="Consumables">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="15" y="-15"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <!-- Show All Checkbox -->
+                    <CheckButton name="SS_Tab6_ShowAllCheckbox" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="TOPRIGHT">
+                                <Offset><AbsDimension x="-100" y="-15"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConsumeConfig_ShowAllCheckbox_OnClick()</OnClick></Scripts>
+                    </CheckButton>
+					
+					<!-- Show All Label -->
+                    <Frame name="SS_Tab6_ShowAllLabelFrame">
+                        <Anchors>
+                            <Anchor point="TOPRIGHT">
+                                <Offset><AbsDimension x="-15" y="-15"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <FontString name="SS_Tab6_ShowAllLabel" inherits="GameFontNormalSmall" text="Show All">
+                                    <Anchors>
+                                        <Anchor point="LEFT" relativeTo="SS_Tab6_ShowAllCheckbox" relativePoint="RIGHT">
+                                            <Offset><AbsDimension x="5" y="0"/></Offset>
+                                        </Anchor>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                    </Frame>
+                    
+                    <!-- Scroll Frame -->
+                    <ScrollFrame name="SS_Tab6_ConsumeListScrollFrame" inherits="FauxScrollFrameTemplate">
+                        <Size>
+                            <AbsDimension x="340" y="500"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset><AbsDimension x="15" y="-45"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                    </ScrollFrame>
+					
+					<!-- Scroll Up Button -->
+                    <Button name="SS_Tab6_ConsumeListScrollUp" inherits="UIPanelScrollUpButtonTemplate">
+                        <Anchors>
+                            <Anchor point="BOTTOMRIGHT" relativeTo="SS_Tab6_ConsumeListScrollFrame" relativePoint="TOPRIGHT">
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>SS_ConsumeConfig_ScrollUp()</OnClick>
+                        </Scripts>
+                    </Button>
+                    
+                    <!-- Scroll Down Button -->
+                    <Button name="SS_Tab6_ConsumeListScrollDown" inherits="UIPanelScrollDownButtonTemplate">
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" relativeTo="SS_Tab6_ConsumeListScrollFrame" relativePoint="BOTTOMRIGHT">
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>SS_ConsumeConfig_ScrollDown()</OnClick>
+                        </Scripts>
+                    </Button>
+                    
+                    <!-- Content Frame -->
+                    <Frame name="SS_Tab6_ConsumeListPanel_Content" enableMouse="false">
+                        <Size>
+                            <AbsDimension x="340" y="500"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab6_ConsumeListScrollFrame">
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                    </Frame>
+                </Frames>
+            </Frame>
+			
+        </Frames>
+        <Scripts>
+            <OnShow>
+                PlaySound("TalentScreenOpen")
+            </OnShow>
+            <OnHide>
+                PlaySound("TalentScreenClose")
+            </OnHide>
+            <OnDragStart>
+                SS_Frame:StartMoving()
+            </OnDragStart>
+            <OnDragStop>
+                SS_Frame:StopMovingOrSizing()
+            </OnDragStop>
+        </Scripts>
+    </Frame>
+</Ui>
