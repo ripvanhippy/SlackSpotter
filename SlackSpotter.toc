@@ -9,6 +9,12 @@ SlackSpotter.xml
 SlackSpotter.lua
 Shoutouts.lua
 ConfigSpecs.lua
+MappingData.lua
 ConsumeData.lua
 ConsumePresets.lua
+CheckConsumes.lua
+RaidBuffCheck.lua
+RaidBuffAnnounce.lua
+DisplayRaidList.lua
+Announcements.lua
 ConsumeConfig.lua

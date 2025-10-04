@@ -7,6 +7,12 @@
 -- GLOBAL STATE VARIABLES
 -- ============================================================================
 SS_CurrentTab = 1  -- Currently selected tab (1-6)
+--Selected raid buffs for checking
+SS_RaidBuffs_Selected = {
+    Thorns = false,
+    ShadowProtection = false,
+    EmeraldBlessing = false
+}
 
 -- ============================================================================
 -- FRAME INITIALIZATION
@@ -148,28 +154,53 @@ end
 -- ============================================================================
 
 function SS_Tab1_RaidBuffCheckPanel_ThornsCheckbox_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Thorns checkbox clicked (placeholder)")
-    -- TODO: Implement thorns checking logic
+    SS_RaidBuffs_Selected.Thorns = this:GetChecked()
 end
 
 function SS_Tab1_RaidBuffCheckPanel_ShadowProtCheckbox_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Shadow Protection checkbox clicked (placeholder)")
-    -- TODO: Implement shadow prot checking logic
+    SS_RaidBuffs_Selected.ShadowProtection = this:GetChecked()
 end
 
 function SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Emerald Blessing checkbox clicked (placeholder)")
-    -- TODO: Implement emerald blessing checking logic
+    SS_RaidBuffs_Selected.EmeraldBlessing = this:GetChecked()
 end
 
 function SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Raid Buff Check clicked (placeholder)")
-    -- TODO: Check and announce raid buffs
+    -- Auto-refresh: check buffs before announcing
+    local buffResults = SS_RaidBuff_CheckEntireRaid()
+    
+    -- Send announcements
+    if GetNumRaidMembers() > 0 then
+        SS_RaidBuffAnnounce_SendToRaid(buffResults)
+    else
+        SS_RaidBuffAnnounce_SendToSelf(buffResults)
+    end
 end
 
 function SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Consume Check clicked - announcing to raid (placeholder)")
-    -- TODO: This triggers the old "To Raid" logic (announce missing consumes)
+    -- Auto-refresh: Run consume check before announcing
+    -- This ensures we always have current data even if user forgot to click Refresh
+    local raidInstance = SS_ConsumeConfig_CurrentRaid or "Kara40"
+    local results = SS_Check_CheckEntireRaid(raidInstance)
+    
+    -- Store results for display
+    SS_Display_RaidResults = results
+    SS_Display_UpdateRaidList()
+    
+    -- Check if we have any results
+    if not results or not next(results) then
+        DEFAULT_CHAT_FRAME:AddMessage("|cffff8000No raid members to check!|r")
+        return
+    end
+    
+    -- Send announcement to appropriate channel
+    if GetNumRaidMembers() > 0 then
+        -- In raid: send to raid chat
+        SS_Announce_SendToRaid(results, raidInstance)
+    else
+        -- Solo: send to self (chat window)
+        SS_Announce_SendToSelf(results, raidInstance)
+    end
 end
 
 -- ============================================================================
@@ -235,12 +266,55 @@ end
 -- ============================================================================
 
 function SS_Tab1_RaidListPanel_RefreshButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Refresh clicked - loading raid and checking (placeholder)")
-    -- TODO: This triggers old "Consumecheck" logic:
-    -- 1. Load current raid members
-    -- 2. Check all consumes
-    -- 3. Check all raid buffs
-    -- 4. Update the table display
+    local raidInstance = SS_ConsumeConfig_CurrentRaid or "Kara40"
+    
+    -- Run consume check
+    local consumeResults = SS_Check_CheckEntireRaid(raidInstance)
+    
+    -- Run raid buff check
+    local buffResults = SS_RaidBuff_CheckEntireRaid()
+    
+    -- Merge results for display
+    for playerName, consumeData in pairs(consumeResults) do
+        local buffData = buffResults[playerName]
+        if buffData then
+            consumeData.buffsFound = buffData.buffsFound
+            consumeData.buffsRequired = buffData.buffsRequired
+            consumeData.buffsMissing = buffData.missing
+            consumeData.class = buffData.class  -- Ensure class is set
+        end
+    end
+    
+    -- Add players who have buff results but no consume results
+    for playerName, buffData in pairs(buffResults) do
+        if not consumeResults[playerName] then
+            consumeResults[playerName] = {
+                class = buffData.class,
+                spec = buffData.spec,
+                found = 0,
+                required = 0,
+                missing = {},
+                passed = true,
+                buffsFound = buffData.buffsFound,
+                buffsRequired = buffData.buffsRequired,
+                buffsMissing = buffData.missing
+            }
+        end
+    end
+    
+    -- Store merged results and display
+    SS_Display_RaidResults = consumeResults
+    SS_Display_UpdateRaidList()
+    
+    -- Show summary in chat
+    local totalPassed = 0
+    local totalChecked = 0
+    for _, data in pairs(consumeResults) do
+        totalChecked = totalChecked + 1
+        if data.passed then totalPassed = totalPassed + 1 end
+    end
+    
+    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00Check complete: " .. totalPassed .. "/" .. totalChecked .. " passed consumes|r")
 end
 
 function SS_Tab1_RaidListPanel_ScrollFrame_Update()
@@ -300,14 +374,35 @@ end
 -- EVENT HANDLING
 -- ============================================================================
 
+-- Prevent double-initialization
+if not SlackSpotter_Initialized then
+    SlackSpotter_Initialized = false
+end
+
 local SS_EventFrame = CreateFrame("Frame")
 SS_EventFrame:RegisterEvent("ADDON_LOADED")
 SS_EventFrame:SetScript("OnEvent", function()
+
+
+
     if event == "ADDON_LOADED" and arg1 == "SlackSpotter" then
+	        -- Check if already initialized this session
+        if SlackSpotter_Initialized then
+            return
+        end
+        SlackSpotter_Initialized = true
+        -- Unregister immediately to prevent double-fire
+        SS_EventFrame:UnregisterEvent("ADDON_LOADED")
+        
         -- Initialize main frame (after XML loaded)
         SS_InitializeFrame()
         
-        -- Initialize Shoutouts module
+        -- Initialize MappingData module
+        if SS_MappingData_Initialize then
+            SS_MappingData_Initialize()
+        end
+		
+		-- Initialize Shoutouts module
         if SS_Shoutouts_Initialize then
             SS_Shoutouts_Initialize()
         end
@@ -316,10 +411,35 @@ SS_EventFrame:SetScript("OnEvent", function()
         if SS_ConfigSpecs_Initialize then
             SS_ConfigSpecs_Initialize()
         end
-		
-		-- Initialize ConsumeConfig module
+        
+        -- Initialize ConsumeConfig module
         if SS_ConsumeConfig_Initialize then
             SS_ConsumeConfig_Initialize()
+        end
+        
+        -- Initialize CheckConsumes module
+        if SS_Check_Initialize then
+            SS_Check_Initialize()
+        end
+		
+		-- Initialize RaidBuff module
+        if SS_RaidBuff_Initialize then
+            SS_RaidBuff_Initialize()
+        end
+        
+        -- Initialize RaidBuffAnnounce module
+        if SS_RaidBuffAnnounce_Initialize then
+            SS_RaidBuffAnnounce_Initialize()
+        end
+        
+        -- Initialize Display module
+        if SS_Display_Initialize then
+            SS_Display_Initialize()
+        end
+        
+        -- Initialize Announcements module
+        if SS_Announce_Initialize then
+            SS_Announce_Initialize()
         end
         
         -- Auto-load consume config from SavedVariables

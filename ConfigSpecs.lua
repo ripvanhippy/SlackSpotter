@@ -56,7 +56,7 @@ SS_ConfigSpecs_ClassColors = {
 -- ============================================================================
 
 -- Convert UPPERCASE class to Proper Case (WARRIOR -> Warrior)
-local function SS_ConfigSpecs_ProperCase(str)
+function SS_ConfigSpecs_ProperCase(str)
     if not str or str == "" then return "" end
     return string.upper(string.sub(str, 1, 1)) .. string.lower(string.sub(str, 2))
 end
