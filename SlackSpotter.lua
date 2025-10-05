@@ -17,6 +17,9 @@ SS_RaidBuffs_Selected = {
 -- Protection potion list mode
 SS_ListEveryoneProtection = false
 
+-- Debug mode
+SS_DebugMode = false
+
 -- ============================================================================
 -- FRAME INITIALIZATION
 -- ============================================================================
@@ -114,6 +117,30 @@ end)
     button:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
+end
+
+-- ============================================================================
+-- DEBUG MODE TOGGLE
+-- ============================================================================
+
+function SS_Debug_Toggle()
+    SS_DebugMode = not SS_DebugMode
+    
+    local checkbox = getglobal("SS_DebugButton")
+    if checkbox then
+        checkbox:SetChecked(SS_DebugMode)
+    end
+    
+    -- Update Tab 6 display if currently visible
+    if SS_CurrentTab == 6 and SS_ConsumeConfig_UpdateDisplay then
+        SS_ConsumeConfig_UpdateDisplay()
+    end
+    
+    if SS_DebugMode then
+        DEFAULT_CHAT_FRAME:AddMessage("|cffff8000Debug mode enabled|r")
+    else
+        DEFAULT_CHAT_FRAME:AddMessage("|cffff8000Debug mode disabled|r")
+    end
 end
 
 -- ============================================================================
@@ -466,8 +493,7 @@ function SS_Tab1_RaidListPanel_RefreshButton_OnClick()
 end
 
 function SS_Tab1_RaidListPanel_ScrollFrame_Update()
-    -- TODO: Update visible raid member rows based on scroll position
-    DEFAULT_CHAT_FRAME:AddMessage("Scroll update (placeholder)")
+    SS_Display_UpdateRaidList()
 end
 
 -- ============================================================================

@@ -1113,7 +1113,38 @@
                         </Anchors>
                     </Frame>
                 </Frames>
-            </Frame>
+                
+			</Frame>
+			
+			<!-- ========================================== -->
+            <!-- DEBUG BUTTON (Bottom-Right, Always Visible) -->
+            <!-- ========================================== -->
+            <CheckButton name="SS_DebugButton" inherits="UICheckButtonTemplate">
+                <Size>
+                    <AbsDimension x="24" y="24"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT">
+                        <Offset>
+                            <AbsDimension x="-10" y="10"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>SS_Debug_Toggle()</OnClick>
+                </Scripts>
+            </CheckButton>
+            
+            <FontString name="SS_DebugButtonText" inherits="GameFontNormalSmall" text="Debug">
+                <Anchors>
+                    <Anchor point="RIGHT" relativeTo="SS_DebugButton" relativePoint="LEFT">
+                        <Offset>
+                            <AbsDimension x="-5" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+			<!-- debug button ends here-->
 			
         </Frames>
         <Scripts>

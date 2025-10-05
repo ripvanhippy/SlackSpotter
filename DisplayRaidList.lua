@@ -18,6 +18,12 @@ SS_Display_RowHeight = 20
 function SS_Display_UpdateRaidList()
     local content = getglobal("SS_Tab1_RaidListPanel_Content")
     if not content then return end
+	
+	-- Get scroll offset from FauxScrollFrame
+    local scrollFrame = getglobal("SS_Tab1_RaidListPanel_ScrollFrame")
+    if scrollFrame then
+        SS_Display_ScrollOffset = FauxScrollFrame_GetOffset(scrollFrame)
+    end
     
     -- Check if results exist
     if not SS_Display_RaidResults or not next(SS_Display_RaidResults) then
@@ -64,7 +70,7 @@ table.sort(memberList, function(a, b)
 end)
 	
     -- Sort by name
-    table.sort(memberList, function(a, b) return a.name < b.name end)
+    --table.sort(memberList, function(a, b) return a.name < b.name end)
     
     -- Display visible rows
     for i = 1, SS_Display_MaxVisibleRows do
@@ -76,6 +82,12 @@ end)
             local row = getglobal("SS_Tab1_RaidRow" .. i)
             if row then row:Hide() end
         end
+    end
+	
+	-- Update FauxScrollFrame
+    local scrollFrame = getglobal("SS_Tab1_RaidListPanel_ScrollFrame")
+    if scrollFrame then
+        FauxScrollFrame_Update(scrollFrame, table.getn(memberList), SS_Display_MaxVisibleRows, SS_Display_RowHeight)
     end
 end
 

@@ -441,8 +441,15 @@ function SS_ConsumeConfig_CreateConsumeRow(rowIndex, item)
     row.nameLabel:Show()
     row.effectLabel:Show()
     
-    -- Update row data
+    -- Update row data;	
+    -- Show ID in debug mode
+if SS_DebugMode then
+    local consumeID = SS_ConsumeData_NameToID[item.name] or "?"
+    row.nameLabel:SetText("#" .. consumeID .. " - " .. item.name)
+else
     row.nameLabel:SetText(item.name)
+end
+    -- end of debug mode
     row.effectLabel:SetText(item.effect)
     
     local isChecked = SS_ConsumeConfig_CheckedConsumes[item.name]

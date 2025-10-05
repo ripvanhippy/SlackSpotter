@@ -66,23 +66,6 @@ end
 -- ============================================================================
 function SS_ConfigSpecs_RefreshRaid()
     SS_ConfigSpecs_RaidMembers = {}
-	
-	-- Sort by class order, then by name
-local classOrder = {
-    ["Warrior"] = 1, ["Paladin"] = 2, ["Hunter"] = 3, ["Shaman"] = 4,
-    ["Rogue"] = 5, ["Druid"] = 6, ["Priest"] = 7, ["Mage"] = 8, ["Warlock"] = 9
-}
-
-table.sort(SS_ConfigSpecs_RaidMembers, function(a, b)
-    local orderA = classOrder[a.class] or 99
-    local orderB = classOrder[b.class] or 99
-    
-    if orderA == orderB then
-        return a.name < b.name  -- Same class: sort by name
-    else
-        return orderA < orderB  -- Different class: sort by class order
-    end
-end)
     
     local numRaidMembers = GetNumRaidMembers()
     if numRaidMembers > 0 then
@@ -109,6 +92,23 @@ end)
         })
     end
     
+		-- Sort by class order, then by name
+local classOrder = {
+    ["Warrior"] = 1, ["Paladin"] = 2, ["Hunter"] = 3, ["Shaman"] = 4,
+    ["Rogue"] = 5, ["Druid"] = 6, ["Priest"] = 7, ["Mage"] = 8, ["Warlock"] = 9
+}
+	
+	table.sort(SS_ConfigSpecs_RaidMembers, function(a, b)
+    local orderA = classOrder[a.class] or 99
+    local orderB = classOrder[b.class] or 99
+    
+    if orderA == orderB then
+        return a.name < b.name  -- Same class: sort by name
+    else
+        return orderA < orderB  -- Different class: sort by class order
+    end
+end)
+	
     SS_ConfigSpecs_ScrollOffset = 0
     SS_ConfigSpecs_UpdateDisplay()
     

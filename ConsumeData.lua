@@ -220,3 +220,66 @@ SS_ConsumeData_ConsumableRoles = {
     ["Winterfall Firewater"] = {"Physical", "PhysRanged", "Tanks"},
 	["Battle Shout (TEST)"] = {"Physical"}
 }
+
+-- ============================================================================
+-- CONSUME ID MAPPING (for compact presets)
+-- Maps numeric IDs to consume names for preset storage
+-- ============================================================================
+SS_ConsumeData_IDMapping = {
+    [1] = "Flask of the Titans",
+    [2] = "Flask of Supreme Power",
+    [3] = "Flask of Distilled Wisdom",
+    [4] = "Flask of Chromatic Resistance",
+    [5] = "Elixir of the Mongoose",
+    [6] = "Elixir of Giants",
+    [7] = "Elixir of Superior Defense",
+    [8] = "Elixir of Greater Firepower",
+    [9] = "Elixir of Greater Arcane Power",
+    [10] = "Elixir of Frost Power",
+    [11] = "Elixir of Shadow Power",
+    [12] = "Elixir of Healing Power",
+    [13] = "Elixir of Greater Intellect",
+    [14] = "Elixir of Greater Agility",
+    [15] = "Greater Arcane Elixir",
+    [16] = "Elixir of the Sages",
+    [17] = "Elixir of Fortitude",
+    [18] = "Blessed Sunfruit Juice",
+    [19] = "Rumsey Rum Black Label",
+    [20] = "Kreeg's Stout Beatdown",
+    [21] = "Gordok Green Grog",
+    [22] = "R.O.I.D.S.",
+    [23] = "Ground Scorpok Assay",
+    [24] = "Cerebral Cortex Compound",
+    [25] = "Gizzard Gum",
+    [26] = "Lung Juice Cocktail",
+    [27] = "Juju Power",
+    [28] = "Juju Might",
+    [29] = "Juju Flurry",
+    [30] = "Juju Chill",
+    [31] = "Spirit of Zanza",
+    [32] = "Swiftness of Zanza",
+    [33] = "Sheen of Zanza",
+    [34] = "Greater Fire Protection Potion",
+    [35] = "Greater Frost Protection Potion",
+    [36] = "Greater Nature Protection Potion",
+    [37] = "Greater Arcane Protection Potion",
+    [38] = "Greater Shadow Protection Potion",
+    [39] = "Greater Holy Protection Potion",
+    [40] = "Mighty Rage Potion",
+    [41] = "Mageblood Potion",
+    [42] = "Winterfall Firewater",
+    [43] = "Elixir of Brute Force",
+    [44] = "Elixir of the Honored Dead",
+    [45] = "Gift of Arthas",
+    [46] = "Smoked Desert Dumplings",
+    [47] = "Dirge's Kickin' Chimaerok Chops",
+    [48] = "Blessed Sunfruit",
+    [49] = "Nightfin Soup",
+    [50] = "Grilled Squid"
+}
+
+-- Reverse mapping: name -> ID
+SS_ConsumeData_NameToID = {}
+for id, name in pairs(SS_ConsumeData_IDMapping) do
+    SS_ConsumeData_NameToID[name] = id
+end
