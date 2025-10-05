@@ -121,23 +121,96 @@ end
 
 -- Update "Any X Consume" checkbox availability
 function SS_ConsumeConfig_UpdateMinRequiredCheckboxes()
-    local checkedCount = SS_ConsumeConfig_GetCheckedCount()
+    -- Get currently checked consumes
+    local checkedConsumes = {}
+    for consumeName, isChecked in pairs(SS_ConsumeConfig_CheckedConsumes) do
+        if isChecked then
+            table.insert(checkedConsumes, consumeName)
+        end
+    end
     
-    -- Update checkboxes 1-4 based on how many consumes are selected
-    for i = 1, 4 do
-        local checkbox = getglobal("SS_Tab6_MinRequiredCheckbox"..i)
-        if checkbox then
-            if i <= checkedCount then
-                -- Enable if we have enough consumes selected
-                checkbox:Enable()
-                checkbox:SetAlpha(1.0)
-            else
-                -- Disable and uncheck if not enough consumes
+    if table.getn(checkedConsumes) == 0 then
+        -- No consumes selected - disable all checkboxes
+        for i = 1, 4 do
+            local checkbox = getglobal("SS_Tab6_MinRequiredCheckbox" .. i)
+            if checkbox then
+                checkbox:SetChecked(false)
                 checkbox:Disable()
                 checkbox:SetAlpha(0.3)
+            end
+        end
+        SS_ConsumeConfig_MinRequired = 0
+        return
+    end
+    
+    -- Group consumes by consume groups (same logic as CheckConsumes.lua)
+    local grouped = {}
+    local processed = {}
+    
+    -- Check each consume group
+    for groupIndex = 1, table.getn(SS_ConsumeData_Groups) do
+        local groupData = SS_ConsumeData_Groups[groupIndex]
+        local consumesInThisGroup = {}
+        
+        for i = 1, table.getn(checkedConsumes) do
+            local consumeName = checkedConsumes[i]
+            if not processed[consumeName] then
+                for j = 1, table.getn(groupData.consumes) do
+                    if groupData.consumes[j] == consumeName then
+                        table.insert(consumesInThisGroup, consumeName)
+                        processed[consumeName] = true
+                        break
+                    end
+                end
+            end
+        end
+        
+        -- If 2+ consumes from same group, count as ONE requirement
+        if table.getn(consumesInThisGroup) >= 2 then
+            table.insert(grouped, {isGroup = true, count = 1})
+        elseif table.getn(consumesInThisGroup) == 1 then
+            table.insert(grouped, {isGroup = false, count = 1})
+        end
+    end
+    
+    -- Add ungrouped consumes
+    for i = 1, table.getn(checkedConsumes) do
+        local consumeName = checkedConsumes[i]
+        if not processed[consumeName] then
+            table.insert(grouped, {isGroup = false, count = 1})
+        end
+    end
+    
+    -- Calculate actual requirement count (after grouping)
+    local actualCount = table.getn(grouped)
+    
+    -- Maximum allowed checkbox = actualCount - 1
+    -- (Can't have "Any X" where X = total, that's just normal checking)
+    local maxAllowed = actualCount - 1
+    if maxAllowed < 0 then maxAllowed = 0 end
+    
+    -- Update checkboxes 1-4
+    for i = 1, 4 do
+        local checkbox = getglobal("SS_Tab6_MinRequiredCheckbox" .. i)
+        if checkbox then
+            if i <= maxAllowed then
+                -- Enable this checkbox
+                checkbox:Enable()
+                checkbox:SetAlpha(1.0)
+                
+                -- Keep current state if still valid
+                if SS_ConsumeConfig_MinRequired == i then
+                    checkbox:SetChecked(true)
+                end
+            else
+                -- Disable this checkbox
+                checkbox:Disable()
+                checkbox:SetAlpha(0.3)
+                checkbox:SetChecked(false)
+                
+                -- If this was selected, clear it
                 if SS_ConsumeConfig_MinRequired == i then
                     SS_ConsumeConfig_MinRequired = 0
-                    checkbox:SetChecked(false)
                 end
             end
         end

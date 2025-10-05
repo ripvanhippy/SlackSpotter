@@ -44,6 +44,25 @@ function SS_Display_UpdateRaidList()
         })
     end
     
+	-- Sort by class order, then by name
+local classOrder = {
+    ["WARRIOR"] = 1, ["PALADIN"] = 2, ["HUNTER"] = 3, ["SHAMAN"] = 4,
+    ["ROGUE"] = 5, ["DRUID"] = 6, ["PRIEST"] = 7, ["MAGE"] = 8, ["WARLOCK"] = 9
+}
+
+table.sort(memberList, function(a, b)
+    local classA = string.upper(a.class)
+    local classB = string.upper(b.class)
+    local orderA = classOrder[classA] or 99
+    local orderB = classOrder[classB] or 99
+    
+    if orderA == orderB then
+        return a.name < b.name  -- Same class: sort by name
+    else
+        return orderA < orderB  -- Different class: sort by class order
+    end
+end)
+	
     -- Sort by name
     table.sort(memberList, function(a, b) return a.name < b.name end)
     
