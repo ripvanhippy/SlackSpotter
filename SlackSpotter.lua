@@ -14,6 +14,9 @@ SS_RaidBuffs_Selected = {
     EmeraldBlessing = false
 }
 
+-- Protection potion list mode
+SS_ListEveryoneProtection = false
+
 -- ============================================================================
 -- FRAME INITIALIZATION
 -- ============================================================================
@@ -42,6 +45,75 @@ function SS_InitializeFrame()
     SS_SelectTab(1)
     
     DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter loaded!|r Type /ss to open.")
+end
+
+-- ============================================================================
+-- MINIMAP BUTTON
+-- ============================================================================
+
+function SS_CreateMinimapButton()
+    local button = CreateFrame("Button", "SlackSpotterMinimapButton", Minimap)
+    button:SetFrameStrata("MEDIUM")
+    button:SetWidth(32)
+    button:SetHeight(32)
+    button:SetFrameLevel(8)
+    
+    -- Position (pfUI compatible)
+    button:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -15, 15)
+    
+    -- Icon
+    local icon = button:CreateTexture(nil, "BACKGROUND")
+    icon:SetWidth(20)
+    icon:SetHeight(20)
+    icon:SetPoint("CENTER", 0, 1)
+    icon:SetTexture("Interface\\AddOns\\SlackSpotter\\slackericoncircle")
+    
+    -- Border (Blizzard style)
+    local overlay = button:CreateTexture(nil, "OVERLAY")
+    overlay:SetWidth(52)
+    overlay:SetHeight(52)
+    overlay:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")
+    overlay:SetPoint("TOPLEFT", 0, 0)
+    
+    -- Highlight
+    button:SetHighlightTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight")
+    
+    button:SetScript("OnClick", function()
+        SS_ToggleFrame()
+    end)
+    
+    button:SetScript("OnEnter", function()
+    -- Create update function
+    local function UpdateTooltip()
+        GameTooltip:ClearLines()
+        GameTooltip:AddLine("SlackSpotter", 0.2, 0.8, 1)
+        if IsShiftKeyDown() then
+            GameTooltip:AddLine("Advanced Options:", 1, 1, 1)
+            GameTooltip:AddLine("- Scan all zones", 0.8, 0.8, 0.8)
+            GameTooltip:AddLine("- Export report", 0.8, 0.8, 0.8)
+        else
+            GameTooltip:AddLine("Click to toggle addon", 1, 1, 1)
+            GameTooltip:AddLine("Hold Shift for advanced options", 1, 0.5, 0)
+        end
+        GameTooltip:Show()
+    end
+    
+    GameTooltip:SetOwner(button, "ANCHOR_LEFT")
+    UpdateTooltip()
+    
+    -- Update tooltip on modifier key change
+    button:SetScript("OnUpdate", function()
+        if GameTooltip:IsOwned(button) then
+            UpdateTooltip()
+        else
+            button:SetScript("OnUpdate", nil)
+        end
+    end)
+end)
+    
+    button:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
 end
 
 -- ============================================================================
@@ -166,47 +238,7 @@ function SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox_OnClick()
 end
 
 function SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton_OnClick()
-    -- Auto-refresh Tab 5 specs first
-    if SS_ConfigSpecs_RefreshRaid then
-        SS_ConfigSpecs_RefreshRaid()
-    end
-	
-	-- Force-populate SelectedSpecs from saved data
-	if SS_ConfigSpecs_AutoLoadSavedSpecs then
-        SS_ConfigSpecs_AutoLoadSavedSpecs()
-    end
-	
-	-- Check raid buffs only
-    local buffResults = SS_RaidBuff_CheckEntireRaid()
-    
-    -- Update table display with buff data
-    -- Preserve existing consume data if present
-    if not SS_Display_RaidResults then
-        SS_Display_RaidResults = {}
-    end
-    
-    for playerName, buffData in pairs(buffResults) do
-        if SS_Display_RaidResults[playerName] then
-            -- Merge into existing data
-            SS_Display_RaidResults[playerName].buffsFound = buffData.buffsFound
-            SS_Display_RaidResults[playerName].buffsRequired = buffData.buffsRequired
-            SS_Display_RaidResults[playerName].buffsMissing = buffData.missing
-        else
-            -- Create new entry with only buff data
-            SS_Display_RaidResults[playerName] = {
-                class = buffData.class,
-                spec = buffData.spec,
-                found = 0,
-                required = 0,
-                passed = true,
-                buffsFound = buffData.buffsFound,
-                buffsRequired = buffData.buffsRequired,
-                buffsMissing = buffData.missing
-            }
-        end
-    end
-    
-    SS_Display_UpdateRaidList()
+    local consumeResults, buffResults, raidInstance = SS_Tab1_RefreshAndCheckAll()
     
     -- Announce raid buffs only
     if GetNumRaidMembers() > 0 then
@@ -217,41 +249,9 @@ function SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton_OnClick()
 end
 
 function SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()
-    -- Auto-refresh Tab 5 specs first
-    if SS_ConfigSpecs_RefreshRaid then
-        SS_ConfigSpecs_RefreshRaid()
-    end
-    if SS_ConfigSpecs_AutoLoadSavedSpecs then
-        SS_ConfigSpecs_AutoLoadSavedSpecs()
-    end
+    local consumeResults, buffResults, raidInstance = SS_Tab1_RefreshAndCheckAll()
     
-    -- Check both consumes and buffs
-    local raidInstance = SS_ConsumeConfig_CurrentRaid or "Kara40"
-    local consumeResults = SS_Check_CheckEntireRaid(raidInstance)
-    local buffResults = SS_RaidBuff_CheckEntireRaid()
-    
-    -- Merge buff data into consume results
-    for playerName, consumeData in pairs(consumeResults) do
-        local buffData = buffResults[playerName]
-        if buffData then
-            consumeData.buffsFound = buffData.buffsFound
-            consumeData.buffsRequired = buffData.buffsRequired
-            consumeData.buffsMissing = buffData.missing
-        end
-    end
-    
-    -- Store results for display
-    SS_Display_RaidResults = consumeResults
-	
-    SS_Display_UpdateRaidList()
-    
-    -- Check if we have any results
-    if not consumeResults or not next(consumeResults) then
-        DEFAULT_CHAT_FRAME:AddMessage("|cffff8000No raid members to check!|r")
-        return
-    end
-    
-    -- Send announcement to appropriate channel
+    -- Announce consumes only
     if GetNumRaidMembers() > 0 then
         SS_Announce_SendToRaid(consumeResults, raidInstance)
     else
@@ -260,42 +260,117 @@ function SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()
 end
 
 -- ============================================================================
+-- HELPER: Check for Greater Protection Potions
+-- ============================================================================
+function SS_CheckGreaterProtectionPotion(protectionType)
+    -- Get raid size
+    local numRaidMembers = GetNumRaidMembers()
+    local totalMembers = (numRaidMembers > 0) and numRaidMembers or (GetNumPartyMembers() + 1)
+    
+    local missingPlayers = {}
+    
+    -- Check each member
+    for i = 1, totalMembers do
+        local name, class, unitID
+        
+        if numRaidMembers > 0 then
+            name, _, _, _, class = GetRaidRosterInfo(i)
+            class = SS_ConfigSpecs_ProperCase(class)
+            unitID = "raid" .. i
+        else
+            if i == 1 then
+                name = UnitName("player")
+                _, class = UnitClass("player")
+                class = SS_ConfigSpecs_ProperCase(class)
+                unitID = "player"
+            else
+                name = UnitName("party" .. (i-1))
+                _, class = UnitClass("party" .. (i-1))
+                class = SS_ConfigSpecs_ProperCase(class)
+                unitID = "party" .. (i-1)
+            end
+        end
+        
+        if name and UnitIsConnected(unitID) then
+            local hasGreaterProt = false
+            
+            -- Scan buffs
+            for buffIndex = 1, 32 do
+                local buffTexture = UnitBuff(unitID, buffIndex)
+                if not buffTexture then break end
+                
+                -- Create tooltip if needed
+                if not SS_TooltipScanner then
+                    SS_TooltipScanner = CreateFrame("GameTooltip", "SS_TooltipScanner", nil, "GameTooltipTemplate")
+                    SS_TooltipScanner:SetOwner(WorldFrame, "ANCHOR_NONE")
+                end
+                
+                SS_TooltipScanner:ClearLines()
+                SS_TooltipScanner:SetUnitBuff(unitID, buffIndex)
+                local buffNameText = getglobal("SS_TooltipScannerTextLeft1")
+                local buffName = buffNameText and buffNameText:GetText()
+                
+                -- Check if it matches protection type
+                if buffName and string.find(buffName, protectionType) and string.find(buffName, "Protection") then
+                    -- Check tooltip for "Absorbs 1950" (Greater version)
+                    local isGreater = false
+                    for line = 1, SS_TooltipScanner:NumLines() do
+                        local lineText = getglobal("SS_TooltipScannerTextLeft" .. line)
+                        if lineText and lineText:GetText() then
+                            if string.find(lineText:GetText(), "Absorbs 1950") then
+                                isGreater = true
+                                break
+                            end
+                        end
+                    end
+                    
+                    if isGreater then
+                        hasGreaterProt = true
+                        break
+                    end
+                end
+            end
+            
+            if not hasGreaterProt then
+                table.insert(missingPlayers, {name = name, class = class})
+            end
+        end
+    end
+    
+    -- Announce results
+    SS_Announce_ProtectionPotions(protectionType, missingPlayers)
+end
+
+-- ============================================================================
 -- TAB 1: PROTECTION POTION PANEL FUNCTIONS (MIDDLE-LEFT)
 -- ============================================================================
 
 function SS_Tab1_ProtectionPotionPanel_ProtPotArcaneButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Checking Arcane Protection Potions (placeholder)")
-    -- TODO: Implement arcane protection check
+    SS_CheckGreaterProtectionPotion("Arcane")
 end
 
 function SS_Tab1_ProtectionPotionPanel_ProtPotFireButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Checking Fire Protection Potions (placeholder)")
-    -- TODO: Implement fire protection check
+    SS_CheckGreaterProtectionPotion("Fire")
 end
 
 function SS_Tab1_ProtectionPotionPanel_ProtPotFrostButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Checking Frost Protection Potions (placeholder)")
-    -- TODO: Implement frost protection check
+    SS_CheckGreaterProtectionPotion("Frost")
 end
 
 function SS_Tab1_ProtectionPotionPanel_ProtPotNatureButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Checking Nature Protection Potions (placeholder)")
-    -- TODO: Implement nature protection check
+    SS_CheckGreaterProtectionPotion("Nature")
 end
 
 function SS_Tab1_ProtectionPotionPanel_ProtPotShadowButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Checking Shadow Protection Potions (placeholder)")
-    -- TODO: Implement shadow protection check
+    SS_CheckGreaterProtectionPotion("Shadow")
 end
 
 function SS_Tab1_ProtectionPotionPanel_ProtPotHolyButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Checking Holy Protection Potions (placeholder)")
-    -- TODO: Implement holy protection check
+    SS_CheckGreaterProtectionPotion("Holy")
 end
 
 function SS_Tab1_ProtectionPotionPanel_ListEveryoneCheckbox_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("List Everyone checkbox clicked (placeholder)")
-    -- TODO: Toggle list everyone mode
+    SS_ListEveryoneProtection = not SS_ListEveryoneProtection
 end
 
 -- ============================================================================
@@ -318,10 +393,9 @@ function SS_Tab1_StatsPanel_ResetButton_OnClick()
 end
 
 -- ============================================================================
--- TAB 1: RAID LIST PANEL FUNCTIONS (RIGHT-SIDE)
+-- HELPER: Refresh raid data and check consumes + buffs
 -- ============================================================================
-
-function SS_Tab1_RaidListPanel_RefreshButton_OnClick()
+function SS_Tab1_RefreshAndCheckAll()
     -- Auto-refresh Tab 5 specs first
     if SS_ConfigSpecs_RefreshRaid then
         SS_ConfigSpecs_RefreshRaid()
@@ -329,7 +403,7 @@ function SS_Tab1_RaidListPanel_RefreshButton_OnClick()
     if SS_ConfigSpecs_AutoLoadSavedSpecs then
         SS_ConfigSpecs_AutoLoadSavedSpecs()
     end
-	
+    
     local raidInstance = SS_ConsumeConfig_CurrentRaid or "Kara40"
     
     -- Run consume check
@@ -345,7 +419,7 @@ function SS_Tab1_RaidListPanel_RefreshButton_OnClick()
             consumeData.buffsFound = buffData.buffsFound
             consumeData.buffsRequired = buffData.buffsRequired
             consumeData.buffsMissing = buffData.missing
-            consumeData.class = buffData.class  -- Ensure class is set
+            consumeData.class = buffData.class
         end
     end
     
@@ -369,6 +443,16 @@ function SS_Tab1_RaidListPanel_RefreshButton_OnClick()
     -- Store merged results and display
     SS_Display_RaidResults = consumeResults
     SS_Display_UpdateRaidList()
+    
+    return consumeResults, buffResults, raidInstance
+end
+
+-- ============================================================================
+-- TAB 1: RAID LIST PANEL FUNCTIONS (RIGHT-SIDE)
+-- ============================================================================
+
+function SS_Tab1_RaidListPanel_RefreshButton_OnClick()
+    local consumeResults, buffResults, raidInstance = SS_Tab1_RefreshAndCheckAll()
     
     -- Show summary in chat
     local totalPassed = 0
@@ -460,6 +544,9 @@ SS_EventFrame:SetScript("OnEvent", function()
         
         -- Initialize main frame (after XML loaded)
         SS_InitializeFrame()
+		
+		-- Create minimap button
+    SS_CreateMinimapButton()
         
         -- Initialize MappingData module
         if SS_MappingData_Initialize then
@@ -489,11 +576,6 @@ SS_EventFrame:SetScript("OnEvent", function()
 		-- Initialize RaidBuff module
         if SS_RaidBuff_Initialize then
             SS_RaidBuff_Initialize()
-        end
-        
-        -- Initialize RaidBuffAnnounce module
-        if SS_RaidBuffAnnounce_Initialize then
-            SS_RaidBuffAnnounce_Initialize()
         end
         
         -- Initialize Display module

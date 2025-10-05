@@ -100,6 +100,42 @@ SS_RaidBuffs_Definitions = {
 }
 
 -- ============================================================================
+-- HELPER: Check if buff tooltip contains keyword (robust whitespace handling)
+-- ============================================================================
+function SS_RaidBuff_TooltipContainsKeyword(unitID, buffIndex, keyword)
+    -- Create tooltip if needed
+    if not SS_TooltipScanner then
+        SS_TooltipScanner = CreateFrame("GameTooltip", "SS_TooltipScanner", nil, "GameTooltipTemplate")
+        SS_TooltipScanner:SetOwner(WorldFrame, "ANCHOR_NONE")
+    end
+    
+    -- Set tooltip to this buff
+    SS_TooltipScanner:ClearLines()
+    SS_TooltipScanner:SetUnitBuff(unitID, buffIndex)
+    
+    -- Normalize keyword: lowercase + remove all whitespace
+    local normalizedKeyword = string.lower(keyword)
+    normalizedKeyword = string.gsub(normalizedKeyword, "%s", "")
+    
+    -- Scan all tooltip lines
+    for line = 1, SS_TooltipScanner:NumLines() do
+        local lineText = getglobal("SS_TooltipScannerTextLeft" .. line)
+        if lineText and lineText:GetText() then
+            local text = lineText:GetText()
+            -- Normalize text: lowercase + remove all whitespace
+            local normalizedText = string.lower(text)
+            normalizedText = string.gsub(normalizedText, "%s", "")
+            
+            if string.find(normalizedText, normalizedKeyword) then
+                return true
+            end
+        end
+    end
+    
+    return false
+end
+
+-- ============================================================================
 -- HELPER: Detect which classes are in raid and online
 -- ============================================================================
 function SS_RaidBuff_GetRaidClasses()
@@ -176,17 +212,7 @@ function SS_RaidBuff_ScanPlayerBuffs(unitID)
                     if buffName == buffDef.buffNames[j] then
                         -- Check tooltip if needed (Shadow Protection case)
                         if buffDef.tooltipCheck then
-                            local tooltipMatch = false
-                            for line = 1, SS_TooltipScanner:NumLines() do
-                                local lineText = getglobal("SS_TooltipScannerTextLeft" .. line)
-                                if lineText and lineText:GetText() then
-                                    if string.find(lineText:GetText(), buffDef.tooltipCheck) then
-                                        tooltipMatch = true
-                                        break
-                                    end
-                                end
-                            end
-                            if tooltipMatch then
+                            if SS_RaidBuff_TooltipContainsKeyword(unitID, buffIndex, buffDef.tooltipCheck) then
                                 foundBuffs[buffDef.name] = true
                             end
                         else

@@ -99,14 +99,20 @@ function SS_ConfigSpecs_RefreshRaid()
 end
 
 -- Auto-populate SelectedSpecs from saved guild specs
+-- ONLY loads saved spec if player is NEW (not already in working memory)
 function SS_ConfigSpecs_AutoLoadSavedSpecs()
     if not SS_GuildSpecsDB then return end
     
     for i = 1, table.getn(SS_ConfigSpecs_RaidMembers) do
         local member = SS_ConfigSpecs_RaidMembers[i]
-        if SS_GuildSpecsDB[member.name] then
-            SS_ConfigSpecs_SelectedSpecs[member.name] = SS_GuildSpecsDB[member.name]
+        
+        -- ONLY apply saved spec if this player has NO spec assigned yet
+        if not SS_ConfigSpecs_SelectedSpecs[member.name] then
+            if SS_GuildSpecsDB[member.name] then
+                SS_ConfigSpecs_SelectedSpecs[member.name] = SS_GuildSpecsDB[member.name]
+            end
         end
+        -- If player already has a spec in working memory, DO NOT overwrite
     end
 	
 	-- Update Tab 5 UI display

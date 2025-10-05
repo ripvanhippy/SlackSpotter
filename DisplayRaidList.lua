@@ -100,16 +100,17 @@ function SS_Display_CreateRow(rowIndex, memberData)
     local isOffline = (memberData.buffsFound == nil and memberData.found == nil)
     
     if isOffline then
-        row.nameLabel:SetTextColor(0.5, 0.5, 0.5)  -- Grey
+    row.nameLabel:SetTextColor(0.5, 0.5, 0.5)  -- Grey
+else
+    local classUpper = string.upper(memberData.class)
+    local classColor = SS_ClassColors[classUpper]
+    if classColor then
+        row.nameLabel:SetTextColor(classColor.r, classColor.g, classColor.b)
     else
-        local classColor = SS_ClassColors[memberData.class]
-        if classColor then
-            row.nameLabel:SetTextColor(classColor.r, classColor.g, classColor.b)
-        else
-            row.nameLabel:SetTextColor(1, 1, 1)
-        end
+        row.nameLabel:SetTextColor(1, 1, 1)
     end
-    row.nameLabel:SetText(memberData.name)
+end
+row.nameLabel:SetText(memberData.name)
     
     -- Raid buffs display
     if memberData.buffsFound and memberData.buffsRequired then
