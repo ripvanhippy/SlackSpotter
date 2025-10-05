@@ -166,10 +166,49 @@ function SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox_OnClick()
 end
 
 function SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton_OnClick()
-    -- Auto-refresh: check buffs before announcing
+    -- Auto-refresh Tab 5 specs first
+    if SS_ConfigSpecs_RefreshRaid then
+        SS_ConfigSpecs_RefreshRaid()
+    end
+	
+	-- Force-populate SelectedSpecs from saved data
+	if SS_ConfigSpecs_AutoLoadSavedSpecs then
+        SS_ConfigSpecs_AutoLoadSavedSpecs()
+    end
+	
+	-- Check raid buffs only
     local buffResults = SS_RaidBuff_CheckEntireRaid()
     
-    -- Send announcements
+    -- Update table display with buff data
+    -- Preserve existing consume data if present
+    if not SS_Display_RaidResults then
+        SS_Display_RaidResults = {}
+    end
+    
+    for playerName, buffData in pairs(buffResults) do
+        if SS_Display_RaidResults[playerName] then
+            -- Merge into existing data
+            SS_Display_RaidResults[playerName].buffsFound = buffData.buffsFound
+            SS_Display_RaidResults[playerName].buffsRequired = buffData.buffsRequired
+            SS_Display_RaidResults[playerName].buffsMissing = buffData.missing
+        else
+            -- Create new entry with only buff data
+            SS_Display_RaidResults[playerName] = {
+                class = buffData.class,
+                spec = buffData.spec,
+                found = 0,
+                required = 0,
+                passed = true,
+                buffsFound = buffData.buffsFound,
+                buffsRequired = buffData.buffsRequired,
+                buffsMissing = buffData.missing
+            }
+        end
+    end
+    
+    SS_Display_UpdateRaidList()
+    
+    -- Announce raid buffs only
     if GetNumRaidMembers() > 0 then
         SS_RaidBuffAnnounce_SendToRaid(buffResults)
     else
@@ -178,28 +217,45 @@ function SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton_OnClick()
 end
 
 function SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()
-    -- Auto-refresh: Run consume check before announcing
-    -- This ensures we always have current data even if user forgot to click Refresh
+    -- Auto-refresh Tab 5 specs first
+    if SS_ConfigSpecs_RefreshRaid then
+        SS_ConfigSpecs_RefreshRaid()
+    end
+    if SS_ConfigSpecs_AutoLoadSavedSpecs then
+        SS_ConfigSpecs_AutoLoadSavedSpecs()
+    end
+    
+    -- Check both consumes and buffs
     local raidInstance = SS_ConsumeConfig_CurrentRaid or "Kara40"
-    local results = SS_Check_CheckEntireRaid(raidInstance)
+    local consumeResults = SS_Check_CheckEntireRaid(raidInstance)
+    local buffResults = SS_RaidBuff_CheckEntireRaid()
+    
+    -- Merge buff data into consume results
+    for playerName, consumeData in pairs(consumeResults) do
+        local buffData = buffResults[playerName]
+        if buffData then
+            consumeData.buffsFound = buffData.buffsFound
+            consumeData.buffsRequired = buffData.buffsRequired
+            consumeData.buffsMissing = buffData.missing
+        end
+    end
     
     -- Store results for display
-    SS_Display_RaidResults = results
+    SS_Display_RaidResults = consumeResults
+	
     SS_Display_UpdateRaidList()
     
     -- Check if we have any results
-    if not results or not next(results) then
+    if not consumeResults or not next(consumeResults) then
         DEFAULT_CHAT_FRAME:AddMessage("|cffff8000No raid members to check!|r")
         return
     end
     
     -- Send announcement to appropriate channel
     if GetNumRaidMembers() > 0 then
-        -- In raid: send to raid chat
-        SS_Announce_SendToRaid(results, raidInstance)
+        SS_Announce_SendToRaid(consumeResults, raidInstance)
     else
-        -- Solo: send to self (chat window)
-        SS_Announce_SendToSelf(results, raidInstance)
+        SS_Announce_SendToSelf(consumeResults, raidInstance)
     end
 end
 
@@ -266,6 +322,14 @@ end
 -- ============================================================================
 
 function SS_Tab1_RaidListPanel_RefreshButton_OnClick()
+    -- Auto-refresh Tab 5 specs first
+    if SS_ConfigSpecs_RefreshRaid then
+        SS_ConfigSpecs_RefreshRaid()
+    end
+    if SS_ConfigSpecs_AutoLoadSavedSpecs then
+        SS_ConfigSpecs_AutoLoadSavedSpecs()
+    end
+	
     local raidInstance = SS_ConsumeConfig_CurrentRaid or "Kara40"
     
     -- Run consume check

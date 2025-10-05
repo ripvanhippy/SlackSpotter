@@ -19,10 +19,14 @@ function SS_Display_UpdateRaidList()
     local content = getglobal("SS_Tab1_RaidListPanel_Content")
     if not content then return end
     
-    -- Clear existing rows
-    for i = 1, SS_Display_MaxVisibleRows do
-        local row = getglobal("SS_Tab1_RaidRow" .. i)
-        if row then row:Hide() end
+    -- Check if results exist
+    if not SS_Display_RaidResults or not next(SS_Display_RaidResults) then
+        -- Clear all rows if no data
+        for i = 1, SS_Display_MaxVisibleRows do
+            local row = getglobal("SS_Tab1_RaidRow" .. i)
+            if row then row:Hide() end
+        end
+        return
     end
     
     -- Build sorted member list
@@ -32,10 +36,10 @@ function SS_Display_UpdateRaidList()
             name = playerName,
             class = data.class,
             spec = data.spec,
-            found = data.found,
-            required = data.required,
+            found = data.found or 0,
+            required = data.required or 0,
             passed = data.passed,
-			buffsFound = data.buffsFound,
+            buffsFound = data.buffsFound,
             buffsRequired = data.buffsRequired
         })
     end
@@ -48,6 +52,10 @@ function SS_Display_UpdateRaidList()
         local dataIndex = i + SS_Display_ScrollOffset
         if dataIndex <= table.getn(memberList) then
             SS_Display_CreateRow(i, memberList[dataIndex])
+        else
+            -- Hide rows beyond data
+            local row = getglobal("SS_Tab1_RaidRow" .. i)
+            if row then row:Hide() end
         end
     end
 end
@@ -88,11 +96,18 @@ function SS_Display_CreateRow(rowIndex, memberData)
     end
     
     -- Update row data
-    local classColor = RAID_CLASS_COLORS[memberData.class]
-    if classColor then
-        row.nameLabel:SetTextColor(classColor.r, classColor.g, classColor.b)
+    -- Check if player is offline (if they have no data, assume offline)
+    local isOffline = (memberData.buffsFound == nil and memberData.found == nil)
+    
+    if isOffline then
+        row.nameLabel:SetTextColor(0.5, 0.5, 0.5)  -- Grey
     else
-        row.nameLabel:SetTextColor(1, 1, 1)
+        local classColor = SS_ClassColors[memberData.class]
+        if classColor then
+            row.nameLabel:SetTextColor(classColor.r, classColor.g, classColor.b)
+        else
+            row.nameLabel:SetTextColor(1, 1, 1)
+        end
     end
     row.nameLabel:SetText(memberData.name)
     

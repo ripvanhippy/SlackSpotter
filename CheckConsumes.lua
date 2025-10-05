@@ -136,8 +136,14 @@ function SS_Check_CompareConsumes(unitID, raidInstance, specName)
         return nil
     end
     
+    -- ADD THIS: Handle empty consumes list
     if not requiredConsumes.consumes or table.getn(requiredConsumes.consumes) == 0 then
-        return nil
+        return {
+            found = 0,
+            required = 0,
+            missing = {},
+            passed = true
+        }
     end
     
     -- Scan player's actual buffs
@@ -223,8 +229,11 @@ function SS_Check_GetRequiredConsumes(raidInstance, specName)
     end
     
     if table.getn(consumeList) == 0 then
-        DEFAULT_CHAT_FRAME:AddMessage("ERROR: No consumes in list, returning NIL")
-        return nil
+        -- No consumes configured - return empty requirements instead of NIL
+        return {
+            consumes = {},
+            minRequired = 0
+        }
     end
     
     -- Return raw minRequired from config (0 or checkbox value)
@@ -360,51 +369,55 @@ end
 -- ============================================================================
 
 function SS_Check_CheckEntireRaid(raidInstance)
-    local results = {}  -- [playerName] = {spec, found, required, missing, passed}
+    local results = {}
     
-    local numRaidMembers = GetNumRaidMembers()
-    if numRaidMembers == 0 then
-        -- Not in raid, check self only
-        local playerName = UnitName("player")
-        local _, englishClass = UnitClass("player")
+    local numMembers = GetNumRaidMembers()
+    local isRaid = (numMembers > 0)
+    
+    if not isRaid then
+        numMembers = GetNumPartyMembers()
+        if numMembers == 0 then
+            numMembers = 1  -- Solo
+        else
+            numMembers = numMembers + 1  -- Party includes self
+        end
+    end
+    
+    for i = 1, numMembers do
+        local name, class, unitID, playerSpec
         
-        local specName = SS_Check_GetPlayerSpec(playerName)
-        if not specName then
-            DEFAULT_CHAT_FRAME:AddMessage("|cffff8000You have no spec configured in Tab 5!|r")
-            return results
+        if isRaid then
+            -- In raid
+            name, _, _, _, class = GetRaidRosterInfo(i)
+            class = SS_ConfigSpecs_ProperCase(class)
+            unitID = "raid" .. i
+        else
+            -- Solo or party
+            if i == 1 then
+                name = UnitName("player")
+                _, class = UnitClass("player")
+                class = SS_ConfigSpecs_ProperCase(class)
+                unitID = "player"
+            else
+                name = UnitName("party" .. (i-1))
+                _, class = UnitClass("party" .. (i-1))
+                class = SS_ConfigSpecs_ProperCase(class)
+                unitID = "party" .. (i-1)
+            end
         end
         
-        local result = SS_Check_CompareConsumes("player", raidInstance, specName)
-        if result then
-            results[playerName] = {
-                class = englishClass,
-                spec = "WarriorDPS",
-                found = result.found,
-                required = result.required,
-                missing = result.missing,
-                passed = result.passed
-            }
-        end
-    else
-        -- Check all raid members
-        for i = 1, numRaidMembers do
-            local name, _, _, _, class = GetRaidRosterInfo(i)
-            if name and class then
-                -- Get spec from Tab 5 config
-                local specName = SS_Check_GetPlayerSpec(name)
-                if not specName then
-                    -- No spec configured, skip this player
-                    DEFAULT_CHAT_FRAME:AddMessage("|cffff8000" .. name .. " has no spec configured - skipping|r")
-                    specName = nil
-                end
-                
-                local unitID = "raid" .. i
-                local result = SS_Check_CompareConsumes(unitID, raidInstance, specName)
+        playerSpec = SS_Check_GetPlayerSpec(name)
+        
+        if name and UnitIsConnected(unitID) then
+            if not playerSpec then
+                DEFAULT_CHAT_FRAME:AddMessage("|cffff8000" .. name .. " has no spec configured - skipping|r")
+            else
+                local result = SS_Check_CompareConsumes(unitID, raidInstance, playerSpec)
                 
                 if result then
                     results[name] = {
                         class = class,
-                        spec = specName,
+                        spec = playerSpec,
                         found = result.found,
                         required = result.required,
                         missing = result.missing,

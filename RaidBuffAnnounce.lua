@@ -8,26 +8,14 @@
 -- ============================================================================
 
 function SS_RaidBuffAnnounce_Format(raidResults)
-    
-	-- DEBUG
-    DEFAULT_CHAT_FRAME:AddMessage("=== Announce Format DEBUG ===")
-    for playerName, data in pairs(raidResults) do
-        DEFAULT_CHAT_FRAME:AddMessage("Player: " .. playerName)
-        if data.buffsMissing then
-            DEFAULT_CHAT_FRAME:AddMessage("  buffsMissing table exists, count: " .. table.getn(data.buffsMissing))
-        else
-            DEFAULT_CHAT_FRAME:AddMessage("  buffsMissing is NIL")
-        end
-    end
-	
 	-- Separate raid buffs from personal buffs
     local raidBuffsMissing = {}  -- [buffName] = {player1, player2, ...}
     local personalBuffsMissing = {}  -- [playerName] = {buff1, buff2, ...}
     
     for playerName, data in pairs(raidResults) do
-        if data.buffsMissing then
-            for i = 1, table.getn(data.buffsMissing) do
-                local missingBuff = data.buffsMissing[i]
+        if data.missing then
+            for i = 1, table.getn(data.missing) do
+                local missingBuff = data.missing[i]
                 
                 if missingBuff.personal then
                     -- Personal buff - whisper

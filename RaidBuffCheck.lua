@@ -37,12 +37,12 @@ SS_RaidBuffs_Definitions = {
     },
     {
         name = "Shadow Protection",
-        buffNames = {"Prayer of Shadow Protection"},
-        tooltipCheck = "60",  -- Distinguish from potion (checks for "60" resistance)
+        buffNames = {"Shadow Protection", "Prayer of Shadow Protection"},
+        tooltipCheck = "Shadow Resistance",
         needsClass = "Priest",
         appliesTo = "everyone",
         personal = false,
-        optional = true  -- Checkbox-controlled
+        optional = true
     },
     {
         name = "Thorns",
@@ -50,7 +50,7 @@ SS_RaidBuffs_Definitions = {
         needsClass = "Druid",
         appliesTo = "tanks",
         personal = false,
-        optional = true  -- Checkbox-controlled
+        optional = true
     },
     {
         name = "Emerald Blessing",
@@ -58,10 +58,9 @@ SS_RaidBuffs_Definitions = {
         needsClass = "Druid",
         appliesTo = "druids",
         personal = false,
-        optional = true,  -- Checkbox-controlled
-        groupCheck = true  -- Special: if ANY druid has it, all pass
+        optional = true,
+        groupCheck = true
     },
-    -- Personal buffs (whispered if missing)
     {
         name = "Mage Armor",
         buffNames = {"Mage Armor", "Ice Armor"},
@@ -265,14 +264,12 @@ function SS_RaidBuff_CheckEntireRaid()
         end
         
         if name and UnitIsConnected(unitID) then
-            -- Scan player's buffs
-            local foundBuffs = SS_RaidBuff_ScanPlayerBuffs(unitID)
-			
-			-- DEBUG
-            DEFAULT_CHAT_FRAME:AddMessage("Player " .. name .. " buffs found:")
-            for buffName, _ in pairs(foundBuffs) do
-                DEFAULT_CHAT_FRAME:AddMessage("  - " .. buffName)
-            end
+            -- Check if player has spec assigned
+            if not playerSpec then
+                DEFAULT_CHAT_FRAME:AddMessage("|cffff8000" .. name .. " has no spec assigned - skipping buff check|r")
+            else
+                -- Scan player's buffs
+                local foundBuffs = SS_RaidBuff_ScanPlayerBuffs(unitID)
             
             -- Check Emerald Blessing first (for group check)
             if foundBuffs["Emerald Blessing"] then
@@ -321,14 +318,6 @@ function SS_RaidBuff_CheckEntireRaid()
                 end
 				
             end
-			
-			-- DEBUG
-            DEFAULT_CHAT_FRAME:AddMessage("Player " .. name .. " summary:")
-            DEFAULT_CHAT_FRAME:AddMessage("  Found: " .. foundCount .. "/" .. table.getn(requiredBuffs))
-            DEFAULT_CHAT_FRAME:AddMessage("  Missing count: " .. table.getn(missingBuffs))
-            for i = 1, table.getn(missingBuffs) do
-                DEFAULT_CHAT_FRAME:AddMessage("    - " .. missingBuffs[i].name)
-            end
             
             results[name] = {
                 class = class,
@@ -337,6 +326,7 @@ function SS_RaidBuff_CheckEntireRaid()
                 buffsRequired = table.getn(requiredBuffs),
                 missing = missingBuffs
             }
+			end
         end
     end
     

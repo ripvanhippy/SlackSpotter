@@ -98,6 +98,21 @@ function SS_ConfigSpecs_RefreshRaid()
     DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00Loaded " .. table.getn(SS_ConfigSpecs_RaidMembers) .. " raid members.|r")
 end
 
+-- Auto-populate SelectedSpecs from saved guild specs
+function SS_ConfigSpecs_AutoLoadSavedSpecs()
+    if not SS_GuildSpecsDB then return end
+    
+    for i = 1, table.getn(SS_ConfigSpecs_RaidMembers) do
+        local member = SS_ConfigSpecs_RaidMembers[i]
+        if SS_GuildSpecsDB[member.name] then
+            SS_ConfigSpecs_SelectedSpecs[member.name] = SS_GuildSpecsDB[member.name]
+        end
+    end
+	
+	-- Update Tab 5 UI display
+    SS_ConfigSpecs_UpdateDisplay()
+end
+
 -- ============================================================================
 -- AUTO-LOAD SPECS FROM SAVEDVARIABLES (Once per session)
 -- ============================================================================
