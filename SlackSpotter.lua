@@ -245,6 +245,7 @@ function SS_ShowTab1Content()
     -- Show all Tab 1 panels
     if SS_Tab1_RaidBuffCheckPanel then SS_Tab1_RaidBuffCheckPanel:Show() end
     if SS_Tab1_ProtectionPotionPanel then SS_Tab1_ProtectionPotionPanel:Show() end
+    if SS_Tab1_ConsumeButtonCheckPanel then SS_Tab1_ConsumeButtonCheckPanel:Show() end
     if SS_Tab1_StatsPanel then SS_Tab1_StatsPanel:Show() end
     if SS_Tab1_RaidListPanel then SS_Tab1_RaidListPanel:Show() end
 end
@@ -482,6 +483,9 @@ end
 function SS_Tab1_RaidListPanel_RefreshButton_OnClick()
     local consumeResults, buffResults, raidInstance = SS_Tab1_RefreshAndCheckAll()
     
+	-- Store results for display
+    SS_Display_RaidResults = consumeResults
+	
     -- Show summary in chat
     local totalPassed = 0
     local totalChecked = 0
@@ -511,6 +515,11 @@ end
 
 SLASH_SS1 = "/ss"
 SlashCmdList["SS"] = function(msg)
+    if not SS_Frame then
+        DEFAULT_CHAT_FRAME:AddMessage("|cffff0000SlackSpotter frame not loaded yet!|r")
+        return
+    end
+    
     if msg == "" then
         SS_ToggleFrame()
         return

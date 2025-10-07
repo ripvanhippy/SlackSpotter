@@ -6,8 +6,8 @@
 -- ============================================================================
 -- GLOBALS
 -- ============================================================================
-SS_Display_RaidResults = {}  -- Stores last check results
-SS_Display_ScrollOffset = 0
+SS_Display_RaidResults = SS_Display_RaidResults or {}
+SS_Display_ScrollOffset = SS_Display_ScrollOffset or 0
 SS_Display_MaxVisibleRows = 25
 SS_Display_RowHeight = 20
 
@@ -18,12 +18,6 @@ SS_Display_RowHeight = 20
 function SS_Display_UpdateRaidList()
     local content = getglobal("SS_Tab1_RaidListPanel_Content")
     if not content then return end
-	
-	-- Get scroll offset from FauxScrollFrame
-    local scrollFrame = getglobal("SS_Tab1_RaidListPanel_ScrollFrame")
-    if scrollFrame then
-        SS_Display_ScrollOffset = FauxScrollFrame_GetOffset(scrollFrame)
-    end
     
     -- Check if results exist
     if not SS_Display_RaidResults or not next(SS_Display_RaidResults) then
@@ -99,12 +93,12 @@ function SS_Display_CreateRow(rowIndex, memberData)
     local content = getglobal("SS_Tab1_RaidListPanel_Content")
     if not content then return end
     
-    local rowName = "SS_Tab1_RaidRow" .. rowIndex
+    local rowName = "SS_Tab1_RaidRow"..rowIndex
     local row = getglobal(rowName)
     
     -- Create row if doesn't exist
     if not row then
-        row = CreateFrame("Frame", rowName, content)
+    row = CreateFrame("Frame", rowName, content)
         row:SetWidth(480)
         row:SetHeight(SS_Display_RowHeight)
         row:SetPoint("TOPLEFT", content, "TOPLEFT", 0, -(rowIndex-1) * SS_Display_RowHeight)
@@ -172,8 +166,8 @@ end
 -- ============================================================================
 -- SCROLL FUNCTIONS
 -- ============================================================================
-
-function SS_Display_ScrollUp()
+function SS_Tab1_ScrollUp()
+    SS_Display_ScrollOffset = SS_Display_ScrollOffset or 0
     if SS_Display_ScrollOffset > 0 then
         SS_Display_ScrollOffset = SS_Display_ScrollOffset - 3
         if SS_Display_ScrollOffset < 0 then
@@ -183,8 +177,17 @@ function SS_Display_ScrollUp()
     end
 end
 
-function SS_Display_ScrollDown()
-    local maxOffset = table.getn(SS_Display_RaidResults) - SS_Display_MaxVisibleRows
+function SS_Tab1_ScrollDown()
+    SS_Display_ScrollOffset = SS_Display_ScrollOffset or 0
+    
+    local totalMembers = 0
+    if SS_Display_RaidResults then
+        for _ in pairs(SS_Display_RaidResults) do
+            totalMembers = totalMembers + 1
+        end
+    end
+    
+    local maxOffset = totalMembers - SS_Display_MaxVisibleRows
     if maxOffset < 0 then maxOffset = 0 end
     
     if SS_Display_ScrollOffset < maxOffset then

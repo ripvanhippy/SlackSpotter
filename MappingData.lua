@@ -90,6 +90,32 @@ function SS_NeedsInnerFire(specName)
 end
 
 -- ============================================================================
+-- SHORTENED CONSUME NAMES (for announcements)
+-- ============================================================================
+SS_ConsumeShortNames = {
+    ["Elixir of the Mongoose"] = "Mongoose",
+    ["Elixir of the Giants"] = "Giants",
+    ["Elixir of Superior Defense"] = "Sup Defense",
+    ["Elixir of Greater Firepower"] = "Fire Power",
+    ["Elixir of Shadowpower"] = "Shadow Power",
+    ["Elixir of Greater Nature Power"] = "Nature Power",
+    ["Elixir of Greater Frost Power"] = "Frost Power",
+    ["Flask of Supreme Power"] = "Supreme Flask",
+    ["Flask of the Titans"] = "Titans Flask",
+    ["Flask of Distilled Wisdom"] = "Wisdom Flask",
+    ["Flask of Chromatic Resistance"] = "Chrome Flask",
+    ["Greater Arcane Elixir"] = "Arcane Elixir",
+    ["Cerebral Cortex Compound"] = "Cerebral",
+    ["Ground Scorpok Assay"] = "Scorpok",
+    ["Danonzo's Tel'Abim Delight"] = "Tel'Abim SP",
+    ["Danonzo's Tel'Abim Medley"] = "Tel'Abim Haste",
+    ["Danonzo's Tel'Abim Surprise"] = "Tel'Abim RAP",
+    ["Major Troll's Blood Potion"] = "Troll's Blood",
+    ["Empowering Herbal Salad"] = "Herb Salad",
+    ["Winterfall Firewater"] = "Firewater"
+}
+
+-- ============================================================================
 -- INITIALIZATION
 -- ============================================================================
 function SS_MappingData_Initialize()

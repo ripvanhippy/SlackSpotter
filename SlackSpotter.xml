@@ -473,7 +473,6 @@
             <!-- TAB 1: Main Consume Button (MIDDLE-LEFT pt2) -->
             <!-- ========================================== -->
 			
-			
 			<Frame name="SS_Tab1_ConsumeButtonCheckPanel">
                 <Size>
                     <AbsDimension x="275" y="50"/>
@@ -503,7 +502,7 @@
                         <Scripts><OnClick>SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()</OnClick></Scripts>
                     </Button>
 				</Frames>
-				</Frame>
+			</Frame>
 			
 			
             <!-- ========================================== -->
@@ -655,34 +654,42 @@
                     
                     <!-- Scroll Frame for Raid List -->
                     <ScrollFrame name="SS_Tab1_RaidListPanel_ScrollFrame" inherits="FauxScrollFrameTemplate">
-                        <Size>
-                            <AbsDimension x="480" y="500"/>
-                        </Size>
-                        <Anchors>
-                            <Anchor point="TOPLEFT">
-                                <Offset><AbsDimension x="15" y="-70"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts>
-                            <OnVerticalScroll>
-                                FauxScrollFrame_OnVerticalScroll(20, SS_Tab1_RaidListPanel_ScrollFrame_Update)
-                            </OnVerticalScroll>
-                        </Scripts>
-                    </ScrollFrame>
-                    
-                    <!-- Content Frame (25 dynamic rows created in Lua) -->
-                    <Frame name="SS_Tab1_RaidListPanel_Content">
-                        <Size>
-                            <AbsDimension x="480" y="500"/>
-                        </Size>
-                        <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidListPanel_ScrollFrame">
-                                <Offset><AbsDimension x="0" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                    </Frame>
-                </Frames>
-            </Frame>
+    <Size>
+        <AbsDimension x="480" y="500"/>
+    </Size>
+    <Anchors>
+        <Anchor point="TOPLEFT">
+            <Offset><AbsDimension x="15" y="-70"/></Offset>
+        </Anchor>
+    </Anchors>
+    <Scripts>
+        <OnLoad>
+            this:EnableMouseWheel(1)
+        </OnLoad>
+        <OnMouseWheel>
+            if arg1 > 0 then
+                SS_Tab1_ScrollUp()
+            else
+                SS_Tab1_ScrollDown()
+            end
+        </OnMouseWheel>
+        <OnVerticalScroll>
+            FauxScrollFrame_OnVerticalScroll(20, SS_Display_UpdateRaidList)
+        </OnVerticalScroll>
+    </Scripts>
+</ScrollFrame>
+
+<!-- Content Frame (25 dynamic rows created in Lua) -->
+<Frame name="SS_Tab1_RaidListPanel_Content">
+    <Size>
+        <AbsDimension x="480" y="500"/>
+    </Size>
+    <Anchors>
+        <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidListPanel_ScrollFrame">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
+        </Anchor>
+    </Anchors>
+</Frame>
             
             <!-- ========================================== -->
             <!-- TAB 5: CONFIG SPECS PANELS -->
@@ -764,20 +771,30 @@
                 <Frames>
                     <!-- Scroll Frame -->
                     <ScrollFrame name="SS_Tab5_RaidListPanel_ScrollFrame" inherits="FauxScrollFrameTemplate">
-                        <Size>
-                            <AbsDimension x="480" y="500"/>
-                        </Size>
-                        <Anchors>
-                            <Anchor point="TOPLEFT">
-                                <Offset><AbsDimension x="15" y="-55"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts>
-                            <OnVerticalScroll>
-                                FauxScrollFrame_OnVerticalScroll(20, SS_ConfigSpecs_UpdateDisplay)
-                            </OnVerticalScroll>
-                        </Scripts>
-                    </ScrollFrame>
+    <Size>
+        <AbsDimension x="480" y="500"/>
+    </Size>
+    <Anchors>
+        <Anchor point="TOPLEFT">
+            <Offset><AbsDimension x="15" y="-55"/></Offset>
+        </Anchor>
+    </Anchors>
+    <Scripts>
+        <OnLoad>
+            this:EnableMouseWheel(1)
+        </OnLoad>
+        <OnMouseWheel>
+            if arg1 > 0 then
+                SS_Tab5_ScrollUp()
+            else
+                SS_Tab5_ScrollDown()
+            end
+        </OnMouseWheel>
+        <OnVerticalScroll>
+            FauxScrollFrame_OnVerticalScroll(20, SS_ConfigSpecs_UpdateList)
+        </OnVerticalScroll>
+    </Scripts>
+</ScrollFrame>
                     
                     <!-- Content Frame -->
                     <Frame name="SS_Tab5_RaidListPanel_Content">
@@ -1132,30 +1149,6 @@
                             </Anchor>
                         </Anchors>
                     </ScrollFrame>
-					
-					<!-- Scroll Up Button -->
-                    <Button name="SS_Tab6_ConsumeListScrollUp" inherits="UIPanelScrollUpButtonTemplate">
-                        <Anchors>
-                            <Anchor point="BOTTOMRIGHT" relativeTo="SS_Tab6_ConsumeListScrollFrame" relativePoint="TOPRIGHT">
-                                <Offset><AbsDimension x="0" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts>
-                            <OnClick>SS_ConsumeConfig_ScrollUp()</OnClick>
-                        </Scripts>
-                    </Button>
-                    
-                    <!-- Scroll Down Button -->
-                    <Button name="SS_Tab6_ConsumeListScrollDown" inherits="UIPanelScrollDownButtonTemplate">
-                        <Anchors>
-                            <Anchor point="TOPRIGHT" relativeTo="SS_Tab6_ConsumeListScrollFrame" relativePoint="BOTTOMRIGHT">
-                                <Offset><AbsDimension x="0" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts>
-                            <OnClick>SS_ConsumeConfig_ScrollDown()</OnClick>
-                        </Scripts>
-                    </Button>
                     
                     <!-- Content Frame -->
                     <Frame name="SS_Tab6_ConsumeListPanel_Content" enableMouse="false">

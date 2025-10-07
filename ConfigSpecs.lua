@@ -360,6 +360,34 @@ function SS_ConfigSpecs_ScrollDown()
 end
 
 -- ============================================================================
+-- UPDATE LIST (FOR SCROLL CALLBACK)
+-- ============================================================================
+function SS_ConfigSpecs_UpdateList()
+    SS_ConfigSpecs_UpdateDisplay()
+end
+
+-- ============================================================================
+-- SCROLL FUNCTIONS
+-- ============================================================================
+function SS_Tab5_ScrollUp()
+    if SS_ConfigSpecs_ScrollOffset > 0 then
+        SS_ConfigSpecs_ScrollOffset = SS_ConfigSpecs_ScrollOffset - 3
+        if SS_ConfigSpecs_ScrollOffset < 0 then
+            SS_ConfigSpecs_ScrollOffset = 0
+        end
+        SS_ConfigSpecs_UpdateDisplay()
+    end
+end
+
+function SS_Tab5_ScrollDown()
+    local totalMembers = table.getn(SS_ConfigSpecs_RaidMembers)
+    if SS_ConfigSpecs_ScrollOffset < totalMembers - SS_ConfigSpecs_MaxVisibleRows then
+        SS_ConfigSpecs_ScrollOffset = SS_ConfigSpecs_ScrollOffset + 3
+        SS_ConfigSpecs_UpdateDisplay()
+    end
+end
+
+-- ============================================================================
 -- INITIALIZATION
 -- ============================================================================
 function SS_ConfigSpecs_Initialize()
