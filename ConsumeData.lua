@@ -72,8 +72,7 @@ SS_ConsumeData_Consumables = {
             {name = "Dreamtonic", effect = "(10 all stats)", buffName = "Dreamtonic"},
             {name = "Juju Power", effect = "(30 str)", buffName = "Juju Power"},
             {name = "Juju Might", effect = "(40 ap)", buffName = "Juju Might"},
-            {name = "Winterfall Firewater", effect = "(35 ap)", buffName = "Winterfall Firewater"},
-			{name = "Battle Shout (TEST)", effect = "(test)", buffName = "Battle Shout"}
+            {name = "Winterfall Firewater", effect = "(35 ap)", buffName = "Winterfall Firewater"}
         }
     }
 }
@@ -226,56 +225,55 @@ SS_ConsumeData_ConsumableRoles = {
 -- Maps numeric IDs to consume names for preset storage
 -- ============================================================================
 SS_ConsumeData_IDMapping = {
-    [1] = "Flask of the Titans",
-    [2] = "Flask of Supreme Power",
-    [3] = "Flask of Distilled Wisdom",
-    [4] = "Flask of Chromatic Resistance",
-    [5] = "Elixir of the Mongoose",
-    [6] = "Elixir of Giants",
-    [7] = "Elixir of Superior Defense",
-    [8] = "Elixir of Greater Firepower",
-    [9] = "Elixir of Greater Arcane Power",
-    [10] = "Elixir of Frost Power",
-    [11] = "Elixir of Shadow Power",
-    [12] = "Elixir of Healing Power",
-    [13] = "Elixir of Greater Intellect",
-    [14] = "Elixir of Greater Agility",
-    [15] = "Greater Arcane Elixir",
-    [16] = "Elixir of the Sages",
-    [17] = "Elixir of Fortitude",
-    [18] = "Blessed Sunfruit Juice",
-    [19] = "Rumsey Rum Black Label",
-    [20] = "Kreeg's Stout Beatdown",
-    [21] = "Gordok Green Grog",
-    [22] = "R.O.I.D.S.",
-    [23] = "Ground Scorpok Assay",
-    [24] = "Cerebral Cortex Compound",
-    [25] = "Gizzard Gum",
-    [26] = "Lung Juice Cocktail",
-    [27] = "Juju Power",
-    [28] = "Juju Might",
-    [29] = "Juju Flurry",
-    [30] = "Juju Chill",
-    [31] = "Spirit of Zanza",
-    [32] = "Swiftness of Zanza",
-    [33] = "Sheen of Zanza",
-    [34] = "Greater Fire Protection Potion",
-    [35] = "Greater Frost Protection Potion",
-    [36] = "Greater Nature Protection Potion",
-    [37] = "Greater Arcane Protection Potion",
-    [38] = "Greater Shadow Protection Potion",
-    [39] = "Greater Holy Protection Potion",
-    [40] = "Mighty Rage Potion",
-    [41] = "Mageblood Potion",
-    [42] = "Winterfall Firewater",
-    [43] = "Elixir of Brute Force",
-    [44] = "Elixir of the Honored Dead",
-    [45] = "Gift of Arthas",
-    [46] = "Smoked Desert Dumplings",
-    [47] = "Dirge's Kickin' Chimaerok Chops",
-    [48] = "Blessed Sunfruit",
-    [49] = "Nightfin Soup",
-    [50] = "Grilled Squid"
+    -- Flasks 0-9
+    [01] = "Flask of Supreme Power",
+    [02] = "Flask of the Titans",
+    [03] = "Flask of Distilled Wisdom",
+    [04] = "Flask of Chromatic Resistance",
+    
+    -- Worldbuffs 10-19
+    [10] = "Spirit of Zanza",
+    [11] = "Swiftness of Zanza",
+    [12] = "Cerebral Cortex Compound",
+    [13] = "Ground Scorpok Assay",
+    [14] = "R.O.I.D.S.",
+    
+    -- Elixirs 20-39
+    [20] = "Dreamshard Elixir",
+    [21] = "Mageblood Elixir",
+    [22] = "Greater Arcane Elixir",
+    [23] = "Elixir of Shadowpower",
+    [24] = "Elixir of Greater Firepower",
+    [25] = "Elixir of Greater Nature Power",
+    [26] = "Elixir of Greater Frost Power",
+    [27] = "Elixir of the Mongoose",
+    [28] = "Elixir of the Giants",
+    [29] = "Elixir of Fortitude",
+    [30] = "Major Troll's Blood Potion",
+    [31] = "Elixir of Superior Defense",
+    
+    -- Food 40-59
+    [40] = "Danonzo's Tel'Abim Delight",
+    [41] = "Danonzo's Tel'Abim Medley",
+    [42] = "Danonzo's Tel'Abim Surprise",
+    [43] = "Hardened Mushroom",
+    [44] = "Sour Mountain Berry",
+    [45] = "Power Mushroom",
+    [46] = "Tender Wolf Steak",
+    [47] = "Le Fishe Au Chocolat",
+    [48] = "Nightfin Soup",
+    [49] = "Empowering Herbal Salad",
+    
+    -- Alcohol 60-69
+    [60] = "Medivh's Merlot Blue",
+    [61] = "Medivh's Merlot",
+    [62] = "Rumsey Rum Black Label",
+    
+    -- Other 70-79
+    [70] = "Dreamtonic",
+    [71] = "Juju Power",
+    [72] = "Juju Might",
+    [73] = "Winterfall Firewater"
 }
 
 -- Reverse mapping: name -> ID

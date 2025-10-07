@@ -502,8 +502,6 @@ function SS_ConsumeConfig_ScrollUp()
 end
 
 function SS_ConsumeConfig_ScrollDown()
-    DEFAULT_CHAT_FRAME:AddMessage("ScrollDown: offset=" .. SS_ConsumeConfig_ScrollOffset)
-
     local totalLines = 0
     
     for catIndex = 1, table.getn(SS_ConsumeData_Consumables) do
@@ -527,7 +525,6 @@ function SS_ConsumeConfig_ScrollDown()
         SS_ConsumeConfig_ScrollOffset = SS_ConsumeConfig_ScrollOffset + 3
         SS_ConsumeConfig_UpdateDisplay()
     end
-	    DEFAULT_CHAT_FRAME:AddMessage("totalLines=" .. totalLines .. " maxVisible=" .. SS_ConsumeConfig_MaxVisibleRows)
 
 end
 

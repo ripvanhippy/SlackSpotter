@@ -68,9 +68,6 @@ function SS_Announce_SendToRaid(raidResults, raidInstance)
         return
     end
     
-    -- Header
-    SendChatMessage("=== Missing Consumes (" .. raidInstance .. ") ===", "RAID")
-    
     -- Send each line
     for i = 1, table.getn(lines) do
         SendChatMessage(lines[i], "RAID")

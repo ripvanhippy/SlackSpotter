@@ -14,62 +14,63 @@
     </Button>
     
     <!-- Main Frame -->
+	<!-- 840.840 540.420 300.420 540.420 300.420 -->
     <Frame name="SS_Frame" enableMouse="true" toplevel="true" parent="UIParent" hidden="true" movable="true">
         <Size>
-            <AbsDimension x="840" y="840"/>
+            <AbsDimension x="900" y="900"/>
         </Size>
         <Anchors>
             <Anchor point="CENTER"/>
         </Anchors>
         <HitRectInsets>
-            <AbsInset left="0" right="36" top="0" bottom="54"/>
+            <AbsInset left="20" right="70" top="10" bottom="100"/>
         </HitRectInsets>
         <Layers>
             <Layer level="BORDER">
                 <Texture file="Interface\PaperDollInfoFrame\UI-Character-General-TopLeft">
                     <Size>
-                        <AbsDimension x="540" y="420"/>
+                        <AbsDimension x="600" y="450"/>
                     </Size>
                     <Anchors>
                         <Anchor point="TOPLEFT">
                             <Offset>
-                                <AbsDimension x="5" y="-2"/>
+                                <AbsDimension x="0" y="0"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
                 </Texture>
                 <Texture file="Interface\PaperDollInfoFrame\UI-Character-General-TopRight">
                     <Size>
-                        <AbsDimension x="300" y="420"/>
+                        <AbsDimension x="300" y="450"/>
                     </Size>
                     <Anchors>
                         <Anchor point="TOPRIGHT">
                             <Offset>
-                                <AbsDimension x="5" y="-2"/>
+                                <AbsDimension x="0" y="0"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
                 </Texture>
                 <Texture file="Interface\TalentFrame\UI-TalentFrame-BotLeft">
                     <Size>
-                        <AbsDimension x="540" y="420"/>
+                        <AbsDimension x="600" y="450"/>
                     </Size>
                     <Anchors>
                         <Anchor point="BOTTOMLEFT">
                             <Offset>
-                                <AbsDimension x="5" y="-2"/>
+                                <AbsDimension x="0" y="0"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
                 </Texture>
                 <Texture file="Interface\TalentFrame\UI-TalentFrame-BotRight">
                     <Size>
-                        <AbsDimension x="300" y="420"/>
+                        <AbsDimension x="300" y="450"/>
                     </Size>
                     <Anchors>
                         <Anchor point="BOTTOMRIGHT">
                             <Offset>
-                                <AbsDimension x="5" y="-2"/>
+                                <AbsDimension x="0" y="0"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -78,12 +79,12 @@
             <Layer level="ARTWORK">
                 <Texture name="SS_Frame_CustomBG" file="Interface\AddOns\SlackSpotter\SlackerBG">
                     <Size>
-                        <AbsDimension x="690" y="548"/>
+                        <AbsDimension x="745" y="590"/>
                     </Size>
                     <Anchors>
                         <Anchor point="CENTER">
                             <Offset>
-                                <AbsDimension x="-25" y="22"/>
+                                <AbsDimension x="-28" y="25"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -114,7 +115,7 @@
                         </Anchor>
                     </Anchors>
                 </FontString>
-                <FontString name="SS_Frame_SubtitleText1" inherits="GameFontNormal" text="|cffc0c0c0Slackers raid with empty hands, No flasks, no food, no battle plans.|r">
+                <FontString name="SS_Frame_SubtitleText1" inherits="GameFontNormal" text="|cffc0c0c0Slackers raid with empty hands. No flasks, no food, no battle plans.|r">
                     <Anchors>
                         <Anchor point="TOP">
                             <Offset>
@@ -123,7 +124,7 @@
                         </Anchor>
                     </Anchors>
                 </FontString>
-                <FontString name="SS_Frame_SubtitleText2" inherits="GameFontNormal" text="|cffc0c0c0They ride the parse, then dodge the blame— But logs reveal their silent shame!|r">
+                <FontString name="SS_Frame_SubtitleText2" inherits="GameFontNormal" text="|cffc0c0c0They ride the parse and dodge the blame — But this addon reveals their shame!|r">
                     <Anchors>
                         <Anchor point="TOP">
                             <Offset>
@@ -136,16 +137,16 @@
                     <Anchors>
                         <Anchor point="BOTTOMLEFT">
                             <Offset>
-                                <AbsDimension x="92" y="144"/>
+                                <AbsDimension x="75" y="156´7"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
                 </FontString>
-                <FontString name="SS_Frame_BottomRightText" inherits="GameFontNormal" text="V0.36 - 30th Sep 25">
+                <FontString name="SS_Frame_BottomRightText" inherits="GameFontNormal" text="V0.40 - 7th Oct 25">
                     <Anchors>
                         <Anchor point="BOTTOMRIGHT">
                             <Offset>
-                                <AbsDimension x="-85" y="144"/>
+                                <AbsDimension x="-118" y="155"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -156,12 +157,12 @@
             <!-- Close Button -->
             <Button name="SS_Frame_CloseButton" inherits="UIPanelCloseButton">
                 <Size>
-                    <AbsDimension x="54" y="49"/>
+                    <AbsDimension x="65" y="55"/>
                 </Size>
                 <Anchors>
                     <Anchor point="CENTER" relativePoint="TOPRIGHT">
                         <Offset>
-                            <AbsDimension x="-81" y="-41"/>
+                            <AbsDimension x="-108" y="-42"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -177,7 +178,7 @@
                 <Anchors>
                     <Anchor point="BOTTOMLEFT">
                         <Offset>
-                            <AbsDimension x="30" y="95"/>
+                            <AbsDimension x="35" y="100"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -257,18 +258,37 @@
                     </OnClick>
                 </Scripts>
             </Button>
+			
+			<!-- ========================================== -->
+            <!-- DEBUG BUTTON (Bottom-Right, Always Visible) -->
+            <!-- ========================================== -->
+            <CheckButton name="SS_DebugButton" inherits="UICheckButtonTemplate">
+                <Size>
+                    <AbsDimension x="24" y="24"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT">
+                        <Offset>
+                            <AbsDimension x="-245" y="148"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>SS_Debug_Toggle()</OnClick>
+                </Scripts>
+            </CheckButton>
             
             <!-- ========================================== -->
             <!-- TAB 1: RAID BUFF CHECK PANEL (TOP-LEFT) -->
             <!-- ========================================== -->
             <Frame name="SS_Tab1_RaidBuffCheckPanel">
                 <Size>
-                    <AbsDimension x="240" y="140"/>
+                    <AbsDimension x="275" y="145"/>
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT">
                         <Offset>
-                            <AbsDimension x="30" y="-130"/>
+                            <AbsDimension x="60" y="-140"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -293,7 +313,7 @@
                     <CheckButton name="SS_Tab1_RaidBuffCheckPanel_ShadowProtCheckbox" inherits="UICheckButtonTemplate">
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_ThornsCheckbox" relativePoint="BOTTOMLEFT">
-                                <Offset><AbsDimension x="0" y="-5"/></Offset>
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
                             </Anchor>
                         </Anchors>
                         <Scripts>
@@ -304,7 +324,7 @@
                     <CheckButton name="SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox" inherits="UICheckButtonTemplate">
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_ShadowProtCheckbox" relativePoint="BOTTOMLEFT">
-                                <Offset><AbsDimension x="0" y="-5"/></Offset>
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
                             </Anchor>
                         </Anchors>
                         <Scripts>
@@ -313,45 +333,35 @@
                     </CheckButton>
                     <!-- Raid Buff Check Button -->
                     <Button name="SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton" inherits="UIPanelButtonTemplate" text="Raid Buff Check">
-                        <Size><AbsDimension x="110" y="25"/></Size>
+                        <Size><AbsDimension x="135" y="35"/></Size>
                         <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox" relativePoint="BOTTOMLEFT">
-                                <Offset><AbsDimension x="0" y="-10"/></Offset>
+                            <Anchor point="BOTTOM">
+                                <Offset><AbsDimension x="0" y="10"/></Offset>
                             </Anchor>
                         </Anchors>
                         <Scripts><OnClick>SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton_OnClick()</OnClick></Scripts>
                     </Button>
-                    <!-- Consume Check Button -->
-                    <Button name="SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton" inherits="UIPanelButtonTemplate" text="Consume Check">
-                        <Size><AbsDimension x="110" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()</OnClick></Scripts>
-                    </Button>
                 </Frames>
                 <Layers>
                     <Layer level="OVERLAY">
-                        <FontString name="SS_Tab1_RaidBuffCheckPanel_ThornsLabel" inherits="GameFontNormal" text="Thorns">
+                        <FontString name="SS_Tab1_RaidBuffCheckPanel_ThornsLabel" inherits="GameFontNormal" text="Check for Druid - Thorns">
                             <Anchors>
-                                <Anchor point="LEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_ThornsCheckbox" relativePoint="RIGHT">
-                                    <Offset><AbsDimension x="5" y="0"/></Offset>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="50" y="-18"/></Offset>
                                 </Anchor>
                             </Anchors>
                         </FontString>
-                        <FontString name="SS_Tab1_RaidBuffCheckPanel_ShadowProtLabel" inherits="GameFontNormal" text="Shadow Protection">
+                        <FontString name="SS_Tab1_RaidBuffCheckPanel_ShadowProtLabel" inherits="GameFontNormal" text="Check for Priest - Shadow Protection">
                             <Anchors>
-                                <Anchor point="LEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_ShadowProtCheckbox" relativePoint="RIGHT">
-                                    <Offset><AbsDimension x="5" y="0"/></Offset>
+                                <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_ThornsLabel" relativePoint="BOTTOMLEFT">
+                                    <Offset><AbsDimension x="0" y="-20"/></Offset>
                                 </Anchor>
                             </Anchors>
                         </FontString>
-                        <FontString name="SS_Tab1_RaidBuffCheckPanel_EmeraldBlessLabel" inherits="GameFontNormal" text="Emerald Blessing">
+                        <FontString name="SS_Tab1_RaidBuffCheckPanel_EmeraldBlessLabel" inherits="GameFontNormal" text="Check for Druid - Emerald Blessing">
                             <Anchors>
-                                <Anchor point="LEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox" relativePoint="RIGHT">
-                                    <Offset><AbsDimension x="5" y="0"/></Offset>
+                                <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel_ShadowProtLabel" relativePoint="BOTTOMLEFT">
+                                    <Offset><AbsDimension x="0" y="-20"/></Offset>
                                 </Anchor>
                             </Anchors>
                         </FontString>
@@ -364,7 +374,7 @@
             <!-- ========================================== -->
             <Frame name="SS_Tab1_ProtectionPotionPanel">
                 <Size>
-                    <AbsDimension x="240" y="130"/>
+                    <AbsDimension x="275" y="100"/>
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel" relativePoint="BOTTOMLEFT">
@@ -381,7 +391,7 @@
                 <Frames>
                     <!-- Protection Potion Buttons (2 rows of 3) -->
                     <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotArcaneButton" inherits="UIPanelButtonTemplate" text="Arcane">
-                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Size><AbsDimension x="75" y="22"/></Size>
                         <Anchors>
                             <Anchor point="TOPLEFT">
                                 <Offset><AbsDimension x="10" y="-10"/></Offset>
@@ -390,7 +400,7 @@
                         <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotArcaneButton_OnClick()</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotFireButton" inherits="UIPanelButtonTemplate" text="Fire">
-                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Size><AbsDimension x="75" y="22"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotArcaneButton" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -399,7 +409,7 @@
                         <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotFireButton_OnClick()</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotFrostButton" inherits="UIPanelButtonTemplate" text="Frost">
-                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Size><AbsDimension x="75" y="22"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotFireButton" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -408,7 +418,7 @@
                         <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotFrostButton_OnClick()</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotNatureButton" inherits="UIPanelButtonTemplate" text="Nature">
-                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Size><AbsDimension x="75" y="22"/></Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotArcaneButton" relativePoint="BOTTOMLEFT">
                                 <Offset><AbsDimension x="0" y="-5"/></Offset>
@@ -417,7 +427,7 @@
                         <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotNatureButton_OnClick()</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotShadowButton" inherits="UIPanelButtonTemplate" text="Shadow">
-                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Size><AbsDimension x="75" y="22"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotNatureButton" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -426,7 +436,7 @@
                         <Scripts><OnClick>SS_Tab1_ProtectionPotionPanel_ProtPotShadowButton_OnClick()</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab1_ProtectionPotionPanel_ProtPotHolyButton" inherits="UIPanelButtonTemplate" text="Holy">
-                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Size><AbsDimension x="75" y="22"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotShadowButton" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -438,7 +448,7 @@
                     <CheckButton name="SS_Tab1_ProtectionPotionPanel_ListEveryoneCheckbox" inherits="UICheckButtonTemplate">
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ProtPotNatureButton" relativePoint="BOTTOMLEFT">
-                                <Offset><AbsDimension x="0" y="-10"/></Offset>
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
                             </Anchor>
                         </Anchors>
                         <Scripts>
@@ -450,24 +460,61 @@
                     <Layer level="OVERLAY">
                         <FontString name="SS_Tab1_ProtectionPotionPanel_ListEveryoneLabel" inherits="GameFontNormal" text="List everyone">
                             <Anchors>
-                                <Anchor point="LEFT" relativeTo="SS_Tab1_ProtectionPotionPanel_ListEveryoneCheckbox" relativePoint="RIGHT">
-                                    <Offset><AbsDimension x="5" y="0"/></Offset>
+                                <Anchor point="BOTTOMLEFT">
+                                    <Offset><AbsDimension x="50" y="20"/></Offset>
                                 </Anchor>
                             </Anchors>
                         </FontString>
                     </Layer>
                 </Layers>
             </Frame>
-            
+
+            <!-- ========================================== -->
+            <!-- TAB 1: Main Consume Button (MIDDLE-LEFT pt2) -->
+            <!-- ========================================== -->
+			
+			
+			<Frame name="SS_Tab1_ConsumeButtonCheckPanel">
+                <Size>
+                    <AbsDimension x="275" y="50"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ProtectionPotionPanel" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="-10"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Frames>
+				
+                    <!-- Consume Check Button -->
+                    <Button name="SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton" inherits="UIPanelButtonTemplate" text="Main Consume Check">
+                        <Size><AbsDimension x="150" y="35"/></Size>
+                        <Anchors>
+                            <Anchor point="CENTER">
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()</OnClick></Scripts>
+                    </Button>
+				</Frames>
+				</Frame>
+			
+			
             <!-- ========================================== -->
             <!-- TAB 1: STATS PANEL (BOTTOM-LEFT) -->
             <!-- ========================================== -->
             <Frame name="SS_Tab1_StatsPanel">
                 <Size>
-                    <AbsDimension x="240" y="260"/>
+                    <AbsDimension x="275" y="250"/>
                 </Size>
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ProtectionPotionPanel" relativePoint="BOTTOMLEFT">
+                    <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ConsumeButtonCheckPanel" relativePoint="BOTTOMLEFT">
                         <Offset>
                             <AbsDimension x="0" y="-10"/>
                         </Offset>
@@ -520,7 +567,7 @@
                 <Frames>
                     <!-- Three buttons in horizontal row -->
                     <Button name="SS_Tab1_StatsPanel_RepPlusButton" inherits="UIPanelButtonTemplate" text="Rep+">
-                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Size><AbsDimension x="50" y="22"/></Size>
                         <Anchors>
                             <Anchor point="BOTTOMLEFT">
                                 <Offset><AbsDimension x="10" y="10"/></Offset>
@@ -529,22 +576,31 @@
                         <Scripts><OnClick>SS_Tab1_StatsPanel_RepPlusButton_OnClick()</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab1_StatsPanel_RepMinusButton" inherits="UIPanelButtonTemplate" text="Rep-">
-                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Size><AbsDimension x="50" y="22"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab1_StatsPanel_RepPlusButton" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                                <Offset><AbsDimension x="4" y="0"/></Offset>
                             </Anchor>
                         </Anchors>
                         <Scripts><OnClick>SS_Tab1_StatsPanel_RepMinusButton_OnClick()</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab1_StatsPanel_ResetButton" inherits="UIPanelButtonTemplate" text="Reset Stats">
-                        <Size><AbsDimension x="70" y="22"/></Size>
+                        <Size><AbsDimension x="72" y="22"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab1_StatsPanel_RepMinusButton" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
+                                <Offset><AbsDimension x="4" y="0"/></Offset>
                             </Anchor>
                         </Anchors>
                         <Scripts><OnClick>SS_Tab1_StatsPanel_ResetButton_OnClick()</OnClick></Scripts>
+                    </Button>
+					<Button name="SS_Tab1_StatsPanel_TakeDataButton" inherits="UIPanelButtonTemplate" text="Take Data">
+                        <Size><AbsDimension x="71" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativeTo="SS_Tab1_StatsPanel_ResetButton" relativePoint="RIGHT">
+                                <Offset><AbsDimension x="4" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Tab1_StatsPanel_TakeDataButton_OnClick()</OnClick></Scripts>
                     </Button>
                 </Frames>
             </Frame>
@@ -554,12 +610,12 @@
             <!-- ========================================== -->
             <Frame name="SS_Tab1_RaidListPanel">
                 <Size>
-                    <AbsDimension x="520" y="590"/>
+                    <AbsDimension x="450" y="575"/>
                 </Size>
                 <Anchors>
-                    <Anchor point="TOPRIGHT">
+                    <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel" relativePoint="TOPRIGHT">
                         <Offset>
-                            <AbsDimension x="-40" y="-130"/>
+                            <AbsDimension x="5" y="0"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -577,7 +633,7 @@
                                 </Anchor>
                             </Anchors>
                         </FontString>
-                        <FontString name="SS_Tab1_RaidListPanel_TableHeader" inherits="GameFontNormal" text="Raidmembers | Raidbuffs | Consumes">
+                        <FontString name="SS_Tab1_RaidListPanel_TableHeader" inherits="GameFontNormal" text="Raidmembers___________Raidbuffs___Consumes">
                             <Anchors>
                                 <Anchor point="TOPLEFT">
                                     <Offset><AbsDimension x="15" y="-50"/></Offset>
@@ -1115,37 +1171,7 @@
                 </Frames>
                 
 			</Frame>
-			
-			<!-- ========================================== -->
-            <!-- DEBUG BUTTON (Bottom-Right, Always Visible) -->
-            <!-- ========================================== -->
-            <CheckButton name="SS_DebugButton" inherits="UICheckButtonTemplate">
-                <Size>
-                    <AbsDimension x="24" y="24"/>
-                </Size>
-                <Anchors>
-                    <Anchor point="BOTTOMRIGHT">
-                        <Offset>
-                            <AbsDimension x="-10" y="10"/>
-                        </Offset>
-                    </Anchor>
-                </Anchors>
-                <Scripts>
-                    <OnClick>SS_Debug_Toggle()</OnClick>
-                </Scripts>
-            </CheckButton>
-            
-            <FontString name="SS_DebugButtonText" inherits="GameFontNormalSmall" text="Debug">
-                <Anchors>
-                    <Anchor point="RIGHT" relativeTo="SS_DebugButton" relativePoint="LEFT">
-                        <Offset>
-                            <AbsDimension x="-5" y="0"/>
-                        </Offset>
-                    </Anchor>
-                </Anchors>
-            </FontString>
-			<!-- debug button ends here-->
-			
+		
         </Frames>
         <Scripts>
             <OnShow>

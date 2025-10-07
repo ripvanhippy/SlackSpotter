@@ -225,6 +225,7 @@ function SS_HideAllTabContent()
     -- Hide Tab 1 panels
     if SS_Tab1_RaidBuffCheckPanel then SS_Tab1_RaidBuffCheckPanel:Hide() end
     if SS_Tab1_ProtectionPotionPanel then SS_Tab1_ProtectionPotionPanel:Hide() end
+	if SS_Tab1_ConsumeButtonCheckPanel then SS_Tab1_ConsumeButtonCheckPanel:Hide() end
     if SS_Tab1_StatsPanel then SS_Tab1_StatsPanel:Hide() end
     if SS_Tab1_RaidListPanel then SS_Tab1_RaidListPanel:Hide() end
     
