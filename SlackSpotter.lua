@@ -515,10 +515,6 @@ end
 
 SLASH_SS1 = "/ss"
 SlashCmdList["SS"] = function(msg)
-    if not SS_Frame then
-        DEFAULT_CHAT_FRAME:AddMessage("|cffff0000SlackSpotter frame not loaded yet!|r")
-        return
-    end
     
     if msg == "" then
         SS_ToggleFrame()

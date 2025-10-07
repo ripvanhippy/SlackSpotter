@@ -137,7 +137,7 @@
                     <Anchors>
                         <Anchor point="BOTTOMLEFT">
                             <Offset>
-                                <AbsDimension x="75" y="156´7"/>
+                                <AbsDimension x="75" y="15"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -690,6 +690,8 @@
         </Anchor>
     </Anchors>
 </Frame>
+</Frames>
+            </Frame>
             
             <!-- ========================================== -->
             <!-- TAB 5: CONFIG SPECS PANELS -->
