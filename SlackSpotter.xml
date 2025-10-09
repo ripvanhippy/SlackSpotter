@@ -137,7 +137,7 @@
                     <Anchors>
                         <Anchor point="BOTTOMLEFT">
                             <Offset>
-                                <AbsDimension x="75" y="15"/>
+                                <AbsDimension x="75" y="156"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -283,7 +283,7 @@
             <!-- ========================================== -->
             <Frame name="SS_Tab1_RaidBuffCheckPanel">
                 <Size>
-                    <AbsDimension x="275" y="145"/>
+                    <AbsDimension x="275" y="140"/>
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT">
@@ -333,7 +333,7 @@
                     </CheckButton>
                     <!-- Raid Buff Check Button -->
                     <Button name="SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton" inherits="UIPanelButtonTemplate" text="Raid Buff Check">
-                        <Size><AbsDimension x="135" y="35"/></Size>
+                        <Size><AbsDimension x="135" y="30"/></Size>
                         <Anchors>
                             <Anchor point="BOTTOM">
                                 <Offset><AbsDimension x="0" y="10"/></Offset>
@@ -473,36 +473,53 @@
             <!-- TAB 1: Main Consume Button (MIDDLE-LEFT pt2) -->
             <!-- ========================================== -->
 			
-			<Frame name="SS_Tab1_ConsumeButtonCheckPanel">
-                <Size>
-                    <AbsDimension x="275" y="50"/>
-                </Size>
+<Frame name="SS_Tab1_ConsumeButtonCheckPanel">
+    <Size>
+        <AbsDimension x="275" y="50"/>
+    </Size>
+    <Anchors>
+        <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ProtectionPotionPanel" relativePoint="BOTTOMLEFT">
+            <Offset>
+                <AbsDimension x="0" y="-10"/>
+            </Offset>
+        </Anchor>
+    </Anchors>
+    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+        <EdgeSize><AbsValue val="16"/></EdgeSize>
+        <TileSize><AbsValue val="16"/></TileSize>
+        <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+    </Backdrop>
+    <Layers>
+        <Layer level="OVERLAY">
+            <FontString name="SS_Tab1_ConsumeButtonCheckPanel_RaidLabel" inherits="GameFontNormalSmall" text="Current Raid: Kara40">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ProtectionPotionPanel" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                            <AbsDimension x="0" y="-10"/>
-                        </Offset>
+                    <Anchor point="TOPLEFT">
+                        <Offset><AbsDimension x="10" y="-10"/></Offset>
                     </Anchor>
                 </Anchors>
-                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-                    <EdgeSize><AbsValue val="16"/></EdgeSize>
-                    <TileSize><AbsValue val="16"/></TileSize>
-                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
-                </Backdrop>
-                <Frames>
-				
-                    <!-- Consume Check Button -->
-                    <Button name="SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton" inherits="UIPanelButtonTemplate" text="Main Consume Check">
-                        <Size><AbsDimension x="150" y="35"/></Size>
-                        <Anchors>
-                            <Anchor point="CENTER">
-                                <Offset><AbsDimension x="0" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()</OnClick></Scripts>
-                    </Button>
-				</Frames>
-			</Frame>
+            </FontString>
+            <FontString name="SS_Tab1_ConsumeButtonCheckPanel_SpecLabel" inherits="GameFontNormalSmall" text="Missing Specs: 0">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ConsumeButtonCheckPanel_RaidLabel" relativePoint="BOTTOMLEFT">
+                        <Offset><AbsDimension x="0" y="-2"/></Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+        </Layer>
+    </Layers>
+    <Frames>
+        <!-- Consume Check Button -->
+        <Button name="SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton" inherits="UIPanelButtonTemplate" text="Main Consume Check">
+            <Size><AbsDimension x="145" y="30"/></Size>
+            <Anchors>
+                <Anchor point="RIGHT">
+                    <Offset><AbsDimension x="-8" y="0"/></Offset>
+                </Anchor>
+            </Anchors>
+            <Scripts><OnClick>SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()</OnClick></Scripts>
+        </Button>
+    </Frames>
+</Frame>
 			
 			
             <!-- ========================================== -->
@@ -852,7 +869,7 @@
                         <FontString name="SS_Tab6_MinRequiredLabel" inherits="GameFontNormal" text="Any X Consume:">
                             <Anchors>
                                 <Anchor point="TOPLEFT">
-                                    <Offset><AbsDimension x="15" y="-200"/></Offset>
+                                    <Offset><AbsDimension x="15" y="-365"/></Offset>
                                 </Anchor>
                             </Anchors>
                         </FontString>
@@ -861,14 +878,14 @@
                 <Frames>
                     <!-- Raid Buttons (2 rows of 5) -->
                     <Button name="SS_Tab6_RaidButton_MC" inherits="UIPanelButtonTemplate" text="MC">
-                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Size><AbsDimension x="65" y="25"/></Size>
                         <Anchors>
                             <Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-35"/></Offset></Anchor>
                         </Anchors>
                         <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("MC")</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab6_RaidButton_BWL" inherits="UIPanelButtonTemplate" text="BWL">
-                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Size><AbsDimension x="65" y="25"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_MC" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -877,7 +894,7 @@
                         <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("BWL")</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab6_RaidButton_AQ40" inherits="UIPanelButtonTemplate" text="AQ40">
-                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Size><AbsDimension x="65" y="25"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_BWL" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -886,7 +903,7 @@
                         <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("AQ40")</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab6_RaidButton_Naxx" inherits="UIPanelButtonTemplate" text="Naxx">
-                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Size><AbsDimension x="65" y="25"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_AQ40" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -895,7 +912,7 @@
                         <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("Naxx")</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab6_RaidButton_Kara40" inherits="UIPanelButtonTemplate" text="Kara40">
-                        <Size><AbsDimension x="60" y="20"/></Size>
+                        <Size><AbsDimension x="65" y="25"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_Naxx" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -906,7 +923,7 @@
                     
                     <!-- Second Row -->
                     <Button name="SS_Tab6_RaidButton_Kara10" inherits="UIPanelButtonTemplate" text="Kara10">
-                        <Size><AbsDimension x="60" y="20"/></Size>
+                        <Size><AbsDimension x="65" y="25"/></Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="SS_Tab6_RaidButton_MC" relativePoint="BOTTOMLEFT">
                                 <Offset><AbsDimension x="0" y="-5"/></Offset>
@@ -915,7 +932,7 @@
                         <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("Kara10")</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab6_RaidButton_ES" inherits="UIPanelButtonTemplate" text="ES">
-                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Size><AbsDimension x="65" y="25"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_Kara10" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -924,7 +941,7 @@
                         <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("ES")</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab6_RaidButton_AQ20" inherits="UIPanelButtonTemplate" text="AQ20">
-                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Size><AbsDimension x="65" y="25"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_ES" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -933,7 +950,7 @@
                         <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("AQ20")</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab6_RaidButton_ZG" inherits="UIPanelButtonTemplate" text="ZG">
-                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Size><AbsDimension x="65" y="25"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_AQ20" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -942,7 +959,7 @@
                         <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("ZG")</OnClick></Scripts>
                     </Button>
                     <Button name="SS_Tab6_RaidButton_Ony" inherits="UIPanelButtonTemplate" text="Ony">
-                        <Size><AbsDimension x="50" y="20"/></Size>
+                        <Size><AbsDimension x="65" y="25"/></Size>
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_ZG" relativePoint="RIGHT">
                                 <Offset><AbsDimension x="5" y="0"/></Offset>
@@ -966,7 +983,9 @@
                     <!-- Min Required Checkboxes (1-4) -->
                     <CheckButton name="SS_Tab6_MinRequiredCheckbox1" inherits="UICheckButtonTemplate">
                         <Anchors>
-                            <Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-220"/></Offset></Anchor>
+                            <Anchor point="TOPLEFT">
+							    <Offset><AbsDimension x="15" y="-375"/></Offset>
+							</Anchor>
                         </Anchors>
                         <Scripts><OnClick>SS_ConsumeConfig_MinRequiredCheckbox_OnClick(1)</OnClick></Scripts>
                     </CheckButton>
@@ -1075,9 +1094,9 @@
                     <AbsDimension x="380" y="590"/>
                 </Size>
                 <Anchors>
-                    <Anchor point="TOPRIGHT">
+                    <Anchor point="TOPLEFT" relativeTo="SS_Tab6_ControlPanel" relativePoint="TOPRIGHT">
                         <Offset>
-                            <AbsDimension x="-40" y="-130"/>
+                            <AbsDimension x="10" y="0"/>
                         </Offset>
                     </Anchor>
                 </Anchors>

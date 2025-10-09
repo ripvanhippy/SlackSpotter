@@ -262,103 +262,114 @@ end
 -- CORE: Check entire raid for buffs
 -- ============================================================================
 function SS_RaidBuff_CheckEntireRaid()
-    local results = {}  -- [playerName] = {buffsFound, buffsRequired, missing}
+    local results = {}
     local classInfo = SS_RaidBuff_GetRaidClasses()
     
-    -- Special case: Track if ANY druid has Emerald Blessing
     local anyDruidHasEmeraldBlessing = false
     
     local numRaidMembers = GetNumRaidMembers()
-    local totalMembers = (numRaidMembers > 0) and numRaidMembers or 1
+    local numPartyMembers = GetNumPartyMembers()
+    local totalMembers = 1  -- Always include self
+    local isRaid = false
+    
+    if numRaidMembers > 0 then
+        totalMembers = numRaidMembers
+        isRaid = true
+    elseif numPartyMembers > 0 then
+        totalMembers = numPartyMembers + 1
+    end
     
     for i = 1, totalMembers do
         local name, class, unitID, playerSpec
         
-        if numRaidMembers == 0 then
+        if isRaid then
+            -- In raid
+            name, _, _, _, class = GetRaidRosterInfo(i)
+            class = SS_ConfigSpecs_ProperCase(class)
+            unitID = "raid" .. i
+        elseif numPartyMembers > 0 then
+            -- In party
+            if i == 1 then
+                name = UnitName("player")
+                _, class = UnitClass("player")
+                class = SS_ConfigSpecs_ProperCase(class)
+                unitID = "player"
+            else
+                name = UnitName("party" .. (i-1))
+                _, class = UnitClass("party" .. (i-1))
+                class = SS_ConfigSpecs_ProperCase(class)
+                unitID = "party" .. (i-1)
+            end
+        else
             -- Solo
             name = UnitName("player")
             _, class = UnitClass("player")
             class = SS_ConfigSpecs_ProperCase(class)
             unitID = "player"
-            playerSpec = SS_Check_GetPlayerSpec(name)
-        else
-            -- In raid
-            name, _, _, _, class = GetRaidRosterInfo(i)
-            class = SS_ConfigSpecs_ProperCase(class)
-            unitID = "raid" .. i
-            playerSpec = SS_Check_GetPlayerSpec(name)
         end
         
+        playerSpec = SS_Check_GetPlayerSpec(name)
+        
         if name and UnitIsConnected(unitID) then
-            -- Check if player has spec assigned
             if not playerSpec then
                 DEFAULT_CHAT_FRAME:AddMessage("|cffff8000" .. name .. " has no spec assigned - skipping buff check|r")
             else
-                -- Scan player's buffs
                 local foundBuffs = SS_RaidBuff_ScanPlayerBuffs(unitID)
             
-            -- Check Emerald Blessing first (for group check)
-            if foundBuffs["Emerald Blessing"] then
-                anyDruidHasEmeraldBlessing = true
-            end
-            
-            -- Determine which buffs this player needs
-            local requiredBuffs = {}
-            local missingBuffs = {}
-            local foundCount = 0
-            
-            for j = 1, table.getn(SS_RaidBuffs_Definitions) do
-                local buffDef = SS_RaidBuffs_Definitions[j]
-                local shouldCheck = true
-                
-                -- Skip optional buffs if checkbox not ticked
-                if buffDef.optional then
-                    if buffDef.name == "Shadow Protection" and not SS_RaidBuffs_Selected.ShadowProtection then
-                        shouldCheck = false
-                    end
-                    if buffDef.name == "Thorns" and not SS_RaidBuffs_Selected.Thorns then
-                        shouldCheck = false
-                    end
-                    if buffDef.name == "Emerald Blessing" and not SS_RaidBuffs_Selected.EmeraldBlessing then
-                        shouldCheck = false
-                    end
+                if foundBuffs["Emerald Blessing"] then
+                    anyDruidHasEmeraldBlessing = true
                 end
                 
-                -- Skip if required class not online
-                if shouldCheck and buffDef.needsClass and not classInfo[buffDef.needsClass].online then
-                    shouldCheck = false
-                end
+                local requiredBuffs = {}
+                local missingBuffs = {}
+                local foundCount = 0
                 
-                -- Check if player needs this buff
-                if shouldCheck and SS_RaidBuff_PlayerNeedsBuff(buffDef, name, class, playerSpec) then
-                    table.insert(requiredBuffs, buffDef.name)
+                for j = 1, table.getn(SS_RaidBuffs_Definitions) do
+                    local buffDef = SS_RaidBuffs_Definitions[j]
+                    local shouldCheck = true
                     
-                    if foundBuffs[buffDef.name] then
-                        foundCount = foundCount + 1
-                    else
-                        table.insert(missingBuffs, {
-                            name = buffDef.name,
-                            personal = buffDef.personal or false
-                        })
+                    if buffDef.optional then
+                        if buffDef.name == "Shadow Protection" and not SS_RaidBuffs_Selected.ShadowProtection then
+                            shouldCheck = false
+                        end
+                        if buffDef.name == "Thorns" and not SS_RaidBuffs_Selected.Thorns then
+                            shouldCheck = false
+                        end
+                        if buffDef.name == "Emerald Blessing" and not SS_RaidBuffs_Selected.EmeraldBlessing then
+                            shouldCheck = false
+                        end
+                    end
+                    
+                    if shouldCheck and buffDef.needsClass and not classInfo[buffDef.needsClass].online then
+                        shouldCheck = false
+                    end
+                    
+                    if shouldCheck and SS_RaidBuff_PlayerNeedsBuff(buffDef, name, class, playerSpec) then
+                        table.insert(requiredBuffs, buffDef.name)
+                        
+                        if foundBuffs[buffDef.name] then
+                            foundCount = foundCount + 1
+                        else
+                            table.insert(missingBuffs, {
+                                name = buffDef.name,
+                                personal = buffDef.personal or false
+                            })
+                        end
                     end
                 end
-				
+                
+                results[name] = {
+                    class = class,
+                    spec = playerSpec,
+                    buffsFound = foundCount,
+                    buffsRequired = table.getn(requiredBuffs),
+                    missing = missingBuffs
+                }
             end
-            
-            results[name] = {
-                class = class,
-                spec = playerSpec,
-                buffsFound = foundCount,
-                buffsRequired = table.getn(requiredBuffs),
-                missing = missingBuffs
-            }
-			end
         end
     end
     
-    -- Post-process Emerald Blessing
     if SS_RaidBuffs_Selected.EmeraldBlessing and anyDruidHasEmeraldBlessing then
-        -- Remove Emerald Blessing from all missing lists
         for playerName, data in pairs(results) do
             for i = table.getn(data.missing), 1, -1 do
                 if data.missing[i].name == "Emerald Blessing" then

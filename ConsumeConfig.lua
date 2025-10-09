@@ -759,24 +759,25 @@ function SS_ConsumeConfig_CreateSpecButtons()
     }
     
     local yOffset = -5
+
+for i = 1, table.getn(classOrder) do
+    local classData = classOrder[i]
     
-    for i = 1, table.getn(classOrder) do
-        local classData = classOrder[i]
+    local label = container:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    label:SetPoint("TOPLEFT", container, "TOPLEFT", 5, yOffset)
+    label:SetText(classData.color .. classData.class .. "|r")
+    
+    local xOffset = 70
+    for j = 1, table.getn(classData.specs) do
+        local specName = classData.specs[j]
+        local fullSpecName = classData.class .. specName
         
-        local label = container:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        label:SetPoint("TOPLEFT", container, "TOPLEFT", 5, yOffset)
-        label:SetText(classData.color .. classData.class .. "|r")
-        
-        local xOffset = 70
-        for j = 1, table.getn(classData.specs) do
-            local specName = classData.specs[j]
-            local fullSpecName = classData.class .. specName
-            
-            local btn = CreateFrame("Button", nil, container, "UIPanelButtonTemplate")
-            btn:SetWidth(55)
-            btn:SetHeight(18)
-            btn:SetPoint("TOPLEFT", container, "TOPLEFT", xOffset, yOffset)
-            btn:SetText(specName)
+        local btn = CreateFrame("Button", nil, container, "UIPanelButtonTemplate")
+        btn:SetWidth(55)
+        btn:SetHeight(18)
+        btn:SetPoint("TOPLEFT", container, "TOPLEFT", xOffset, yOffset)
+        btn:SetText(specName)
+        btn:SetAlpha(0.9)  -- More solid
             
             local capturedSpec = fullSpecName
             btn:SetScript("OnClick", function()
@@ -788,10 +789,10 @@ function SS_ConsumeConfig_CreateSpecButtons()
             end
             SS_ConsumeConfig_SpecButtons[fullSpecName] = btn
             
-            xOffset = xOffset + 60
+            xOffset = xOffset + 65
         end
         
-        yOffset = yOffset - 20
+        yOffset = yOffset - 25
     end
 end
 

@@ -20,7 +20,8 @@ SS_ClassColors = {
 
 -- Helper: Get colored player name for announcements
 function SS_GetColoredName(playerName, class)
-    local color = SS_ClassColors[class]
+    local classUpper = string.upper(class)
+    local color = SS_ClassColors[classUpper]
     if color then
         return string.format("|cff%02x%02x%02x%s|r", 
             color.r * 255, 

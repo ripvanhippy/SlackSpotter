@@ -248,6 +248,8 @@ function SS_ShowTab1Content()
     if SS_Tab1_ConsumeButtonCheckPanel then SS_Tab1_ConsumeButtonCheckPanel:Show() end
     if SS_Tab1_StatsPanel then SS_Tab1_StatsPanel:Show() end
     if SS_Tab1_RaidListPanel then SS_Tab1_RaidListPanel:Show() end
+	
+	SS_Tab1_UpdateInfoLabels()
 end
 
 -- ============================================================================
@@ -270,22 +272,14 @@ function SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton_OnClick()
     local consumeResults, buffResults, raidInstance = SS_Tab1_RefreshAndCheckAll()
     
     -- Announce raid buffs only
-    if GetNumRaidMembers() > 0 then
-        SS_RaidBuffAnnounce_SendToRaid(buffResults)
-    else
-        SS_RaidBuffAnnounce_SendToSelf(buffResults)
-    end
+    SS_RaidBuffAnnounce_SendToRaid(buffResults)
 end
 
 function SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()
     local consumeResults, buffResults, raidInstance = SS_Tab1_RefreshAndCheckAll()
     
     -- Announce consumes only
-    if GetNumRaidMembers() > 0 then
-        SS_Announce_SendToRaid(consumeResults, raidInstance)
-    else
-        SS_Announce_SendToSelf(consumeResults, raidInstance)
-    end
+    SS_Announce_SendToRaid(consumeResults, raidInstance)
 end
 
 -- ============================================================================
@@ -473,7 +467,34 @@ function SS_Tab1_RefreshAndCheckAll()
     SS_Display_RaidResults = consumeResults
     SS_Display_UpdateRaidList()
     
+	SS_Tab1_UpdateInfoLabels()
+	
     return consumeResults, buffResults, raidInstance
+end
+
+-- ============================================================================
+-- UPDATE TAB 1 INFO LABELS
+-- ============================================================================
+function SS_Tab1_UpdateInfoLabels()
+    local raidLabel = getglobal("SS_Tab1_ConsumeButtonCheckPanel_RaidLabel")
+    local specLabel = getglobal("SS_Tab1_ConsumeButtonCheckPanel_SpecLabel")
+    
+    if raidLabel then
+        raidLabel:SetText("Current Raid: " .. (SS_ConsumeConfig_CurrentRaid or "Kara40"))
+    end
+    
+    if specLabel then
+        local noSpecCount = 0
+        if SS_ConfigSpecs_RaidMembers then
+            for i = 1, table.getn(SS_ConfigSpecs_RaidMembers) do
+                local member = SS_ConfigSpecs_RaidMembers[i]
+                if member and not SS_ConfigSpecs_SelectedSpecs[member.name] then
+                    noSpecCount = noSpecCount + 1
+                end
+            end
+        end
+        specLabel:SetText("Missing Specs: " .. noSpecCount)
+    end
 end
 
 -- ============================================================================
