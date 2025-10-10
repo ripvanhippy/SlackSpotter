@@ -244,6 +244,8 @@ end
 
 -- Save current spec data to working memory
 function SS_ConsumeConfig_SaveCurrentSpecToMemory()
+--    DEFAULT_CHAT_FRAME:AddMessage("DEBUG: Saving " .. SS_ConsumeConfig_CurrentSpec .. " to WorkingMemory")
+    
     if not SS_ConsumeConfig_WorkingMemory[SS_ConsumeConfig_CurrentRaid] then
         SS_ConsumeConfig_WorkingMemory[SS_ConsumeConfig_CurrentRaid] = {}
     end
@@ -254,11 +256,15 @@ function SS_ConsumeConfig_SaveCurrentSpecToMemory()
     }
     
     -- Copy checked consumes
+    local count = 0
     for consumeName, isChecked in pairs(SS_ConsumeConfig_CheckedConsumes) do
         if isChecked then
             SS_ConsumeConfig_WorkingMemory[SS_ConsumeConfig_CurrentRaid][SS_ConsumeConfig_CurrentSpec].consumes[consumeName] = true
+            count = count + 1
         end
     end
+    
+--    DEFAULT_CHAT_FRAME:AddMessage("DEBUG: Saved " .. count .. " consumes, minRequired=" .. SS_ConsumeConfig_MinRequired)
 end
 
 -- Load spec data from working memory
@@ -266,6 +272,14 @@ function SS_ConsumeConfig_LoadSpecData()
     -- Clear current UI state ONLY
     SS_ConsumeConfig_CheckedConsumes = {}
     SS_ConsumeConfig_MinRequired = 0
+    
+    -- CRITICAL: Uncheck ALL checkboxes first (fix visual bug)
+    for i = 1, 4 do
+        local cb = getglobal("SS_Tab6_MinRequiredCheckbox" .. i)
+        if cb then
+            cb:SetChecked(false)
+        end
+    end
     
     -- Load current spec from working memory
     if SS_ConsumeConfig_WorkingMemory[SS_ConsumeConfig_CurrentRaid] and 
@@ -488,6 +502,9 @@ function SS_ConsumeConfig_ConsumeCheckbox_OnClick(consumeName)
     
     -- Refresh display
     SS_ConsumeConfig_UpdateDisplay()
+	
+	-- Save to WorkingMemory immediately
+    SS_ConsumeConfig_SaveCurrentSpecToMemory()
 end
 
 -- Scroll functions
@@ -555,6 +572,9 @@ function SS_ConsumeConfig_MinRequiredCheckbox_OnClick(checkboxNum)
             end
         end
     end
+	
+	-- Save to WorkingMemory immediately
+    SS_ConsumeConfig_SaveCurrentSpecToMemory()
 end
 
 -- ============================================================================

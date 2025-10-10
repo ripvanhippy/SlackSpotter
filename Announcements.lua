@@ -23,48 +23,92 @@ end
 -- ============================================================================
 
 function SS_Announce_FormatMissingConsumes(raidResults)
-    -- Group missing consumes by consume name
-    local missingByConsume = {}
+    local normalCheckers = {}  -- [consumeName] = {player1, player2, ...}
+    local anyXFailures = {}    -- {player1, player2, ...} with minRequired data
     
     for playerName, data in pairs(raidResults) do
-        if not data.passed and data.missing then
-            for i = 1, table.getn(data.missing) do
-                local missingItem = data.missing[i]
-                local consumeName = missingItem.name
-                
-                if not missingByConsume[consumeName] then
-                    missingByConsume[consumeName] = {}
+        if data.usesAnyX then
+            -- Player uses "Any X" rule
+            if not data.passed then
+                -- Failed "Any X" check - add to special list
+                table.insert(anyXFailures, {
+                    name = playerName,
+                    class = data.class,
+                    found = data.found,
+                    minRequired = data.minRequired
+                })
+            end
+            -- If passed, skip entirely (don't announce)
+        else
+            -- Normal checker - list missing consumes
+            if not data.passed and data.missing then
+                for i = 1, table.getn(data.missing) do
+                    local missingItem = data.missing[i]
+                    local consumeName = missingItem.name
+                    
+                    if not normalCheckers[consumeName] then
+                        normalCheckers[consumeName] = {}
+                    end
+                    table.insert(normalCheckers[consumeName], {name = playerName, class = data.class})
                 end
-                table.insert(missingByConsume[consumeName], {name = playerName, class = data.class})
             end
         end
     end
     
-    -- Build announcement lines
     local lines = {}
     
-    for consumeName, playerList in pairs(missingByConsume) do
-        -- Sort by player name
+    -- FIRST: "Any X" failures line (if any)
+    if table.getn(anyXFailures) > 0 then
+        -- Sort by minRequired, then by name
+        table.sort(anyXFailures, function(a, b)
+            if a.minRequired == b.minRequired then
+                return a.name < b.name
+            else
+                return a.minRequired < b.minRequired
+            end
+        end)
+        
+        local anyXText = ""
+        local currentMinReq = anyXFailures[1].minRequired
+        
+        for i = 1, table.getn(anyXFailures) do
+            local player = anyXFailures[i]
+            
+            -- Start new line if minRequired changes
+            if player.minRequired ~= currentMinReq then
+                table.insert(lines, "At least " .. currentMinReq .. " Consumes: " .. anyXText)
+                anyXText = ""
+                currentMinReq = player.minRequired
+            end
+            
+            local coloredName = SS_GetColoredName(player.name, player.class)
+            local playerText = "<" .. coloredName .. " " .. player.found .. "/" .. player.minRequired .. ">"
+            
+            if anyXText == "" then
+                anyXText = playerText
+            else
+                anyXText = anyXText .. " " .. playerText
+            end
+        end
+        
+        -- Add final line
+        table.insert(lines, "At least " .. currentMinReq .. " Consumes: " .. anyXText)
+    end
+    
+    -- THEN: Normal consume checks (one line per consumable)
+    for consumeName, playerList in pairs(normalCheckers) do
         table.sort(playerList, function(a, b) return a.name < b.name end)
         
-        -- Build colored names
         local coloredNames = {}
         for i = 1, table.getn(playerList) do
-            local player = playerList[i]
-            local classUpper = string.upper(player.class)
-            local coloredName = SS_GetColoredName(player.name, classUpper)
+            local playerData = playerList[i]
+            local coloredName = SS_GetColoredName(playerData.name, playerData.class)
             table.insert(coloredNames, coloredName)
         end
         
-        -- Format: RED consume name + class-colored players
-        -- Build line with colored names
-local playerString = table.concat(coloredNames, " ")
-local shortName = SS_ConsumeShortNames[consumeName] or consumeName
-table.insert(lines, "|cffff0000" .. shortName .. ":|r " .. playerString)
+        local shortName = SS_ConsumeShortNames[consumeName] or consumeName
+        table.insert(lines, shortName .. ": " .. table.concat(coloredNames, " "))
     end
-    
-    -- Sort lines alphabetically
-    table.sort(lines)
     
     return lines
 end
@@ -94,7 +138,7 @@ function SS_Announce_SendToRaid(raidResults, raidInstance)
         end
     end
     
-    SS_Announce_Output(totalFailed .. "/" .. totalChecked .. " players missing consumes")
+--    SS_Announce_Output(totalFailed .. "/" .. totalChecked .. " players missing consumes")
 end
 
 -- ============================================================================
@@ -212,7 +256,7 @@ function SS_Announce_ProtectionPotions(protectionType, missingPlayers)
     chunkNames = chunkNames .. (j == startIndex and "<" or " <") .. coloredName .. ">"
 end
             
-            local msg = protColor .. "Greater " .. protectionType .. " Protection|r (" .. chunk .. "/" .. totalChunks .. "): " .. chunkNames
+            local msg = protColor .. "Greater " .. protectionType .. " Protection:|r " .. chunkNames
             SS_Announce_Output(msg)
         end
     else

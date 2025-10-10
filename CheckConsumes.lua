@@ -129,20 +129,28 @@ end
 -- ============================================================================
 
 function SS_Check_CompareConsumes(unitID, raidInstance, specName)
-    -- Get required consumes for this spec
-    local requiredConsumes = SS_Check_GetRequiredConsumes(raidInstance, specName)
+--    DEFAULT_CHAT_FRAME:AddMessage("DEBUG CompareConsumes: Called for " .. specName)
     
-    if not requiredConsumes then
+    local requiredData = SS_Check_GetRequiredConsumes(raidInstance, specName)
+    
+--    DEFAULT_CHAT_FRAME:AddMessage("DEBUG CompareConsumes: Got requiredData = " .. (requiredData and "EXISTS" or "NIL"))
+    
+    if not requiredData or not requiredData.consumes then
+        DEFAULT_CHAT_FRAME:AddMessage("|cffff0000ERROR: No consume config for " .. specName .. " in " .. raidInstance .. "|r")
         return nil
     end
     
-    -- ADD THIS: Handle empty consumes list
-    if not requiredConsumes.consumes or table.getn(requiredConsumes.consumes) == 0 then
+--    DEFAULT_CHAT_FRAME:AddMessage("DEBUG CompareConsumes: requiredData has " .. table.getn(requiredData.consumes) .. " consumes")
+    
+    if table.getn(requiredData.consumes) == 0 then
+        -- Spec exists but has no consumes checked - pass automatically
         return {
             found = 0,
             required = 0,
             missing = {},
-            passed = true
+            passed = true,
+            usesAnyX = false,
+            minRequired = 0
         }
     end
     
@@ -150,18 +158,16 @@ function SS_Check_CompareConsumes(unitID, raidInstance, specName)
     local detectedConsumes = SS_Check_ScanPlayerBuffs(unitID)
     
     -- Group required consumes by consume group
-    local groupedRequirements = SS_Check_GroupRequiredConsumes(requiredConsumes)
+    local groupedRequirements = SS_Check_GroupRequiredConsumes(requiredData)
     
     -- Calculate required count AFTER grouping
-    local requiredCount = requiredConsumes.minRequired
-    if not requiredCount or requiredCount == 0 then
-        requiredCount = table.getn(groupedRequirements)
-    end
+    local requiredCount = table.getn(groupedRequirements)
     
     local missingList = {}
     local foundCount = 0
     
-    for _, group in ipairs(groupedRequirements) do
+    for i = 1, table.getn(groupedRequirements) do
+    local group = groupedRequirements[i]
         if group.isGroup then
             -- Multiple consumes from same group - check if ANY present
             local foundInGroup = false
@@ -188,11 +194,22 @@ function SS_Check_CompareConsumes(unitID, raidInstance, specName)
         end
     end
     
+    -- Check if "Any X" rule applies
+    local actualRequired = requiredCount
+    local usesAnyX = false
+    
+    if requiredData.minRequired and requiredData.minRequired > 0 then
+        actualRequired = requiredData.minRequired
+        usesAnyX = true
+    end
+    
     return {
         found = foundCount,
-        required = requiredCount,
+        required = actualRequired,
         missing = missingList,
-        passed = foundCount >= requiredCount
+        passed = foundCount >= actualRequired,
+        usesAnyX = usesAnyX,
+        minRequired = requiredData.minRequired or 0
     }
 end
 
@@ -200,21 +217,22 @@ end
 -- HELPER: Get required consumes from Tab 6 config
 -- ============================================================================
 
+--debug
 function SS_Check_GetRequiredConsumes(raidInstance, specName)
     
     if not SS_ConsumeConfig_WorkingMemory then
-        DEFAULT_CHAT_FRAME:AddMessage("ERROR: WorkingMemory is NIL")
+--        DEFAULT_CHAT_FRAME:AddMessage("ERROR: WorkingMemory is NIL")
         return nil
     end
     
     if not SS_ConsumeConfig_WorkingMemory[raidInstance] then
-        DEFAULT_CHAT_FRAME:AddMessage("ERROR: Raid not in WorkingMemory")
+--        DEFAULT_CHAT_FRAME:AddMessage("ERROR: Raid '" .. raidInstance .. "' not in WorkingMemory")
         return nil
     end
     
     local specData = SS_ConsumeConfig_WorkingMemory[raidInstance][specName]
     if not specData then
-        DEFAULT_CHAT_FRAME:AddMessage("ERROR: Spec not found")
+--        DEFAULT_CHAT_FRAME:AddMessage("ERROR: Spec '" .. specName .. "' not found in raid")
         return nil
     end
     
@@ -229,15 +247,12 @@ function SS_Check_GetRequiredConsumes(raidInstance, specName)
     end
     
     if table.getn(consumeList) == 0 then
-        -- No consumes configured - return empty requirements instead of NIL
+        -- No consumes configured - return empty requirements
         return {
             consumes = {},
             minRequired = 0
         }
     end
-    
-    -- Return raw minRequired from config (0 or checkbox value)
-    -- CompareConsumes will handle defaulting to grouped count
     
     return {
         consumes = consumeList,
@@ -416,13 +431,15 @@ function SS_Check_CheckEntireRaid(raidInstance)
                 
                 if result then
                     results[name] = {
-                        class = class,
-                        spec = playerSpec,
-                        found = result.found,
-                        required = result.required,
-                        missing = result.missing,
-                        passed = result.passed
-                    }
+                    class = class,
+                    spec = playerSpec,
+                    found = result.found,
+                    required = result.required,
+                    missing = result.missing,
+                    passed = result.passed,
+                    usesAnyX = result.usesAnyX or false,
+                    minRequired = result.minRequired or 0
+                }
                 end
             end
         end

@@ -6,14 +6,14 @@
 ## SavedVariables: SS_ShoutoutsDB, SS_GuildSpecsDB, SS_ConsumeConfigDB
 
 SlackSpotter.xml
-SlackSpotter.lua
-Shoutouts.lua
-ConfigSpecs.lua
 MappingData.lua
 ConsumeData.lua
 ConsumePresets.lua
+ConfigSpecs.lua
+ConsumeConfig.lua
 CheckConsumes.lua
 RaidBuffCheck.lua
 DisplayRaidList.lua
 Announcements.lua
-ConsumeConfig.lua
+Shoutouts.lua
+SlackSpotter.lua
