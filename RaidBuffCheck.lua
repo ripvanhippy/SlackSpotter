@@ -86,13 +86,13 @@ SS_RaidBuffs_Definitions = {
         personal = true
     },
     {
-        name = "Shaman Shield",
+        name = "Lightning/Water/Earth Shield",
         buffNames = {"Lightning Shield", "Water Shield", "Earth Shield"},
         appliesTo = "selfShaman",
         personal = true
     },
     {
-        name = "Warlock Stone",
+        name = "Void/Fire/Fel/Wrathstone",
         buffNames = {"Voidstone", "Firestone", "Felstone", "Wrathstone"},
         appliesTo = "selfWarlock",
         personal = true

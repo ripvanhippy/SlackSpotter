@@ -35,7 +35,8 @@ SS_ConsumeData_Consumables = {
             {name = "Elixir of Shadowpower", effect = "(40 ssp)", buffName = "Shadow Power"},
             {name = "Elixir of Greater Firepower", effect = "(40 fsp)", buffName = "Greater Firepower"},
             {name = "Elixir of Greater Nature Power", effect = "(40 nsp)", buffName = "Elixir of Greater Nature Power"},
-            {name = "Elixir of Greater Frost Power", effect = "(40 fsp)", buffName = "Elixir of Greater Frost Power"},
+            {name = "Elixir of Greater Frost Power", effect = "(40 fsp)", buffName = "Greater Frost Power"},
+			{name = "Elixir of Greater Arcane Power", effect = "(40 asp)", buffName = "Greater Arcane Power"},
             {name = "Elixir of the Mongoose", effect = "(25 agi, 2 crit)", buffName = "Elixir of the Mongoose"},
             {name = "Elixir of the Giants", effect = "(25 str)", buffName = "Elixir of the Giants"},
             {name = "Elixir of Fortitude", effect = "(120 hp)", buffName = "Health II"},
@@ -52,16 +53,16 @@ SS_ConsumeData_Consumables = {
             {name = "Hardened Mushroom", effect = "(25 sta)", buffName = "Increased Stamina"},
             {name = "Sour Mountain Berry", effect = "(10 agi)", buffName = "Increased Agility"},
             {name = "Power Mushroom", effect = "(20 str)", buffName = "Well Fed", tooltipKeyword = "Strength"},
-            {name = "Tender Wolf Steak", effect = "(12 sta/spi)", buffName = "Well Fed", tooltipKeyword = "Spirit"},
-            {name = "Le Fishe Au Chocolat", effect = "(10 sta)", buffName = "Well Fed", tooltipKeyword = "dodge"},
+            {name = "Tender Wolf Steak etc.", effect = "(12 sta/spi)", buffName = "Well Fed", tooltipKeyword = "Spirit"},
+            {name = "Le Fishe Au Chocolat", effect = "(dodge/def)", buffName = "Well Fed", tooltipKeyword = "dodge"},
             {name = "Nightfin Soup", effect = "(8 mp5)", buffName = "Mana Regeneration", tooltipKeyword = "8 Mana every 5"},
-            {name = "Empowering Herbal Salad", effect = "(10 int)", buffName = "Increased Healing Bonus"}
+            {name = "Empowering Herbal Salad", effect = "(24 heal)", buffName = "Increased Healing Bonus"}
         }
     },
     {
         category = "Alcohol",
         items = {
-            {name = "Medivh's Merlot Blue", effect = "(15 sta)", buffName = "Medivh's Merlot Blue"},
+            {name = "Medivh's Merlot Blue", effect = "(15 int)", buffName = "Medivh's Merlot Blue"},
             {name = "Medivh's Merlot", effect = "(15 sta)", buffName = "Medivh's Merlot"},
             {name = "Rumsey Rum Black Label", effect = "(15 sta)", buffName = "Rumsey Rum Black Label"}
         }
@@ -69,7 +70,7 @@ SS_ConsumeData_Consumables = {
     {
         category = "Other",
         items = {
-            {name = "Dreamtonic", effect = "(10 all stats)", buffName = "Dreamtonic"},
+            {name = "Dreamtonic", effect = "(35 sp)", buffName = "Dreamtonic"},
             {name = "Juju Power", effect = "(30 str)", buffName = "Juju Power"},
             {name = "Juju Might", effect = "(40 ap)", buffName = "Juju Might"},
             {name = "Winterfall Firewater", effect = "(35 ap)", buffName = "Winterfall Firewater"}
@@ -136,7 +137,7 @@ SS_ConsumeData_Groups = {
             "Hardened Mushroom",
             "Sour Mountain Berry",
             "Power Mushroom",
-            "Tender Wolf Steak",
+            "Tender Wolf Steak etc.",
             "Le Fishe Au Chocolat",
             "Nightfin Soup",
             "Empowering Herbal Salad"
@@ -202,7 +203,7 @@ SS_ConsumeData_ConsumableRoles = {
     ["Hardened Mushroom"] = {"Tanks"},
     ["Sour Mountain Berry"] = {"Physical", "PhysRanged"},
     ["Power Mushroom"] = {"Physical"},
-    ["Tender Wolf Steak"] = {},
+    ["Tender Wolf Steak etc."] = {},
     ["Le Fishe Au Chocolat"] = {"Tanks"},
     ["Nightfin Soup"] = {"Healers"},
     ["Empowering Herbal Salad"] = {"Healers"},
@@ -259,7 +260,7 @@ SS_ConsumeData_IDMapping = {
     [43] = "Hardened Mushroom",
     [44] = "Sour Mountain Berry",
     [45] = "Power Mushroom",
-    [46] = "Tender Wolf Steak",
+    [46] = "Tender Wolf Steak etc.",
     [47] = "Le Fishe Au Chocolat",
     [48] = "Nightfin Soup",
     [49] = "Empowering Herbal Salad",

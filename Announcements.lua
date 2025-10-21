@@ -76,7 +76,7 @@ function SS_Announce_FormatMissingConsumes(raidResults)
             
             -- Start new line if minRequired changes
             if player.minRequired ~= currentMinReq then
-                table.insert(lines, "At least " .. currentMinReq .. " Consumes: " .. anyXText)
+                table.insert(lines, "|cffff4500At least " .. currentMinReq .. " Consumes:|r " .. anyXText)
                 anyXText = ""
                 currentMinReq = player.minRequired
             end
@@ -92,7 +92,7 @@ function SS_Announce_FormatMissingConsumes(raidResults)
         end
         
         -- Add final line
-        table.insert(lines, "At least " .. currentMinReq .. " Consumes: " .. anyXText)
+        table.insert(lines, "|cffff4500At least " .. currentMinReq .. " Consumes:|r " .. anyXText)
     end
     
     -- THEN: Normal consume checks (one line per consumable)

@@ -57,8 +57,8 @@ SS_ManaUsingSpecs = {
     ["PriestHoly"] = true,
     
     -- All Warlock specs use mana
-    ["WarlockAffliction"] = true,
-    ["WarlockDemo"] = true,
+    ["WarlockFire"] = true,
+    ["WarlockShadow"] = true,
     
     -- All Mage specs use mana
     ["MageFire"] = true,
