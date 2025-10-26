@@ -105,6 +105,16 @@ SS_ConsumeData_Groups = {
             "Winterfall Firewater"
         }
     },
+	{
+        groupName = "Spellschool Elixir",
+        consumes = {
+            "Elixir of Shadowpower",
+			"Elixir of Greater Firepower",
+			"Elixir of Greater Nature Power",
+			"Elixir of Greater Frost Power",
+			"Elixir of Greater Arcane Power",
+        }
+    },
     {
         groupName = "Zanza",
         consumes = {
@@ -247,6 +257,7 @@ SS_ConsumeData_IDMapping = {
     [24] = "Elixir of Greater Firepower",
     [25] = "Elixir of Greater Nature Power",
     [26] = "Elixir of Greater Frost Power",
+	[32] = "Elixir of Greater Arcane Power",
     [27] = "Elixir of the Mongoose",
     [28] = "Elixir of the Giants",
     [29] = "Elixir of Fortitude",

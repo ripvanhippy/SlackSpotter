@@ -47,6 +47,9 @@ function SS_InitializeFrame()
     -- Initialize to Tab 1
     SS_SelectTab(1)
     
+    -- Initialize raid tab highlights (default Kara40)
+    SS_UpdateRaidTabHighlights()
+    
     DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter loaded!|r Type /ss to open.")
 end
 
@@ -178,18 +181,16 @@ function SS_SelectTab(tabNum)
         SS_ShowTab1Content()
     elseif tabNum == 2 then
         -- Show Tab 2
-        local frame = getglobal("SS_Tab2_ShoutoutsFrame")
-        if not frame then
-            SS_Shoutouts_CreateUI()
-            frame = getglobal("SS_Tab2_ShoutoutsFrame")
-        end
-        if frame then
-            frame:Show()
+        if SS_Shoutouts_ShowTab then
+            SS_Shoutouts_ShowTab()
         end
     elseif tabNum == 3 then
         -- TODO: SS_ShowTab3Content()
-    elseif tabNum == 4 then
-        -- TODO: SS_ShowTab4Content()
+elseif tabNum == 4 then
+        -- Show Tab 4 (Tactics)
+        if SS_Tactics_ShowTab then
+            SS_Tactics_ShowTab()
+        end
     elseif tabNum == 5 then
         -- Show Tab 5
         if SS_Tab5_ButtonPanel then SS_Tab5_ButtonPanel:Show() end
@@ -204,9 +205,14 @@ function SS_SelectTab(tabNum)
         if SS_Tab6_ControlPanel then SS_Tab6_ControlPanel:Show() end
         if SS_Tab6_ConsumeListPanel then SS_Tab6_ConsumeListPanel:Show() end
         
-        -- Update button highlights
-        if SS_ConsumeConfig_UpdateRaidButtons then
-            SS_ConsumeConfig_UpdateRaidButtons()
+        -- Update spec button highlights
+        if SS_ConsumeConfig_UpdateSpecButtons then
+            SS_ConsumeConfig_UpdateSpecButtons()
+        end
+        
+        -- Update display
+        if SS_ConsumeConfig_UpdateDisplay then
+            SS_ConsumeConfig_UpdateDisplay()
         end
         if SS_ConsumeConfig_UpdateSpecButtons then
             SS_ConsumeConfig_UpdateSpecButtons()
@@ -216,9 +222,65 @@ function SS_SelectTab(tabNum)
         if SS_ConsumeConfig_UpdateDisplay then
             SS_ConsumeConfig_UpdateDisplay()
         end
+        
+        -- Update Tab 4 boss buttons if raid changed (for next time Tab 4 is opened)
+        if SS_Tactics_SyncRaidSelection and SS_ConsumeConfig_CurrentRaid then
+            SS_Tactics_SyncRaidSelection(SS_ConsumeConfig_CurrentRaid)
+        end
     end
     
     SS_CurrentTab = tabNum
+end
+
+-- RAID SELECTION (RIGHT-SIDE TABS)
+function SS_SelectRaid(raidName)
+    -- Update global raid selection variable
+    SS_ConsumeConfig_CurrentRaid = raidName
+    
+    -- Update right-side raid tab highlights
+    SS_UpdateRaidTabHighlights()
+    
+    -- Update Tab 6 (Consume Config) if currently visible
+    if SS_CurrentTab == 6 then
+        if SS_ConsumeConfig_UpdateSpecButtons then
+            SS_ConsumeConfig_UpdateSpecButtons()
+        end
+        if SS_ConsumeConfig_LoadSpecData then
+            SS_ConsumeConfig_LoadSpecData()
+        end
+        if SS_ConsumeConfig_UpdateDisplay then
+            SS_ConsumeConfig_UpdateDisplay()
+        end
+    end
+    
+    -- Update Tab 1 if currently visible (future use)
+    if SS_CurrentTab == 1 then
+        -- Future: refresh consume checks for new raid
+    end
+	
+	-- Sync to Tactics tab 4
+    if SS_Tactics_SyncRaidSelection then
+        SS_Tactics_SyncRaidSelection(raidName)
+    end
+end
+
+function SS_UpdateRaidTabHighlights()
+    local raidTabs = {"Kara40", "Naxx", "AQ40", "BWL", "MC", "ES", "Ony", "ZG", "AQ20", "Kara10"}
+    
+    for i = 1, table.getn(raidTabs) do
+        local raidName = raidTabs[i]
+        local tabButton = getglobal("SS_RaidTab_" .. raidName)
+        
+        if tabButton then
+            if raidName == SS_ConsumeConfig_CurrentRaid then
+                tabButton:SetAlpha(1.0)
+                tabButton:LockHighlight()
+            else
+                tabButton:SetAlpha(0.6)
+                tabButton:UnlockHighlight()
+            end
+        end
+    end
 end
 
 function SS_HideAllTabContent()
@@ -229,8 +291,19 @@ function SS_HideAllTabContent()
     if SS_Tab1_StatsPanel then SS_Tab1_StatsPanel:Hide() end
     if SS_Tab1_RaidListPanel then SS_Tab1_RaidListPanel:Hide() end
     
-    -- Hide Tab 2 panel
-    if SS_Tab2_ShoutoutsFrame then SS_Tab2_ShoutoutsFrame:Hide() end
+    -- Hide Tab 2 panels
+    if SS_Tab2_ChannelPanel then SS_Tab2_ChannelPanel:Hide() end
+    if SS_Tab2_ColorPanel then SS_Tab2_ColorPanel:Hide() end
+    if SS_Tab2_MessagePanel then SS_Tab2_MessagePanel:Hide() end
+    if SS_Tab2_CountdownPanel then SS_Tab2_CountdownPanel:Hide() end
+    
+    -- Hide Tab 4 panels
+    if SS_Tab4_BossPanel then SS_Tab4_BossPanel:Hide() end
+    if SS_Tab4_StrategyPanel then SS_Tab4_StrategyPanel:Hide() end
+    if SS_Tab4_RolePanel then SS_Tab4_RolePanel:Hide() end
+    if SS_Tab4_ImagesPanel then SS_Tab4_ImagesPanel:Hide() end
+	if SS_Tab4_TrashPanel then SS_Tab4_TrashPanel:Hide() end
+	if SS_Tab4_PortPanel then SS_Tab4_PortPanel:Hide() end
     
     -- Hide Tab 5 panels
     if SS_Tab5_ButtonPanel then SS_Tab5_ButtonPanel:Hide() end
@@ -582,6 +655,7 @@ end
 
 local SS_EventFrame = CreateFrame("Frame")
 SS_EventFrame:RegisterEvent("ADDON_LOADED")
+SS_EventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 SS_EventFrame:SetScript("OnEvent", function()
 
 
@@ -621,6 +695,11 @@ SS_EventFrame:SetScript("OnEvent", function()
             SS_ConsumeConfig_Initialize()
         end
         
+        -- Initialize Tactics module
+        if SS_Tactics_Initialize then
+            SS_Tactics_Initialize()
+        end
+        
         -- Initialize CheckConsumes module
         if SS_Check_Initialize then
             SS_Check_Initialize()
@@ -647,5 +726,14 @@ SS_EventFrame:SetScript("OnEvent", function()
         end
         
         DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter addon loaded successfully!|r")
+		
+		-- Preselect Kara40
+        SS_SelectRaid("Kara40")
+		
+    elseif event == "PLAYER_ENTERING_WORLD" then
+        -- Create boss buttons when player fully loaded
+        if SS_Tactics_CreateBossButtons then
+            SS_Tactics_CreateBossButtons()
+        end
     end
 end)

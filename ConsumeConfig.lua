@@ -22,7 +22,7 @@ SS_ConsumeConfig_CheckedConsumes = {}  -- Current UI state for selected spec
 SS_ConsumeConfig_MinRequired = 0  -- Selected "Any X Consume" checkbox (0-4)
 SS_ConsumeConfig_ShowAll = false  -- Show all consumes or filtered by role
 SS_ConsumeConfig_ScrollOffset = 0
-SS_ConsumeConfig_MaxVisibleRows = 25
+SS_ConsumeConfig_MaxVisibleRows = 24
 SS_ConsumeConfig_RowHeight = 18
 
 -- Auto-load flag
@@ -220,15 +220,6 @@ end
 -- ============================================================================
 -- RAID & SPEC SELECTION
 -- ============================================================================
-
--- Select raid instance
-function SS_ConsumeConfig_SelectRaid(raidName)
-    SS_ConsumeConfig_CurrentRaid = raidName
-    
-    SS_ConsumeConfig_UpdateRaidButtons()
-    SS_ConsumeConfig_LoadSpecData()
-    SS_ConsumeConfig_UpdateDisplay()
-end
 
 -- Select spec
 function SS_ConsumeConfig_SelectSpec(specName)
@@ -778,7 +769,7 @@ function SS_ConsumeConfig_CreateSpecButtons()
         {class = "Warlock", color = "|cff9482c9", specs = {"Shadow", "Fire"}}
     }
     
-    local yOffset = -5
+    local yOffset = 2
 
 for i = 1, table.getn(classOrder) do
     local classData = classOrder[i]
@@ -787,7 +778,7 @@ for i = 1, table.getn(classOrder) do
     label:SetPoint("TOPLEFT", container, "TOPLEFT", 5, yOffset)
     label:SetText(classData.color .. classData.class .. "|r")
     
-    local xOffset = 70
+    local xOffset = 60
     for j = 1, table.getn(classData.specs) do
         local specName = classData.specs[j]
         local fullSpecName = classData.class .. specName
@@ -809,27 +800,10 @@ for i = 1, table.getn(classOrder) do
             end
             SS_ConsumeConfig_SpecButtons[fullSpecName] = btn
             
-            xOffset = xOffset + 65
+            xOffset = xOffset + 60
         end
         
         yOffset = yOffset - 25
-    end
-end
-
-function SS_ConsumeConfig_UpdateRaidButtons()
-    local raids = {"MC", "BWL", "AQ40", "Naxx", "Kara40", "Kara10", "ES", "AQ20", "ZG", "Ony"}
-    
-    for i = 1, table.getn(raids) do
-        local raid = raids[i]
-        local btn = getglobal("SS_Tab6_RaidButton_" .. raid)
-        if btn then
-            if raid == SS_ConsumeConfig_CurrentRaid then
-                btn:LockHighlight()
-            else
-                btn:UnlockHighlight()
-                btn:SetAlpha(0.6)
-            end
-        end
     end
 end
 

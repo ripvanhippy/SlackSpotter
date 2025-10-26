@@ -16,7 +16,8 @@ SS_Display_RowHeight = 20
 -- ============================================================================
 
 function SS_Display_UpdateRaidList()
-    local content = getglobal("SS_Tab1_RaidListPanel_Content")
+    local scrollFrame = getglobal("SS_Tab1_RaidListPanel_ScrollFrame")
+    local content = scrollFrame and scrollFrame:GetScrollChild() or getglobal("SS_Tab1_RaidListPanel_Content")
     if not content then return end
     
     -- Check if results exist
@@ -78,11 +79,7 @@ end)
         end
     end
 	
-	-- Update FauxScrollFrame
-    local scrollFrame = getglobal("SS_Tab1_RaidListPanel_ScrollFrame")
-    if scrollFrame then
-        FauxScrollFrame_Update(scrollFrame, table.getn(memberList), SS_Display_MaxVisibleRows, SS_Display_RowHeight)
-    end
+	
 end
 
 -- ============================================================================
@@ -90,7 +87,8 @@ end
 -- ============================================================================
 
 function SS_Display_CreateRow(rowIndex, memberData)
-    local content = getglobal("SS_Tab1_RaidListPanel_Content")
+    local scrollFrame = getglobal("SS_Tab1_RaidListPanel_ScrollFrame")
+    local content = scrollFrame and scrollFrame:GetScrollChild() or getglobal("SS_Tab1_RaidListPanel_Content")
     if not content then return end
     
     local rowName = "SS_Tab1_RaidRow"..rowIndex

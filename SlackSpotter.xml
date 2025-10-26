@@ -12,6 +12,51 @@
             </OnClick>
         </Scripts>
     </Button>
+	
+	<!-- Right-Side Raid Tab Template -->
+        <Button name="SS_RaidTabTemplate" virtual="true">
+            <Size>
+                <AbsDimension x="55" y="52"/>
+            </Size>
+			<HitRectInsets>
+                <AbsInset left="5" right="0" top="5" bottom="10"/>
+            </HitRectInsets>
+            <NormalTexture file="Interface\SpellBook\SpellBook-SkillLineTab">
+                <TexCoords left="0" right="0.578125" top="0" bottom="1.0"/>
+            </NormalTexture>
+            <PushedTexture file="Interface\SpellBook\SpellBook-SkillLineTab">
+                <TexCoords left="0" right="0.578125" top="0" bottom="1.0"/>
+            </PushedTexture>
+            <HighlightTexture file="Interface\Buttons\UI-Panel-Button-Highlight" alphaMode="ADD">
+                <Size>
+                    <AbsDimension x="85" y="50"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="15" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </HighlightTexture>
+            <ButtonText name="$parentText">
+                <Anchors>
+                    <Anchor point="TOP">
+                        <Offset>
+                            <AbsDimension x="0" y="15"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </ButtonText>
+            <NormalFont inherits="GameFontNormalLarge" justifyH="CENTER"/>
+            <HighlightFont inherits="GameFontHighlightLarge" justifyH="CENTER"/>
+            <NormalText>
+                <Color r="0.7" g="0.7" b="0.7" a="1"/>
+            </NormalText>
+            <HighlightText>
+                <Color r="1.0" g="1.0" b="1.0" a="1"/>
+            </HighlightText>
+        </Button>
     
     <!-- Main Frame -->
 	<!-- 840.840 540.420 300.420 540.420 300.420 -->
@@ -260,6 +305,170 @@
             </Button>
 			
 			<!-- ========================================== -->
+            <!-- RIGHT-SIDE RAID TABS -->
+            <!-- ========================================== -->
+            
+            <!-- Kara40 Tab (FIRST) -->
+            <Button name="SS_RaidTab_Kara40" inherits="SS_RaidTabTemplate" text="K40">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeTo="SS_Frame" relativePoint="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-28" y="-135"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectRaid("Kara40")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- Naxx Tab -->
+            <Button name="SS_RaidTab_Naxx" inherits="SS_RaidTabTemplate" text="Naxx">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="SS_RaidTab_Kara40" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="2"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectRaid("Naxx")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- AQ40 Tab -->
+            <Button name="SS_RaidTab_AQ40" inherits="SS_RaidTabTemplate" text="AQ40">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="SS_RaidTab_Naxx" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="2"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectRaid("AQ40")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- BWL Tab -->
+            <Button name="SS_RaidTab_BWL" inherits="SS_RaidTabTemplate" text="BWL">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="SS_RaidTab_AQ40" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="2"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectRaid("BWL")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- MC Tab -->
+            <Button name="SS_RaidTab_MC" inherits="SS_RaidTabTemplate" text="MC">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="SS_RaidTab_BWL" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="2"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectRaid("MC")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- ES Tab -->
+            <Button name="SS_RaidTab_ES" inherits="SS_RaidTabTemplate" text="ES">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="SS_RaidTab_MC" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="2"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectRaid("ES")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- Ony Tab -->
+            <Button name="SS_RaidTab_Ony" inherits="SS_RaidTabTemplate" text="Ony">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="SS_RaidTab_ES" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="2"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectRaid("Ony")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- ZG Tab -->
+            <Button name="SS_RaidTab_ZG" inherits="SS_RaidTabTemplate" text="ZG">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="SS_RaidTab_Ony" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="2"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectRaid("ZG")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- AQ20 Tab -->
+            <Button name="SS_RaidTab_AQ20" inherits="SS_RaidTabTemplate" text="AQ20">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="SS_RaidTab_ZG" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="2"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectRaid("AQ20")
+                    </OnClick>
+                </Scripts>
+            </Button>
+            
+            <!-- Kara10 Tab (LAST) -->
+            <Button name="SS_RaidTab_Kara10" inherits="SS_RaidTabTemplate" text="K10">
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="SS_RaidTab_AQ20" relativePoint="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="2"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectRaid("Kara10")
+                    </OnClick>
+                </Scripts>
+            </Button>
+			
+			<!-- ========================================== -->
             <!-- DEBUG BUTTON (Bottom-Right, Always Visible) -->
             <!-- ========================================== -->
             <CheckButton name="SS_DebugButton" inherits="UICheckButtonTemplate">
@@ -288,7 +497,7 @@
                 <Anchors>
                     <Anchor point="TOPLEFT">
                         <Offset>
-                            <AbsDimension x="60" y="-140"/>
+                            <AbsDimension x="55" y="-135"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -475,7 +684,7 @@
 			
 <Frame name="SS_Tab1_ConsumeButtonCheckPanel">
     <Size>
-        <AbsDimension x="275" y="50"/>
+        <AbsDimension x="275" y="55"/>
     </Size>
     <Anchors>
         <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ProtectionPotionPanel" relativePoint="BOTTOMLEFT">
@@ -527,7 +736,7 @@
             <!-- ========================================== -->
             <Frame name="SS_Tab1_StatsPanel">
                 <Size>
-                    <AbsDimension x="275" y="250"/>
+                    <AbsDimension x="275" y="255"/>
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ConsumeButtonCheckPanel" relativePoint="BOTTOMLEFT">
@@ -626,7 +835,7 @@
             <!-- ========================================== -->
             <Frame name="SS_Tab1_RaidListPanel">
                 <Size>
-                    <AbsDimension x="450" y="575"/>
+                    <AbsDimension x="455" y="580"/>
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidBuffCheckPanel" relativePoint="TOPRIGHT">
@@ -670,46 +879,239 @@
                     </Button>
                     
                     <!-- Scroll Frame for Raid List -->
-                    <ScrollFrame name="SS_Tab1_RaidListPanel_ScrollFrame" inherits="FauxScrollFrameTemplate">
-    <Size>
-        <AbsDimension x="480" y="500"/>
-    </Size>
-    <Anchors>
-        <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="15" y="-70"/></Offset>
-        </Anchor>
-    </Anchors>
-    <Scripts>
-        <OnLoad>
-            this:EnableMouseWheel(1)
-        </OnLoad>
-        <OnMouseWheel>
-            if arg1 > 0 then
-                SS_Tab1_ScrollUp()
-            else
-                SS_Tab1_ScrollDown()
-            end
-        </OnMouseWheel>
-        <OnVerticalScroll>
-            FauxScrollFrame_OnVerticalScroll(20, SS_Display_UpdateRaidList)
-        </OnVerticalScroll>
-    </Scripts>
-</ScrollFrame>
-
-<!-- Content Frame (25 dynamic rows created in Lua) -->
-<Frame name="SS_Tab1_RaidListPanel_Content">
-    <Size>
-        <AbsDimension x="480" y="500"/>
-    </Size>
-    <Anchors>
-        <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidListPanel_ScrollFrame">
-            <Offset><AbsDimension x="0" y="0"/></Offset>
-        </Anchor>
-    </Anchors>
-</Frame>
+                    <ScrollFrame name="SS_Tab1_RaidListPanel_ScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                        <Size>
+                            <AbsDimension x="415" y="495"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset><AbsDimension x="10" y="-75"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnLoad>
+                                this:EnableMouseWheel(1)
+                            </OnLoad>
+                            <OnMouseWheel>
+                                if arg1 > 0 then
+                                    SS_Tab1_ScrollUp()
+                                else
+                                    SS_Tab1_ScrollDown()
+                                end
+                            </OnMouseWheel>
+                            <OnVerticalScroll>
+                                FauxScrollFrame_OnVerticalScroll(20, SS_Display_UpdateRaidList)
+                            </OnVerticalScroll>
+                        </Scripts>
+                    </ScrollFrame>
+                    
+                    <!-- Content Frame (dynamic rows created in Lua) -->
+                    <Frame name="SS_Tab1_RaidListPanel_Content">
+                        <Size>
+                            <AbsDimension x="400" y="1000"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab1_RaidListPanel_ScrollFrame">
+                                <Offset><AbsDimension x="0" y="0"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                    </Frame>
 </Frames>
             </Frame>
+          
+            <!-- ========================================== -->
+            <!-- TAB 2: SHOUTOUTS (Condensed) -->
+            <!-- ========================================== -->
             
+            <!-- Channel Panel -->
+            <Frame name="SS_Tab2_ChannelPanel" hidden="true">
+                <Size><AbsDimension x="350" y="135"/></Size>
+                <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="55" y="-135"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab2_ChannelPanelHeader" inherits="GameFontNormal" text="Channel">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    <FontString name="SS_Tab2_WhisperTargetLabel" inherits="GameFontNormalSmall" text="Target:" hidden="true">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-103"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+            </Frame>
+            
+            <!-- Color Panel -->
+            <Frame name="SS_Tab2_ColorPanel" hidden="true">
+                <Size><AbsDimension x="350" y="135"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab2_ChannelPanel" relativePoint="BOTTOMLEFT">
+                    <Offset><AbsDimension x="0" y="-10"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab2_ColorPanelHeader" inherits="GameFontNormal" text="Color">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+            </Frame>
+            
+            <!-- Message Panel -->
+            <Frame name="SS_Tab2_MessagePanel" hidden="true">
+                <Size><AbsDimension x="350" y="285ffff"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab2_ColorPanel" relativePoint="BOTTOMLEFT">
+                    <Offset><AbsDimension x="0" y="-10"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab2_MessagePanelHeader" inherits="GameFontNormal" text="Message">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    <FontString name="SS_Tab2_CharCounter" inherits="GameFontNormalSmall" text="0/255">
+                        <Anchors><Anchor point="BOTTOMRIGHT"><Offset><AbsDimension x="-20" y="20"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+                <Frames>
+                    <ScrollFrame name="SS_Tab2_MessageScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                        <Scripts>
+                            <OnMouseDown>
+                                local editBox = getglobal("SS_Tab2_MessageEditBox")
+                                if editBox then editBox:SetFocus() end
+                            </OnMouseDown>
+                        </Scripts>
+                        <Size><AbsDimension x="305" y="195"/></Size>
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="10" y="-35"/></Offset></Anchor></Anchors>
+                        <ScrollChild>
+                            <EditBox name="SS_Tab2_MessageEditBox" multiline="true" autoFocus="false">
+                                <Size><AbsDimension x="305" y="400"/></Size>
+                                <FontString inherits="ChatFontNormal"/>
+                                <Scripts>
+                                    <OnEscapePressed>this:ClearFocus()</OnEscapePressed>
+                                    <OnTextChanged>SS_Shoutouts_UpdateCharCounter()</OnTextChanged>
+                                </Scripts>
+                            </EditBox>
+                        </ScrollChild>
+                    </ScrollFrame>
+                    <Button name="SS_Tab2_SendButton" inherits="UIPanelButtonTemplate" text="Send Message">
+                        <Size><AbsDimension x="130" y="30"/></Size>
+                        <Anchors><Anchor point="BOTTOMLEFT"><Offset><AbsDimension x="10" y="10"/></Offset></Anchor></Anchors>
+                        <Scripts><OnClick>SS_Shoutouts_SendMessage()</OnClick></Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+            
+            <!-- Countdown Panel -->
+            <Frame name="SS_Tab2_CountdownPanel" hidden="true">
+                <Size><AbsDimension x="380" y="280"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab2_ChannelPanel" relativePoint="TOPRIGHT">
+                    <Offset><AbsDimension x="10" y="0"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab2_CountdownPanelHeader" inherits="GameFontNormal" text="Countdown">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    <FontString name="SS_Tab2_CountdownSecondsLabel" inherits="GameFontNormalSmall" text="Seconds:">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-35"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    <FontString name="SS_Tab2_CountdownBeforeLabel" inherits="GameFontNormalSmall" text="Starting Message:">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-100"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    <FontString name="SS_Tab2_CountdownAfterLabel" inherits="GameFontNormalSmall" text="Final Message:">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-150"/></Offset></Anchor></Anchors>
+					</FontString>
+                    <FontString name="SS_Tab2_CountdownBeforeCounter" inherits="GameFontNormalSmall" text="0/19 (0/8)" hidden="true">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="230" y="-100"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    <FontString name="SS_Tab2_CountdownAfterCounter" inherits="GameFontNormalSmall" text="0/19 (0/8)" hidden="true">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="230" y="-150"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    <FontString name="SS_Tab2_CountdownIntervalLabel" inherits="GameFontNormalSmall" text="Interval (sec):">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-65"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    <FontString name="SS_Tab2_CountdownWarning" inherits="GameFontNormalSmall" text="Low interval means message limit is reached with 9 seconds">
+                        <Color r="0.7" g="0.7" b="0.7"/>
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-205"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+                <Frames>
+                    <EditBox name="SS_Tab2_CountdownSecondsEditBox" autoFocus="false" numeric="true">
+                        <Size><AbsDimension x="80" y="20"/></Size>
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="100" y="-35"/></Offset></Anchor></Anchors>
+                        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                            <EdgeSize><AbsValue val="8"/></EdgeSize><TileSize><AbsValue val="8"/></TileSize>
+                            <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+                        </Backdrop>
+                        <FontString inherits="ChatFontNormal"/>
+                        <Scripts>
+                            <OnLoad>this:SetText("8")</OnLoad>
+                            <OnEscapePressed>this:ClearFocus()</OnEscapePressed>
+                        </Scripts>
+                    </EditBox>
+                    
+                    <EditBox name="SS_Tab2_CountdownIntervalEditBox" autoFocus="false" numeric="true">
+                        <Size><AbsDimension x="80" y="20"/></Size>
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="100" y="-65"/></Offset></Anchor></Anchors>
+                        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                            <EdgeSize><AbsValue val="8"/></EdgeSize><TileSize><AbsValue val="8"/></TileSize>
+                            <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+                        </Backdrop>
+                        <FontString inherits="ChatFontNormal"/>
+                        <Scripts>
+                            <OnLoad>this:SetText("2")</OnLoad>
+                            <OnEscapePressed>this:ClearFocus()</OnEscapePressed>
+                        </Scripts>
+                    </EditBox>
+                    <EditBox name="SS_Tab2_CountdownBeforeEditBox" autoFocus="false">
+                        <Size><AbsDimension x="350" y="20"/></Size>
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-120"/></Offset></Anchor></Anchors>
+                        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                            <EdgeSize><AbsValue val="8"/></EdgeSize><TileSize><AbsValue val="8"/></TileSize>
+                            <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+                        </Backdrop>
+                        <FontString inherits="ChatFontNormal"/>
+                        <Scripts>
+                            <OnEscapePressed>this:ClearFocus()</OnEscapePressed>
+                            <OnTextChanged>SS_Shoutouts_UpdateCountdownCounters()</OnTextChanged>
+                        </Scripts>
+                    </EditBox>
+                    <EditBox name="SS_Tab2_CountdownAfterEditBox" autoFocus="false">
+                        <Size><AbsDimension x="350" y="20"/></Size>
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-170"/></Offset></Anchor></Anchors>
+                        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                            <EdgeSize><AbsValue val="8"/></EdgeSize><TileSize><AbsValue val="8"/></TileSize>
+                            <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+                        </Backdrop>
+                        <FontString inherits="ChatFontNormal"/>
+                        <Scripts>
+                            <OnEscapePressed>this:ClearFocus()</OnEscapePressed>
+                            <OnTextChanged>SS_Shoutouts_UpdateCountdownCounters()</OnTextChanged>
+                        </Scripts>
+                    </EditBox>
+                    <EditBox name="SS_Tab2_WhisperTargetEditBox" autoFocus="false" hidden="true" parentKey="whisperTarget">
+                        <Size><AbsDimension x="250" y="20"/></Size>
+                        <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab2_ChannelPanel"><Offset><AbsDimension x="60" y="-100"/></Offset></Anchor></Anchors>
+                        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                            <EdgeSize><AbsValue val="8"/></EdgeSize><TileSize><AbsValue val="8"/></TileSize>
+                            <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+                        </Backdrop>
+                        <FontString inherits="ChatFontNormal"/>
+                        <Scripts><OnEscapePressed>this:ClearFocus()</OnEscapePressed></Scripts>
+                    </EditBox>
+                    <Button name="SS_Tab2_StartCountdownButton" inherits="UIPanelButtonTemplate" text="Start Countdown">
+                        <Size><AbsDimension x="150" y="30"/></Size>
+                        <Anchors><Anchor point="BOTTOM"><Offset><AbsDimension x="0" y="15"/></Offset></Anchor></Anchors>
+                        <Scripts><OnClick>SS_Shoutouts_StartCountdown()</OnClick></Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+
+		  
             <!-- ========================================== -->
             <!-- TAB 5: CONFIG SPECS PANELS -->
             <!-- ========================================== -->
@@ -722,7 +1124,7 @@
                 <Anchors>
                     <Anchor point="TOPLEFT">
                         <Offset>
-                            <AbsDimension x="30" y="-130"/>
+                            <AbsDimension x="55" y="-135"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -755,12 +1157,12 @@
             <!-- Right Panel: Raid List (BIGGER) -->
             <Frame name="SS_Tab5_RaidListPanel">
                 <Size>
-                    <AbsDimension x="580" y="590"/>
+                    <AbsDimension x="550" y="580"/>
                 </Size>
                 <Anchors>
                     <Anchor point="TOPRIGHT">
                         <Offset>
-                            <AbsDimension x="-40" y="-130"/>
+                            <AbsDimension x="-110" y="-135"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -778,7 +1180,7 @@
                                 </Anchor>
                             </Anchors>
                         </FontString>
-                        <FontString name="SS_Tab5_RaidListPanel_TableHeader" inherits="GameFontNormal" text="Raidmember                    Chosen Spec">
+                        <FontString name="SS_Tab5_RaidListPanel_TableHeader" inherits="GameFontNormal" text="Raidmember______Chosen Spec">
                             <Anchors>
                                 <Anchor point="TOPLEFT">
                                     <Offset><AbsDimension x="15" y="-35"/></Offset>
@@ -789,9 +1191,9 @@
                 </Layers>
                 <Frames>
                     <!-- Scroll Frame -->
-                    <ScrollFrame name="SS_Tab5_RaidListPanel_ScrollFrame" inherits="FauxScrollFrameTemplate">
+                    <ScrollFrame name="SS_Tab5_RaidListPanel_ScrollFrame" inherits="UIPanelScrollFrameTemplate">
     <Size>
-        <AbsDimension x="480" y="500"/>
+        <AbsDimension x="505" y="515"/>
     </Size>
     <Anchors>
         <Anchor point="TOPLEFT">
@@ -814,18 +1216,18 @@
         </OnVerticalScroll>
     </Scripts>
 </ScrollFrame>
-                    
-                    <!-- Content Frame -->
-                    <Frame name="SS_Tab5_RaidListPanel_Content">
-                        <Size>
-                            <AbsDimension x="480" y="500"/>
-                        </Size>
-                        <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="SS_Tab5_RaidListPanel_ScrollFrame">
-                                <Offset><AbsDimension x="0" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                    </Frame>
+
+<!-- Content Frame -->
+<Frame name="SS_Tab5_RaidListPanel_Content">
+    <Size>
+        <AbsDimension x="530" y="500"/>
+    </Size>
+    <Anchors>
+        <Anchor point="TOPLEFT" relativeTo="SS_Tab5_RaidListPanel_ScrollFrame">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
+        </Anchor>
+    </Anchors>
+</Frame>
                 </Frames>
             </Frame>
 			
@@ -836,12 +1238,12 @@
             <!-- Left Panel: Controls -->
             <Frame name="SS_Tab6_ControlPanel">
                 <Size>
-                    <AbsDimension x="380" y="590"/>
+                    <AbsDimension x="380" y="580"/>
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT">
                         <Offset>
-                            <AbsDimension x="30" y="-130"/>
+                            <AbsDimension x="55" y="-135"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -852,17 +1254,10 @@
                 </Backdrop>
                 <Layers>
                     <Layer level="OVERLAY">
-                        <FontString name="SS_Tab6_RaidLabel" inherits="GameFontNormal" text="Raid:">
-                            <Anchors>
-                                <Anchor point="TOPLEFT">
-                                    <Offset><AbsDimension x="15" y="-15"/></Offset>
-                                </Anchor>
-                            </Anchors>
-                        </FontString>
                         <FontString name="SS_Tab6_SpecLabel" inherits="GameFontNormal" text="Spec:">
                             <Anchors>
                                 <Anchor point="TOPLEFT">
-                                    <Offset><AbsDimension x="15" y="-95"/></Offset>
+                                    <Offset><AbsDimension x="15" y="-15"/></Offset>
                                 </Anchor>
                             </Anchors>
                         </FontString>
@@ -876,104 +1271,13 @@
                     </Layer>
                 </Layers>
                 <Frames>
-                    <!-- Raid Buttons (2 rows of 5) -->
-                    <Button name="SS_Tab6_RaidButton_MC" inherits="UIPanelButtonTemplate" text="MC">
-                        <Size><AbsDimension x="65" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-35"/></Offset></Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("MC")</OnClick></Scripts>
-                    </Button>
-                    <Button name="SS_Tab6_RaidButton_BWL" inherits="UIPanelButtonTemplate" text="BWL">
-                        <Size><AbsDimension x="65" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_MC" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("BWL")</OnClick></Scripts>
-                    </Button>
-                    <Button name="SS_Tab6_RaidButton_AQ40" inherits="UIPanelButtonTemplate" text="AQ40">
-                        <Size><AbsDimension x="65" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_BWL" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("AQ40")</OnClick></Scripts>
-                    </Button>
-                    <Button name="SS_Tab6_RaidButton_Naxx" inherits="UIPanelButtonTemplate" text="Naxx">
-                        <Size><AbsDimension x="65" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_AQ40" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("Naxx")</OnClick></Scripts>
-                    </Button>
-                    <Button name="SS_Tab6_RaidButton_Kara40" inherits="UIPanelButtonTemplate" text="Kara40">
-                        <Size><AbsDimension x="65" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_Naxx" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("Kara40")</OnClick></Scripts>
-                    </Button>
-                    
-                    <!-- Second Row -->
-                    <Button name="SS_Tab6_RaidButton_Kara10" inherits="UIPanelButtonTemplate" text="Kara10">
-                        <Size><AbsDimension x="65" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="SS_Tab6_RaidButton_MC" relativePoint="BOTTOMLEFT">
-                                <Offset><AbsDimension x="0" y="-5"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("Kara10")</OnClick></Scripts>
-                    </Button>
-                    <Button name="SS_Tab6_RaidButton_ES" inherits="UIPanelButtonTemplate" text="ES">
-                        <Size><AbsDimension x="65" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_Kara10" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("ES")</OnClick></Scripts>
-                    </Button>
-                    <Button name="SS_Tab6_RaidButton_AQ20" inherits="UIPanelButtonTemplate" text="AQ20">
-                        <Size><AbsDimension x="65" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_ES" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("AQ20")</OnClick></Scripts>
-                    </Button>
-                    <Button name="SS_Tab6_RaidButton_ZG" inherits="UIPanelButtonTemplate" text="ZG">
-                        <Size><AbsDimension x="65" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_AQ20" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("ZG")</OnClick></Scripts>
-                    </Button>
-                    <Button name="SS_Tab6_RaidButton_Ony" inherits="UIPanelButtonTemplate" text="Ony">
-                        <Size><AbsDimension x="65" y="25"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab6_RaidButton_ZG" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="5" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_ConsumeConfig_SelectRaid("Ony")</OnClick></Scripts>
-                    </Button>
                     
                     <!-- Spec Buttons Container (created dynamically in Lua) -->
                     <Frame name="SS_Tab6_SpecButtonContainer">
                         <Size><AbsDimension x="350" y="90"/></Size>
                         <Anchors>
                             <Anchor point="TOPLEFT">
-                                <Offset><AbsDimension x="15" y="-115"/></Offset>
+                                <Offset><AbsDimension x="10" y="-35"/></Offset>
                             </Anchor>
                         </Anchors>
                     </Frame>
@@ -1091,12 +1395,12 @@
             <!-- Right Panel: Consume List -->
             <Frame name="SS_Tab6_ConsumeListPanel">
                 <Size>
-                    <AbsDimension x="380" y="590"/>
+                    <AbsDimension x="350" y="580"/>
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeTo="SS_Tab6_ControlPanel" relativePoint="TOPRIGHT">
                         <Offset>
-                            <AbsDimension x="10" y="0"/>
+                            <AbsDimension x="5" y="0"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -1105,18 +1409,7 @@
                     <TileSize><AbsValue val="16"/></TileSize>
                     <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
                 </Backdrop>
-				<Scripts>
-                    <OnLoad>
-                        this:EnableMouseWheel(1)
-                    </OnLoad>
-                    <OnMouseWheel>
-                        if arg1 > 0 then
-                            SS_ConsumeConfig_ScrollUp()
-                        else
-                            SS_ConsumeConfig_ScrollDown()
-                        end
-                    </OnMouseWheel>
-                </Scripts>
+				
                 <Layers>
                     <Layer level="OVERLAY">
                         <FontString name="SS_Tab6_ConsumeListHeader" inherits="GameFontNormalLarge" text="Consumables">
@@ -1160,15 +1453,30 @@
                     </Frame>
                     
                     <!-- Scroll Frame -->
-                    <ScrollFrame name="SS_Tab6_ConsumeListScrollFrame" inherits="FauxScrollFrameTemplate">
+                    <ScrollFrame name="SS_Tab6_ConsumeListScrollFrame" inherits="UIPanelScrollFrameTemplate">
                         <Size>
-                            <AbsDimension x="340" y="500"/>
+                            <AbsDimension x="305" y="525"/>
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT">
                                 <Offset><AbsDimension x="15" y="-45"/></Offset>
                             </Anchor>
                         </Anchors>
+                        <Scripts>
+                            <OnLoad>
+                                this:EnableMouseWheel(1)
+                            </OnLoad>
+                            <OnMouseWheel>
+                                if arg1 > 0 then
+                                    SS_ConsumeConfig_ScrollUp()
+                                else
+                                    SS_ConsumeConfig_ScrollDown()
+                                end
+                            </OnMouseWheel>
+                            <OnVerticalScroll>
+                                FauxScrollFrame_OnVerticalScroll(18, SS_ConsumeConfig_UpdateDisplay)
+                            </OnVerticalScroll>
+                        </Scripts>
                     </ScrollFrame>
                     
                     <!-- Content Frame -->
@@ -1185,7 +1493,130 @@
                 </Frames>
                 
 			</Frame>
-		
+			
+           <!-- ========================================== -->
+            <!-- TAB 4: TACTICS -->
+            <!-- ========================================== -->
+            
+            <!-- Boss Selection Panel (Top) -->
+            <Frame name="SS_Tab4_BossPanel" hidden="true">
+                <Size><AbsDimension x="735" y="120"/></Size>
+                <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="55" y="-135"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab4_BossPanelHeader" inherits="GameFontNormal" text="Boss Selection">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    <FontString name="SS_Tab4_CurrentInstanceLabel" inherits="GameFontNormalSmall" text="Instance: Kara40">
+                        <Anchors><Anchor point="TOPRIGHT"><Offset><AbsDimension x="-15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+            </Frame>
+			
+			<!-- Trash/Special Encounters Panel (Below Boss Panel) -->
+            <Frame name="SS_Tab4_TrashPanel" hidden="true">
+                <Size><AbsDimension x="735" y="70"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_BossPanel" relativePoint="BOTTOMLEFT">
+                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab4_TrashPanelHeader" inherits="GameFontNormal" text="Trash / Special Encounters">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+            </Frame>
+            
+            <!-- Boss Room Images Panel (LEFT) -->
+            <Frame name="SS_Tab4_ImagesPanel" hidden="true">
+                <Size><AbsDimension x="380" y="275"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_TrashPanel" relativePoint="BOTTOMLEFT">
+                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab4_ImagesPanelHeader" inherits="GameFontNormal" text="Boss Room">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+            </Frame>
+            
+            <!-- Strategy Textbox Panel (RIGHT) -->
+            <Frame name="SS_Tab4_StrategyPanel" hidden="true">
+                <Size><AbsDimension x="355" y="380"/></Size>
+                <Anchors><Anchor point="TOPRIGHT" relativeTo="SS_Tab4_TrashPanel" relativePoint="BOTTOMRIGHT">
+                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab4_StrategyPanelHeader" inherits="GameFontNormal" text="Strategy">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+                <Frames>
+                    <ScrollFrame name="SS_Tab4_StrategyScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                        <Scripts>
+                            <OnMouseDown>
+                                local editBox = getglobal("SS_Tab4_StrategyEditBox")
+                                if editBox then editBox:SetFocus() end
+                            </OnMouseDown>
+                        </Scripts>
+                        <Size><AbsDimension x="315" y="335"/></Size>
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="10" y="-35"/></Offset></Anchor></Anchors>
+                        <ScrollChild>
+                            <EditBox name="SS_Tab4_StrategyEditBox" multiline="true" autoFocus="false">
+                                <Size><AbsDimension x="315" y="590"/></Size>
+                                <FontString inherits="ChatFontNormal"/>
+                                <Scripts><OnEscapePressed>this:ClearFocus()</OnEscapePressed></Scripts>
+                            </EditBox>
+                        </ScrollChild>
+                    </ScrollFrame>
+                </Frames>
+            </Frame>
+		  
+            <!-- Role Selection Panel (Below Images, LEFT) -->
+            <Frame name="SS_Tab4_RolePanel" hidden="true">
+                <Size><AbsDimension x="270" y="100"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_ImagesPanel" relativePoint="BOTTOMLEFT">
+                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab4_RolePanelHeader" inherits="GameFontNormal" text="Role">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+            </Frame>
+            
+            <!-- Post Button Panel (Next to Role Panel) -->
+            <Frame name="SS_Tab4_PortPanel" hidden="true">
+                <Size><AbsDimension x="105" y="100"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_RolePanel" relativePoint="TOPRIGHT">
+                    <Offset><AbsDimension x="5" y="0"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Frames>
+                    <Button name="SS_Tab4_PortToRaidButton" inherits="UIPanelButtonTemplate" text="Post to Raid">
+                        <Size><AbsDimension x="80" y="60"/></Size>
+                        <Anchors><Anchor point="CENTER"/></Anchors>
+                        <Scripts><OnClick>SS_Tactics_PortToRaid()</OnClick></Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+    
         </Frames>
         <Scripts>
             <OnShow>

@@ -69,30 +69,39 @@ function SS_Announce_FormatMissingConsumes(raidResults)
         end)
         
         local anyXText = ""
-        local currentMinReq = anyXFailures[1].minRequired
-        
-        for i = 1, table.getn(anyXFailures) do
-            local player = anyXFailures[i]
-            
-            -- Start new line if minRequired changes
-            if player.minRequired ~= currentMinReq then
-                table.insert(lines, "|cffff4500At least " .. currentMinReq .. " Consumes:|r " .. anyXText)
-                anyXText = ""
-                currentMinReq = player.minRequired
-            end
-            
-            local coloredName = SS_GetColoredName(player.name, player.class)
-            local playerText = "<" .. coloredName .. " " .. player.found .. "/" .. player.minRequired .. ">"
-            
-            if anyXText == "" then
-                anyXText = playerText
-            else
-                anyXText = anyXText .. " " .. playerText
-            end
-        end
-        
-        -- Add final line
+local currentMinReq = anyXFailures[1].minRequired
+local playersInLine = 0
+
+for i = 1, table.getn(anyXFailures) do
+    local player = anyXFailures[i]
+    
+    -- Start new line if minRequired changes OR if we hit 8 players
+    if player.minRequired ~= currentMinReq then
+        -- Finish current line
         table.insert(lines, "|cffff4500At least " .. currentMinReq .. " Consumes:|r " .. anyXText)
+        anyXText = ""
+        currentMinReq = player.minRequired
+        playersInLine = 0
+    elseif playersInLine >= 8 then
+        -- Hit player limit, start new line with same minReq
+        table.insert(lines, "|cffff4500At least " .. currentMinReq .. " Consumes:|r " .. anyXText)
+        anyXText = ""
+        playersInLine = 0
+    end
+    
+    local coloredName = SS_GetColoredName(player.name, player.class)
+    local playerText = "<" .. coloredName .. " " .. player.found .. "/" .. player.minRequired .. ">"
+    
+    if anyXText == "" then
+        anyXText = playerText
+    else
+        anyXText = anyXText .. " " .. playerText
+    end
+    playersInLine = playersInLine + 1
+end
+
+-- Add final line
+table.insert(lines, "|cffff4500At least " .. currentMinReq .. " Consumes:|r " .. anyXText)
     end
     
     -- THEN: Normal consume checks (one line per consumable)
@@ -107,7 +116,7 @@ function SS_Announce_FormatMissingConsumes(raidResults)
         end
         
         local shortName = SS_ConsumeShortNames[consumeName] or consumeName
-        table.insert(lines, shortName .. ": " .. table.concat(coloredNames, " "))
+        table.insert(lines, "|cffff0000" .. shortName .. ":|r " .. table.concat(coloredNames, " "))
     end
     
     return lines
@@ -203,7 +212,7 @@ function SS_RaidBuffAnnounce_SendToRaid(raidResults)
     end
     
     if not hasAnyMissing then
-        SS_Announce_Output("|cff00ff00All players have their required raid buffs!|r")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00All players have their required raid buffs!|r")
         return
     end
     

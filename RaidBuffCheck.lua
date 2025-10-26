@@ -68,9 +68,15 @@ SS_RaidBuffs_Definitions = {
         personal = true
     },
     {
-        name = "Aspect",
+        name = "Aspect of Hawk/Wolf",
         buffNames = {"Aspect of the Hawk", "Aspect of the Wolf"},
         appliesTo = "selfHunter",
+        personal = true
+    },
+	{
+        name = "Trueshot Aura",
+        buffNames = {"Trueshot Aura"},
+        appliesTo = "selfHunterMM",
         personal = true
     },
     {
@@ -247,6 +253,8 @@ function SS_RaidBuff_PlayerNeedsBuff(buffDef, playerName, playerClass, playerSpe
         return playerClass == "Mage"
     elseif appliesTo == "selfHunter" then
         return playerClass == "Hunter"
+    elseif appliesTo == "selfHunterMM" then
+        return playerClass == "Hunter" and playerSpec and SS_NeedsTrueshotAura(playerSpec)
     elseif appliesTo == "selfWarlock" then
         return playerClass == "Warlock"
     elseif appliesTo == "selfPriestDiscShadow" then

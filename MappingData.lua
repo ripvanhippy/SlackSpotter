@@ -91,6 +91,19 @@ function SS_NeedsInnerFire(specName)
 end
 
 -- ============================================================================
+-- Hunter SPECS NEEDING Trueshot Aura
+-- ============================================================================
+SS_TrueshotAuraSpecs = {
+    ["HunterMM"] = true,
+    -- HunterSV does NOT need the Aura
+}
+
+-- Helper: Check if priest spec needs Inner Fire
+function SS_NeedsTrueshotAura(specName)
+    return SS_TrueshotAuraSpecs[specName] == true
+end
+
+-- ============================================================================
 -- SHORTENED CONSUME NAMES (for announcements)
 -- ============================================================================
 SS_ConsumeShortNames = {
@@ -101,6 +114,8 @@ SS_ConsumeShortNames = {
     ["Elixir of Shadowpower"] = "Shadow Power",
     ["Elixir of Greater Nature Power"] = "Nature Power",
     ["Elixir of Greater Frost Power"] = "Frost Power",
+	["Elixir of Greater Frost Power"] = "Frost Power",
+	["Elixir of Greater Arcane Power"] = "Arcane Power",
     ["Flask of Supreme Power"] = "Supreme Flask",
     ["Flask of the Titans"] = "Titans Flask",
     ["Flask of Distilled Wisdom"] = "Wisdom Flask",

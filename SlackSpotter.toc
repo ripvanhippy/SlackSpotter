@@ -16,4 +16,6 @@ RaidBuffCheck.lua
 DisplayRaidList.lua
 Announcements.lua
 Shoutouts.lua
+SS_TacticsData.lua
+SS_Tactics.lua
 SlackSpotter.lua

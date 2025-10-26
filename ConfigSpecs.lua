@@ -252,8 +252,8 @@ function SS_ConfigSpecs_CreateOrUpdateRow(rowIndex, member)
         
         -- Player name label
         row.nameLabel = row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        row.nameLabel:SetPoint("LEFT", row, "LEFT", 5, 0)
-        row.nameLabel:SetWidth(120)
+        row.nameLabel:SetPoint("LEFT", row, "LEFT", 0, 0)
+        row.nameLabel:SetWidth(100)
         row.nameLabel:SetJustifyH("LEFT")
         
         -- Spec checkboxes (create max 5 for Shaman)
@@ -265,7 +265,7 @@ function SS_ConfigSpecs_CreateOrUpdateRow(rowIndex, member)
             if i == 1 then
                 cb:SetPoint("LEFT", row.nameLabel, "RIGHT", 10, 0)
             else
-                cb:SetPoint("LEFT", row.checkboxes[i-1], "RIGHT", 80, 0)
+                cb:SetPoint("LEFT", row.checkboxes[i-1], "RIGHT", 60, 0)
             end
             
             -- Label next to checkbox
