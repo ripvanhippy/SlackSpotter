@@ -94,11 +94,11 @@ function SS_CreateMinimapButton()
         GameTooltip:ClearLines()
         GameTooltip:AddLine("SlackSpotter", 0.2, 0.8, 1)
         if IsShiftKeyDown() then
-            GameTooltip:AddLine("Advanced Options:", 1, 1, 1)
-            GameTooltip:AddLine("- Scan all zones", 0.8, 0.8, 0.8)
-            GameTooltip:AddLine("- Export report", 0.8, 0.8, 0.8)
+            GameTooltip:AddLine("Advanced Functionality", 1, 1, 1)
+			GameTooltip:AddLine("- upcomming: do consume or buffchecks with '/ss <Buff>' etc.", 0.8, 0.8, 0.8)
+			GameTooltip:AddLine("- this is placeholder text!", 0.8, 0.8, 0.8)
         else
-            GameTooltip:AddLine("Click to toggle addon", 1, 1, 1)
+            GameTooltip:AddLine("Click to toggle addon or type /ss", 1, 1, 1)
             GameTooltip:AddLine("Hold Shift for advanced options", 1, 0.5, 0)
         end
         GameTooltip:Show()

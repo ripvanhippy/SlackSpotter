@@ -138,7 +138,7 @@
             <Layer level="OVERLAY">
                 <Texture name="SS_Frame_CustomIcon" file="Interface\AddOns\SlackSpotter\SlackerIconCircle">
                     <Size>
-                        <AbsDimension x="96" y="96"/>
+                        <AbsDimension x="124" y="123"/>
                     </Size>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -780,7 +780,7 @@
                                 </Anchor>
                             </Anchors>
                         </FontString>
-                        <FontString name="SS_Tab1_StatsPanel_MostFailedList" inherits="GameFontNormal" text="">
+                        <FontString name="SS_Tab1_StatsPanel_MostFailedList" inherits="GameFontNormal" text="|cffff0000STATS PANEL STILL IN DEV|r">
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativeTo="SS_Tab1_StatsPanel_MostFailedLabel" relativePoint="BOTTOMLEFT">
                                     <Offset><AbsDimension x="0" y="-5"/></Offset>
