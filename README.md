@@ -9,14 +9,22 @@ Lets call it a Love-Hate-Relationship... sometimes i want to punsh my screen, so
 
 Anyways this is still in development as it gets more and more refiend, so please excuse the occasional bug
 
+# Consider Supporting
+
+This ate weeks of my time ;_;
+and its still not done!
+
+https://buymeacoffee.com/gahanaho
+
+
 # setup:
 # STEP 1
-**--> theres a minimap button u can leftclick, otherwise type /ss**
+**- Theres a minimap button u can leftclick, otherwise type /ss**
 
-[-->Only needed on very first startup if you want to use the <ERROR> consume-preset]
-switch to tab 6 "config consumes" and hit "load presets" then "save"
-the hardcoded preset is then autoloaded when using the addon. it sets up mc, bwl, aq40, naxx, kara40 with Consume-Guildrules of <ERROR>
-[End of First time Setup!--<]
+[**-->Only needed on very first startup if you want to use the <ERROR> consume-preset**
+- switch to tab 6 "config consumes" and hit "load presets" then "save"
+- the hardcoded preset is then autoloaded when using the addon. it sets up mc, bwl, aq40, naxx, kara40 with Consume-Guildrules of <ERROR>
+**End of First time Setup!--<]**
 
 # STEP 2
 **select the raid on the right sidepanel that you want to Raid**

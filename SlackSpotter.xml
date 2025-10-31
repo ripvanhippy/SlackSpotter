@@ -187,7 +187,7 @@
                         </Anchor>
                     </Anchors>
                 </FontString>
-                <FontString name="SS_Frame_BottomRightText" inherits="GameFontNormal" text="V0.40 - 7th Oct 25">
+                <FontString name="SS_Frame_BottomRightText" inherits="GameFontNormal" text="V0.46 - 31th Oct 25">
                     <Anchors>
                         <Anchor point="BOTTOMRIGHT">
                             <Offset>
