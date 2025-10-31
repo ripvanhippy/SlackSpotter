@@ -37,14 +37,14 @@ https://buymeacoffee.com/gahanaho
 - "any x consume:" checkboxes set a min requirement, like 1 is selected in mc because we only require at least 1 consume out of the ticked list
 - if you, for some ungodly reason, want your mages to pop Giants, you can tick "List all" in the top right, to see all consumes for ticking
 
-# STEP 2
+# STEP 4
 go to tab 5 "Config Specs", hit refresh. you see all current raidmembers. you can assign each member a spec based on class
 	
 - you need to do this by hand, but remember to hit save guild specs when ur done!
 - all guildmembers inside the raid that are from your guild are saved as per your choice and get autoloaded if detected after refresh
 - after a few raids you barely have to chose anyone, addon knows usual specs of your guildies and autoloads them.
 
-# STEP 3
+# STEP 5
 **go to tab 1 "Consumes/Buffs", hit refresh to get an overview of your raid. you can see missing buffs based on raid comp and spec, also missing consumes based on your config from tab 6 "config consumes"**
 - hitting "raid buff check" automatically refreshes the overview again and spits out into raidchat if there are buffs missing. if u want the tanks to have thorns, the priest to buff shadow prot or the druids to buff emerald blessing, check the boxes before hitting the button personal buffs, like Mage Armor, are whispered, to keep Raidchat clean  
 - next are the buttons for the greater prot pots. if too many are missing it, message gets grouped. you can check "list everyone" to call out a long list of people in several messages.
@@ -84,3 +84,11 @@ when i do silent checks and whisper ppl instead of spamming 10 lines again and a
 - Tab 1 and Tab 5 are not automatically refreshing for convinience when clicking on that tab
 - as stated missing functionality: tab 3 completly, tab 4 hardcoded tactics and a save button to remember changes for guild specific tactics
 - stats panel at tab 1 is just a placeholder, code is not done!
+- working on a weapon buff check, but its spaghetti code workaround stuff, API does not support it natively; same with detecting ppls talents
+
+# Consider Supporting
+
+This ate weeks of my time ;_;
+and its still not done!
+
+https://buymeacoffee.com/gahanaho
