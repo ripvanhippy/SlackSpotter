@@ -187,7 +187,7 @@
                         </Anchor>
                     </Anchors>
                 </FontString>
-                <FontString name="SS_Frame_BottomRightText" inherits="GameFontNormal" text="V0.46 - 31th Oct 25">
+                <FontString name="SS_Frame_BottomRightText" inherits="GameFontNormal" text="V0.47 - 7th NOV 25">
                     <Anchors>
                         <Anchor point="BOTTOMRIGHT">
                             <Offset>
@@ -247,7 +247,7 @@
                     </OnClick>
                 </Scripts>
             </Button>
-            <Button name="SS_Tab3" inherits="SS_TabTemplate" text="Assignments">
+            <Button name="SS_Tab3" inherits="SS_TabTemplate" text="Assignments/CDs">
                 <Anchors>
                     <Anchor point="LEFT" relativeTo="SS_Tab2" relativePoint="RIGHT">
                         <Offset>
@@ -303,6 +303,35 @@
                     </OnClick>
                 </Scripts>
             </Button>
+			<Button name="SS_Tab7" inherits="SS_TabTemplate" text="Stats">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="SS_Tab6" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="-15" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectTab(7)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="SS_Tab8" inherits="SS_TabTemplate" text="Help">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="SS_Tab7" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="-15" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SS_SelectTab(8)
+                    </OnClick>
+                </Scripts>
+            </Button>
+
 			
 			<!-- ========================================== -->
             <!-- RIGHT-SIDE RAID TABS -->
@@ -1111,6 +1140,192 @@
                 </Frames>
             </Frame>
 
+<!-- ========================================== -->
+            <!-- TAB 3: ASSIGNMENTS/COOLDOWNS -->
+            <!-- ========================================== -->
+            
+            <!-- Cooldown Panel -->
+            <Frame name="SS_Tab3_CooldownPanel" hidden="true">
+                <Size>
+                    <AbsDimension x="730" y="280"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="55" y="-135"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="SS_Tab3_CooldownPanel_Header" inherits="GameFontNormalLarge" text="Raid Cooldowns">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="15" y="-10"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab3_CooldownPanel_ColumnHeaders" inherits="GameFontNormal" text="Player___________Spell_____________________Target_______________Time">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="15" y="-35"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Button name="SS_Tab3_CooldownPanel_ClearButton" inherits="UIPanelButtonTemplate" text="Clear All">
+                        <Size><AbsDimension x="80" y="22"/></Size>
+                        <Anchors>
+                            <Anchor point="TOPRIGHT">
+                                <Offset><AbsDimension x="-15" y="-10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_Cooldowns_ClearAll()</OnClick></Scripts>
+                    </Button>
+                    
+                    <!-- Content Frame -->
+                    <Frame name="SS_Tab3_CooldownPanel_Content">
+                        <Size>
+                            <AbsDimension x="710" y="230"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset><AbsDimension x="5" y="-55"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                    </Frame>
+                </Frames>
+            </Frame>
+
+           <!-- ========================================== -->
+            <!-- TAB 4: TACTICS -->
+            <!-- ========================================== -->
+            
+            <!-- Boss Selection Panel (Top) -->
+            <Frame name="SS_Tab4_BossPanel" hidden="true">
+                <Size><AbsDimension x="735" y="120"/></Size>
+                <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="55" y="-135"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab4_BossPanelHeader" inherits="GameFontNormal" text="Boss Selection">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    <FontString name="SS_Tab4_CurrentInstanceLabel" inherits="GameFontNormalSmall" text="Instance: Kara40">
+                        <Anchors><Anchor point="TOPRIGHT"><Offset><AbsDimension x="-15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+            </Frame>
+			
+			<!-- Trash/Special Encounters Panel (Below Boss Panel) -->
+            <Frame name="SS_Tab4_TrashPanel" hidden="true">
+                <Size><AbsDimension x="735" y="70"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_BossPanel" relativePoint="BOTTOMLEFT">
+                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab4_TrashPanelHeader" inherits="GameFontNormal" text="Trash / Special Encounters">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+            </Frame>
+            
+            <!-- Boss Room Images Panel (LEFT) -->
+            <Frame name="SS_Tab4_ImagesPanel" hidden="true">
+                <Size><AbsDimension x="380" y="275"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_TrashPanel" relativePoint="BOTTOMLEFT">
+                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab4_ImagesPanelHeader" inherits="GameFontNormal" text="Boss Room">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+            </Frame>
+            
+            <!-- Strategy Textbox Panel (RIGHT) -->
+            <Frame name="SS_Tab4_StrategyPanel" hidden="true">
+                <Size><AbsDimension x="355" y="380"/></Size>
+                <Anchors><Anchor point="TOPRIGHT" relativeTo="SS_Tab4_TrashPanel" relativePoint="BOTTOMRIGHT">
+                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab4_StrategyPanelHeader" inherits="GameFontNormal" text="Strategy">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+                <Frames>
+                    <ScrollFrame name="SS_Tab4_StrategyScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                        <Scripts>
+                            <OnMouseDown>
+                                local editBox = getglobal("SS_Tab4_StrategyEditBox")
+                                if editBox then editBox:SetFocus() end
+                            </OnMouseDown>
+                        </Scripts>
+                        <Size><AbsDimension x="315" y="335"/></Size>
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="10" y="-35"/></Offset></Anchor></Anchors>
+                        <ScrollChild>
+                            <EditBox name="SS_Tab4_StrategyEditBox" multiline="true" autoFocus="false">
+                                <Size><AbsDimension x="315" y="590"/></Size>
+                                <FontString inherits="ChatFontNormal"/>
+                                <Scripts><OnEscapePressed>this:ClearFocus()</OnEscapePressed></Scripts>
+                            </EditBox>
+                        </ScrollChild>
+                    </ScrollFrame>
+                </Frames>
+            </Frame>
+		  
+            <!-- Role Selection Panel (Below Images, LEFT) -->
+            <Frame name="SS_Tab4_RolePanel" hidden="true">
+                <Size><AbsDimension x="270" y="100"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_ImagesPanel" relativePoint="BOTTOMLEFT">
+                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers><Layer level="OVERLAY">
+                    <FontString name="SS_Tab4_RolePanelHeader" inherits="GameFontNormal" text="Role">
+                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
+                    </FontString>
+                </Layer></Layers>
+            </Frame>
+            
+            <!-- Post Button Panel (Next to Role Panel) -->
+            <Frame name="SS_Tab4_PortPanel" hidden="true">
+                <Size><AbsDimension x="105" y="100"/></Size>
+                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_RolePanel" relativePoint="TOPRIGHT">
+                    <Offset><AbsDimension x="5" y="0"/></Offset></Anchor></Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Frames>
+                    <Button name="SS_Tab4_PortToRaidButton" inherits="UIPanelButtonTemplate" text="Post to Raid">
+                        <Size><AbsDimension x="80" y="60"/></Size>
+                        <Anchors><Anchor point="CENTER"/></Anchors>
+                        <Scripts><OnClick>SS_Tactics_PortToRaid()</OnClick></Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
 		  
             <!-- ========================================== -->
             <!-- TAB 5: CONFIG SPECS PANELS -->
@@ -1153,8 +1368,80 @@
                         <Scripts><OnClick>SS_ConfigSpecs_SaveGuildSpecs()</OnClick></Scripts>
                     </Button>
                 </Frames>
-            </Frame>      			
-            <!-- Right Panel: Raid List (BIGGER) -->
+            </Frame>    
+  			
+            <!-- Whisper Spec Panel -->
+            <Frame name="SS_Tab5_WhisperSpecPanel">
+                <Size>
+                    <AbsDimension x="180" y="140"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="SS_Tab5_ButtonPanel" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="-10"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="SS_Tab5_WhisperSpecPanel_CheckboxLabel1" inherits="GameFontNormalSmall" text="Enable Whisperspec">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="40" y="-25"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab5_WhisperSpecPanel_CheckboxLabel2" inherits="GameFontNormalSmall" text="Also /w unassigned">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="40" y="-60"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                        <FontString name="SS_Tab5_WhisperSpecPanel_Label" inherits="GameFontNormalSmall" text="Ask Raidmembers in Raid:">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset><AbsDimension x="20" y="-90"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <CheckButton name="SS_Tab5_WhisperSpecPanel_EnableCheckbox" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset><AbsDimension x="10" y="-15"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConfigSpecs_WhisperSpec_ToggleCheckbox()</OnClick></Scripts>
+                    </CheckButton>
+                    <CheckButton name="SS_Tab5_WhisperSpecPanel_WhisperUnassignedCheckbox" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="SS_Tab5_WhisperSpecPanel_EnableCheckbox" relativePoint="BOTTOMLEFT">
+                                <Offset><AbsDimension x="0" y="-5"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConfigSpecs_WhisperSpec_ToggleWhisperUnassigned()</OnClick></Scripts>
+                    </CheckButton>
+                    <Button name="SS_Tab5_WhisperSpecPanel_ConfirmButton" inherits="UIPanelButtonTemplate" text="Confirm Specs">
+                        <Size><AbsDimension x="150" y="25"/></Size>
+                        <Anchors>
+                            <Anchor point="BOTTOM">
+                                <Offset><AbsDimension x="0" y="10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts><OnClick>SS_ConfigSpecs_WhisperSpec_ConfirmSpecs()</OnClick></Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+			
+			<!-- Right Panel: Raid List -->
             <Frame name="SS_Tab5_RaidListPanel">
                 <Size>
                     <AbsDimension x="550" y="580"/>
@@ -1494,129 +1781,67 @@
                 
 			</Frame>
 			
-           <!-- ========================================== -->
-            <!-- TAB 4: TACTICS -->
-            <!-- ========================================== -->
-            
-            <!-- Boss Selection Panel (Top) -->
-            <Frame name="SS_Tab4_BossPanel" hidden="true">
-                <Size><AbsDimension x="735" y="120"/></Size>
-                <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="55" y="-135"/></Offset></Anchor></Anchors>
-                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
-                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
-                </Backdrop>
-                <Layers><Layer level="OVERLAY">
-                    <FontString name="SS_Tab4_BossPanelHeader" inherits="GameFontNormal" text="Boss Selection">
-                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
-                    </FontString>
-                    <FontString name="SS_Tab4_CurrentInstanceLabel" inherits="GameFontNormalSmall" text="Instance: Kara40">
-                        <Anchors><Anchor point="TOPRIGHT"><Offset><AbsDimension x="-15" y="-15"/></Offset></Anchor></Anchors>
-                    </FontString>
-                </Layer></Layers>
-            </Frame>
-			
-			<!-- Trash/Special Encounters Panel (Below Boss Panel) -->
-            <Frame name="SS_Tab4_TrashPanel" hidden="true">
-                <Size><AbsDimension x="735" y="70"/></Size>
-                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_BossPanel" relativePoint="BOTTOMLEFT">
-                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
-                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
-                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
-                </Backdrop>
-                <Layers><Layer level="OVERLAY">
-                    <FontString name="SS_Tab4_TrashPanelHeader" inherits="GameFontNormal" text="Trash / Special Encounters">
-                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
-                    </FontString>
-                </Layer></Layers>
-            </Frame>
-            
-            <!-- Boss Room Images Panel (LEFT) -->
-            <Frame name="SS_Tab4_ImagesPanel" hidden="true">
-                <Size><AbsDimension x="380" y="275"/></Size>
-                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_TrashPanel" relativePoint="BOTTOMLEFT">
-                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
-                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
-                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
-                </Backdrop>
-                <Layers><Layer level="OVERLAY">
-                    <FontString name="SS_Tab4_ImagesPanelHeader" inherits="GameFontNormal" text="Boss Room">
-                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
-                    </FontString>
-                </Layer></Layers>
-            </Frame>
-            
-            <!-- Strategy Textbox Panel (RIGHT) -->
-            <Frame name="SS_Tab4_StrategyPanel" hidden="true">
-                <Size><AbsDimension x="355" y="380"/></Size>
-                <Anchors><Anchor point="TOPRIGHT" relativeTo="SS_Tab4_TrashPanel" relativePoint="BOTTOMRIGHT">
-                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
-                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
-                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
-                </Backdrop>
-                <Layers><Layer level="OVERLAY">
-                    <FontString name="SS_Tab4_StrategyPanelHeader" inherits="GameFontNormal" text="Strategy">
-                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
-                    </FontString>
-                </Layer></Layers>
-                <Frames>
-                    <ScrollFrame name="SS_Tab4_StrategyScrollFrame" inherits="UIPanelScrollFrameTemplate">
-                        <Scripts>
-                            <OnMouseDown>
-                                local editBox = getglobal("SS_Tab4_StrategyEditBox")
-                                if editBox then editBox:SetFocus() end
-                            </OnMouseDown>
-                        </Scripts>
-                        <Size><AbsDimension x="315" y="335"/></Size>
-                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="10" y="-35"/></Offset></Anchor></Anchors>
-                        <ScrollChild>
-                            <EditBox name="SS_Tab4_StrategyEditBox" multiline="true" autoFocus="false">
-                                <Size><AbsDimension x="315" y="590"/></Size>
-                                <FontString inherits="ChatFontNormal"/>
-                                <Scripts><OnEscapePressed>this:ClearFocus()</OnEscapePressed></Scripts>
-                            </EditBox>
-                        </ScrollChild>
-                    </ScrollFrame>
-                </Frames>
-            </Frame>
-		  
-            <!-- Role Selection Panel (Below Images, LEFT) -->
-            <Frame name="SS_Tab4_RolePanel" hidden="true">
-                <Size><AbsDimension x="270" y="100"/></Size>
-                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_ImagesPanel" relativePoint="BOTTOMLEFT">
-                    <Offset><AbsDimension x="0" y="-5"/></Offset></Anchor></Anchors>
-                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
-                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
-                </Backdrop>
-                <Layers><Layer level="OVERLAY">
-                    <FontString name="SS_Tab4_RolePanelHeader" inherits="GameFontNormal" text="Role">
-                        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="15" y="-15"/></Offset></Anchor></Anchors>
-                    </FontString>
-                </Layer></Layers>
-            </Frame>
-            
-            <!-- Post Button Panel (Next to Role Panel) -->
-            <Frame name="SS_Tab4_PortPanel" hidden="true">
-                <Size><AbsDimension x="105" y="100"/></Size>
-                <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab4_RolePanel" relativePoint="TOPRIGHT">
-                    <Offset><AbsDimension x="5" y="0"/></Offset></Anchor></Anchors>
-                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-                    <EdgeSize><AbsValue val="16"/></EdgeSize><TileSize><AbsValue val="16"/></TileSize>
-                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
-                </Backdrop>
-                <Frames>
-                    <Button name="SS_Tab4_PortToRaidButton" inherits="UIPanelButtonTemplate" text="Post to Raid">
-                        <Size><AbsDimension x="80" y="60"/></Size>
-                        <Anchors><Anchor point="CENTER"/></Anchors>
-                        <Scripts><OnClick>SS_Tactics_PortToRaid()</OnClick></Scripts>
-                    </Button>
-                </Frames>
-            </Frame>
-    
+<!-- ========================================== -->
+<!-- TAB 8: HELP PANEL -->
+<!-- ========================================== -->
+<Frame name="SS_Tab8_HelpPanel" hidden="true">
+    <Size>
+        <AbsDimension x="735" y="580"/>
+    </Size>
+    <Anchors>
+        <Anchor point="TOPLEFT">
+            <Offset>
+                <AbsDimension x="55" y="-135"/>
+            </Offset>
+        </Anchor>
+    </Anchors>
+    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+        <EdgeSize><AbsValue val="16"/></EdgeSize>
+        <TileSize><AbsValue val="16"/></TileSize>
+        <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+    </Backdrop>
+    <Layers>
+        <Layer level="OVERLAY">
+            <FontString name="SS_Tab8_HelpPanelHeader" inherits="GameFontNormalLarge" text="Help &amp; Setup Guide">
+                <Anchors>
+                    <Anchor point="TOP">
+                        <Offset><AbsDimension x="0" y="-15"/></Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+        </Layer>
+    </Layers>
+    <Frames>
+        <ScrollFrame name="SS_Tab8_HelpScrollFrame" inherits="UIPanelScrollFrameTemplate">
+            <Size><AbsDimension x="690" y="520"/></Size>
+            <Anchors>
+                <Anchor point="TOPLEFT">
+                    <Offset><AbsDimension x="15" y="-45"/></Offset>
+                </Anchor>
+            </Anchors>
+            <ScrollChild>
+                <EditBox name="SS_Tab8_HelpEditBox" multiline="true" autoFocus="false">
+    <Size><AbsDimension x="715" y="800"/></Size>
+    <FontString inherits="ChatFontNormal"/>
+    <Scripts>
+        <OnEscapePressed>this:ClearFocus()</OnEscapePressed>
+        <OnChar>return</OnChar>
+        <OnTextChanged>
+            if not SS_HelpTextLoaded then return end
+            this:SetText(SS_Help_OriginalText or "")
+            this:ClearFocus()
+        </OnTextChanged>
+    </Scripts>
+</EditBox>
+            </ScrollChild>
+        </ScrollFrame>
+    </Frames>
+</Frame>
+
+
+
+
+ <!-- END OF ALL FRAMES -->   
         </Frames>
         <Scripts>
             <OnShow>

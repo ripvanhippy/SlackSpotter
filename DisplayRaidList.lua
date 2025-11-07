@@ -199,5 +199,5 @@ end
 -- ============================================================================
 
 function SS_Display_Initialize()
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Display module loaded!|r")
+--    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Display module loaded!|r")
 end

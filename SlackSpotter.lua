@@ -152,7 +152,7 @@ end
 
 function SS_SelectTab(tabNum)
     -- Dim all tabs
-    for i = 1, 6 do
+    for i = 1, 8 do
         local tab = getglobal("SS_Tab"..i)
         if tab then
             tab:SetAlpha(0.6)
@@ -185,20 +185,17 @@ function SS_SelectTab(tabNum)
             SS_Shoutouts_ShowTab()
         end
     elseif tabNum == 3 then
-        -- TODO: SS_ShowTab3Content()
-elseif tabNum == 4 then
+        if SS_Cooldowns_ShowTab then
+            SS_Cooldowns_ShowTab()
+        end
+	elseif tabNum == 4 then
         -- Show Tab 4 (Tactics)
         if SS_Tactics_ShowTab then
             SS_Tactics_ShowTab()
         end
     elseif tabNum == 5 then
-        -- Show Tab 5
-        if SS_Tab5_ButtonPanel then SS_Tab5_ButtonPanel:Show() end
-        if SS_Tab5_RaidListPanel then SS_Tab5_RaidListPanel:Show() end
-        
-        -- Auto-load specs on first view
-        if SS_ConfigSpecs_AutoLoad then
-            SS_ConfigSpecs_AutoLoad()
+        if SS_ConfigSpecs_ShowTab then
+            SS_ConfigSpecs_ShowTab()
         end
     elseif tabNum == 6 then
         -- Show Tab 6
@@ -227,6 +224,15 @@ elseif tabNum == 4 then
         if SS_Tactics_SyncRaidSelection and SS_ConsumeConfig_CurrentRaid then
             SS_Tactics_SyncRaidSelection(SS_ConsumeConfig_CurrentRaid)
         end
+	elseif tabNum == 7 then	
+	    -- Show Tab 7 Stats Tab
+		if SS_Cooldowns_ShowTab then
+			SS_Cooldowns_ShowTab()
+		end
+	elseif tabNum == 8 then	
+	    -- Show Tab 8 Help Tab Frame
+		SS_ShowTab8Content()
+	
     end
     
     SS_CurrentTab = tabNum
@@ -296,6 +302,11 @@ function SS_HideAllTabContent()
     if SS_Tab2_ColorPanel then SS_Tab2_ColorPanel:Hide() end
     if SS_Tab2_MessagePanel then SS_Tab2_MessagePanel:Hide() end
     if SS_Tab2_CountdownPanel then SS_Tab2_CountdownPanel:Hide() end
+	
+	-- Hide Tab 3 panels
+    if SS_Cooldowns_HideTab then
+        SS_Cooldowns_HideTab()
+    end
     
     -- Hide Tab 4 panels
     if SS_Tab4_BossPanel then SS_Tab4_BossPanel:Hide() end
@@ -306,12 +317,18 @@ function SS_HideAllTabContent()
 	if SS_Tab4_PortPanel then SS_Tab4_PortPanel:Hide() end
     
     -- Hide Tab 5 panels
-    if SS_Tab5_ButtonPanel then SS_Tab5_ButtonPanel:Hide() end
-    if SS_Tab5_RaidListPanel then SS_Tab5_RaidListPanel:Hide() end
+    if SS_ConfigSpecs_HideTab then
+        SS_ConfigSpecs_HideTab()
+    end
     
     -- Hide Tab 6 panels
     if SS_Tab6_ControlPanel then SS_Tab6_ControlPanel:Hide() end
     if SS_Tab6_ConsumeListPanel then SS_Tab6_ConsumeListPanel:Hide() end
+	
+	-- Hide Tab 7 panels
+	
+	-- Hide Tab 8 panels
+	if SS_Tab8_HelpPanel then SS_Tab8_HelpPanel:Hide() end
 end
 
 function SS_ShowTab1Content()
@@ -675,57 +692,46 @@ SS_EventFrame:SetScript("OnEvent", function()
 		-- Create minimap button
     SS_CreateMinimapButton()
         
-        -- Initialize MappingData module
-        if SS_MappingData_Initialize then
-            SS_MappingData_Initialize()
-        end
-		
-		-- Initialize Shoutouts module
-        if SS_Shoutouts_Initialize then
-            SS_Shoutouts_Initialize()
+        -- Initialize all modules
+        local modules = {
+            {name = "MappingData", func = SS_MappingData_Initialize},
+            {name = "Shoutouts", func = SS_Shoutouts_Initialize},
+            {name = "ConfigSpecs", func = SS_ConfigSpecs_Initialize},
+            {name = "ConsumeConfig", func = SS_ConsumeConfig_Initialize},
+            {name = "Tactics", func = SS_Tactics_Initialize},
+            {name = "CheckConsumes", func = SS_Check_Initialize},
+            {name = "RaidBuff", func = SS_RaidBuff_Initialize},
+            {name = "Display", func = SS_Display_Initialize},
+            {name = "Announcements", func = SS_Announce_Initialize},
+			{name = "Help", func = SS_Help_Initialize},
+			{name = "Cooldowns", func = SS_Cooldowns_Initialize}
+			
+        }
+        
+        local loaded = 0
+        local failed = {}
+        
+        for i = 1, table.getn(modules) do
+            if modules[i].func then
+                modules[i].func()
+                loaded = loaded + 1
+            else
+                table.insert(failed, modules[i].name)
+            end
         end
         
-        -- Initialize ConfigSpecs module
-        if SS_ConfigSpecs_Initialize then
-            SS_ConfigSpecs_Initialize()
-        end
+        local statusMsg = "|cff00ff00SlackSpotter modules loaded: " .. loaded .. "/" .. table.getn(modules) .. "|r"
+        DEFAULT_CHAT_FRAME:AddMessage(statusMsg)
         
-        -- Initialize ConsumeConfig module
-        if SS_ConsumeConfig_Initialize then
-            SS_ConsumeConfig_Initialize()
-        end
-        
-        -- Initialize Tactics module
-        if SS_Tactics_Initialize then
-            SS_Tactics_Initialize()
-        end
-        
-        -- Initialize CheckConsumes module
-        if SS_Check_Initialize then
-            SS_Check_Initialize()
-        end
-		
-		-- Initialize RaidBuff module
-        if SS_RaidBuff_Initialize then
-            SS_RaidBuff_Initialize()
-        end
-        
-        -- Initialize Display module
-        if SS_Display_Initialize then
-            SS_Display_Initialize()
-        end
-        
-        -- Initialize Announcements module
-        if SS_Announce_Initialize then
-            SS_Announce_Initialize()
+        if table.getn(failed) > 0 then
+            local failedMsg = "|cffff0000Failed to load: " .. table.concat(failed, ", ") .. "|r"
+            DEFAULT_CHAT_FRAME:AddMessage(failedMsg)
         end
         
         -- Auto-load consume config from SavedVariables
         if SS_ConsumeConfig_AutoLoad then
             SS_ConsumeConfig_AutoLoad()
         end
-        
-        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter addon loaded successfully!|r")
 		
 		-- Preselect Kara40
         SS_SelectRaid("Kara40")

@@ -668,7 +668,7 @@ This tab assigns player specializations for consume checking.
 - Warrior: DPS, Tank
 - Paladin: Retri, Holy, Tank
 - Hunter: Surv, MM
-- Shaman: EnhDPS, Ele (Nat), Ele (Fire), Resto, EnhTank
+- Shaman: EnhDPS, EleNat, EleFire, Resto, EnhTank
 - Rogue: DPS
 - Druid: Cat, Owl, Tree, Bear
 - Priest: Disc, Shadow, Holy

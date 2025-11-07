@@ -278,5 +278,5 @@ end
 -- ============================================================================
 
 function SS_Announce_Initialize()
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Announcements module loaded!|r")
+--    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Announcements module loaded!|r")
 end

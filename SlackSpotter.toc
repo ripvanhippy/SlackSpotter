@@ -1,8 +1,8 @@
 ## Interface: 11200
 ## Title: |cff00ff00SlackSpotter|r
 ## Author: Gahanaho, Tel'Abim Horde
-## Notes: Raid consume and buff checker with colored shoutouts. Type /ss to open.
-## Version: 0.40
+## Notes: Consume and buff checker with additional raidhelping modules built in. Type |cff00ff00/ss|r to open or use the |cff00ff00Minimap Button|r. Enjoy!
+## Version: 0.47
 ## SavedVariables: SS_ShoutoutsDB, SS_GuildSpecsDB, SS_ConsumeConfigDB
 
 SlackSpotter.xml
@@ -18,4 +18,6 @@ Announcements.lua
 Shoutouts.lua
 SS_TacticsData.lua
 SS_Tactics.lua
+SS_Cooldowns.lua
+Help.lua
 SlackSpotter.lua

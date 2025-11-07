@@ -47,8 +47,8 @@ SS_ConsumeConfig_SpecRoles = {
     
     -- Shaman
     ["ShamanEnhDPS"] = "Physical",
-    ["ShamanEle (Nat)"] = "CastersNature",
-    ["ShamanEle (Fire)"] = "CastersFire",
+    ["ShamanEleNat"] = "CastersNature",
+    ["ShamanEleFire"] = "CastersFire",
     ["ShamanResto"] = "Healers",
     ["ShamanEnhTank"] = "Tanks",
     
@@ -761,7 +761,7 @@ function SS_ConsumeConfig_CreateSpecButtons()
         {class = "Warrior", color = "|cffc79c6e", specs = {"DPS", "Tank"}},
         {class = "Paladin", color = "|cfff58cba", specs = {"Retri", "Holy", "Tank"}},
         {class = "Hunter", color = "|cffa9d271", specs = {"Surv", "MM"}},
-        {class = "Shaman", color = "|cff0070dd", specs = {"EnhDPS", "Ele (Nat)", "Ele (Fire)", "Resto", "EnhTank"}},
+        {class = "Shaman", color = "|cff0070dd", specs = {"EnhDPS", "EleNat", "EleFire", "Resto", "EnhTank"}},
         {class = "Rogue", color = "|cfffff569", specs = {"DPS"}},
         {class = "Druid", color = "|cffff7d0a", specs = {"Cat", "Owl", "Tree", "Bear"}},
         {class = "Priest", color = "|cffffffff", specs = {"Disc", "Shadow", "Holy"}},
@@ -831,5 +831,5 @@ function SS_ConsumeConfig_Initialize()
     
     SS_ConsumeConfig_CreateSpecButtons()
     
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Consume Config module loaded!|r")
+--    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Consume Config module loaded!|r")
 end

@@ -15,7 +15,7 @@ SS_Tactics_ButtonsCreated = false
 -- BOSS DATA - Kill order per raid
 -- ============================================================================
 SS_Tactics_BossOrder = {
-    ["MC"] = {"Incindis", "Lucifron", "Magmadar", "Basalthar & Smoldaris", "Garr", "Shazzrah", "Baron Geddon", "Golemagg", "Sulfuron Harbinger", "Majordomo Executus", "Ragnaros"},
+    ["MC"] = {"Incindis", "Lucifron", "Magmadar", "Basalthar & Smoldaris", "Sorc-Thane Thaurissan", "Garr", "Shazzrah", "Baron Geddon", "Golemagg", "Sulfuron Harbinger", "Majordomo Executus", "Ragnaros"},
     ["BWL"] = {"Razorgore", "Vaelastrasz", "Broodlord Lashlayer", "Firemaw", "Ebonroc", "Flamegor", "Chromaggus", "Nefarian"},
     ["AQ40"] = {"The Prophet Skeram", "Silithid Royalty", "Battleguard Sartura", "Fankriss the Unyielding", "Viscidus", "Princess Huhuran", "Twin Emperors", "Ouro", "C'Thun"},
     ["Naxx"] = {"Anub'Rekhan", "Grand Widow Faerlina", "Maexxna", "Noth the Plaguebringer", "Heigan the Unclean", "Loatheb", "Instructor Razuvious", "Gothik the Harvester", "The Four Horsemen", "Patchwerk", "Grobbulus", "Gluth", "Thaddius", "Sapphiron", "Kel'Thuzad"},
@@ -47,7 +47,7 @@ SS_Tactics_RoleOrder = {"Tanks", "Healer", "Special 1", "Phys DPS", "Caster DPS"
 -- INITIALIZATION
 -- ============================================================================
 function SS_Tactics_Initialize()
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Tactics module loaded!|r")
+--    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Tactics module loaded!|r")
 end
 
 -- ============================================================================

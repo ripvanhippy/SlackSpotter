@@ -21,6 +21,11 @@ SS_ConfigSpecs_RowHeight = 20
 -- Auto-load flag (0 = not loaded, 1 = loaded this session)
 SS_SpecsLoadedThisSession = 0
 
+-- Whisper Spec System
+SS_ConfigSpecs_WhisperSpecEnabled = false
+SS_ConfigSpecs_WhisperUnassignedEnabled = false
+SS_ConfigSpecs_WhisperSpecFrame = nil
+
 -- ============================================================================
 -- CLASS SPECS DEFINITION
 -- ============================================================================
@@ -28,7 +33,7 @@ SS_ConfigSpecs_ClassSpecs = {
     ["Warrior"] = {"DPS", "Tank"},
     ["Paladin"] = {"Retri", "Holy", "Tank"},
     ["Hunter"] = {"Surv", "MM"},
-    ["Shaman"] = {"EnhDPS", "Ele (Nat)", "Ele (Fire)", "Resto", "EnhTank"},
+    ["Shaman"] = {"EnhDPS", "EleNat", "EleFire", "Resto", "EnhTank"},
     ["Rogue"] = {"DPS"},
     ["Druid"] = {"Cat", "Owl", "Tree", "Bear"},
     ["Priest"] = {"Disc", "Shadow", "Holy"},
@@ -388,8 +393,287 @@ function SS_Tab5_ScrollDown()
 end
 
 -- ============================================================================
+-- WHISPER SPEC SYSTEM
+-- ============================================================================
+
+function SS_ConfigSpecs_WhisperSpec_Initialize()    
+    -- Create event frame
+    local frame = CreateFrame("Frame")
+    SS_ConfigSpecs_WhisperSpecFrame = frame
+    
+    frame:RegisterEvent("CHAT_MSG_WHISPER")
+    
+    frame:SetScript("OnEvent", function()
+        if event == "CHAT_MSG_WHISPER" then
+            SS_ConfigSpecs_WhisperSpec_OnWhisper(arg1, arg2)
+        end
+    end)
+end
+
+function SS_ConfigSpecs_WhisperSpec_ToggleCheckbox()
+    local checkbox = getglobal("SS_Tab5_WhisperSpecPanel_EnableCheckbox")
+    if checkbox then
+        SS_ConfigSpecs_WhisperSpecEnabled = checkbox:GetChecked()
+        
+        -- Save to DB
+        if not SS_GuildSpecsDB then
+            SS_GuildSpecsDB = {}
+        end
+        SS_GuildSpecsDB["_whisperSpecEnabled"] = SS_ConfigSpecs_WhisperSpecEnabled
+        
+        -- Update button state
+        SS_ConfigSpecs_WhisperSpec_UpdateUI()
+    end
+end
+
+function SS_ConfigSpecs_WhisperSpec_ToggleWhisperUnassigned()
+    local checkbox = getglobal("SS_Tab5_WhisperSpecPanel_WhisperUnassignedCheckbox")
+    if checkbox then
+        SS_ConfigSpecs_WhisperUnassignedEnabled = checkbox:GetChecked()
+        
+        -- Save to DB
+        if not SS_GuildSpecsDB then
+            SS_GuildSpecsDB = {}
+        end
+        SS_GuildSpecsDB["_whisperUnassignedEnabled"] = SS_ConfigSpecs_WhisperUnassignedEnabled
+    end
+end
+
+function SS_ConfigSpecs_WhisperSpec_UpdateUI()
+    local mainCheckbox = getglobal("SS_Tab5_WhisperSpecPanel_EnableCheckbox")
+    local unassignedCheckbox = getglobal("SS_Tab5_WhisperSpecPanel_WhisperUnassignedCheckbox")
+    local button = getglobal("SS_Tab5_WhisperSpecPanel_ConfirmButton")
+    
+    if mainCheckbox then
+        mainCheckbox:SetChecked(SS_ConfigSpecs_WhisperSpecEnabled)
+    end
+    
+    if unassignedCheckbox then
+        unassignedCheckbox:SetChecked(SS_ConfigSpecs_WhisperUnassignedEnabled)
+        if SS_ConfigSpecs_WhisperSpecEnabled then
+            unassignedCheckbox:Enable()
+            unassignedCheckbox:SetAlpha(1.0)
+        else
+            unassignedCheckbox:Disable()
+            unassignedCheckbox:SetAlpha(0.5)
+        end
+    end
+    
+    if button then
+        if SS_ConfigSpecs_WhisperSpecEnabled then
+            button:Enable()
+            button:SetAlpha(1.0)
+        else
+            button:Disable()
+            button:SetAlpha(0.5)
+        end
+    end
+end
+
+function SS_ConfigSpecs_WhisperSpec_ConfirmSpecs()
+    if not SS_ConfigSpecs_WhisperSpecEnabled then
+        DEFAULT_CHAT_FRAME:AddMessage("|cffff0000Whisper Spec is disabled!|r")
+        return
+    end
+    
+    -- Refresh raid first
+    SS_ConfigSpecs_RefreshRaid()
+    
+    -- Auto-assign single-spec classes
+    SS_ConfigSpecs_AutoAssignSingleSpecs()
+    
+    -- Update display
+    SS_ConfigSpecs_UpdateDisplay()
+    
+    -- Send raid announcement
+    local raidMsg = "|cff00ffffTo check your saved spec whisper me: -spec|r"
+    SS_Announce_Output(raidMsg, "RAID")
+    
+    local changeMsg = "|cff00ffffTo change your spec whisper me: -spec <name> (example: -spec Tree)|r"
+    SS_Announce_Output(changeMsg, "RAID")
+    
+    -- Whisper unassigned players if checkbox enabled
+    if SS_ConfigSpecs_WhisperUnassignedEnabled then
+        local unassignedCount = 0
+        for i = 1, table.getn(SS_ConfigSpecs_RaidMembers) do
+            local member = SS_ConfigSpecs_RaidMembers[i]
+            if member and not SS_ConfigSpecs_SelectedSpecs[member.name] then
+                SS_ConfigSpecs_WhisperSpec_SendInfo(member.name, member.class)
+                unassignedCount = unassignedCount + 1
+            end
+        end
+        if unassignedCount > 0 then
+            DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00Whispered " .. unassignedCount .. " unassigned players.|r")
+        end
+    end
+    
+    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00Confirmed specs and refreshed raid list.|r")
+end
+
+function SS_ConfigSpecs_AutoAssignSingleSpecs()
+    for i = 1, table.getn(SS_ConfigSpecs_RaidMembers) do
+        local member = SS_ConfigSpecs_RaidMembers[i]
+        if member then
+            local specs = SS_ConfigSpecs_ClassSpecs[member.class]
+            if specs and table.getn(specs) == 1 then
+                -- Only 1 spec available - auto-assign
+                SS_ConfigSpecs_SelectedSpecs[member.name] = 1
+                
+                -- Save to guild DB if in guild
+                if SS_ConfigSpecs_IsInGuild(member.name) then
+                    SS_GuildSpecsDB[member.name] = 1
+                end
+            end
+        end
+    end
+end
+
+function SS_ConfigSpecs_WhisperSpec_SendInfo(playerName, class)
+    local properClass = SS_ConfigSpecs_ProperCase(class)
+    local specs = SS_ConfigSpecs_ClassSpecs[properClass]
+    
+    if not specs then
+        return
+    end
+    
+    -- Get current spec
+    local currentSpecIndex = SS_ConfigSpecs_SelectedSpecs[playerName]
+    local currentSpecName = "None"
+    if currentSpecIndex and specs[currentSpecIndex] then
+        currentSpecName = specs[currentSpecIndex]
+    end
+    
+    -- Build spec list
+    local specList = ""
+    for i = 1, table.getn(specs) do
+        if i > 1 then
+            specList = specList .. ", "
+        end
+        specList = specList .. "'" .. specs[i] .. "'"
+    end
+    
+    -- Build message
+    local message = "Your current spec is saved as: '" .. currentSpecName .. "'. Available specs for your class: " .. specList .. ". To change your saved spec whisper me: \"-spec <name>\"."
+    
+    -- Send whisper
+    SendChatMessage(message, "WHISPER", nil, playerName)
+end
+
+function SS_ConfigSpecs_WhisperSpec_OnWhisper(message, sender)
+    -- Only process if enabled
+    if not SS_ConfigSpecs_WhisperSpecEnabled then
+        return
+    end
+    
+    -- Check if sender is in raid
+    local numRaidMembers = GetNumRaidMembers()
+    if numRaidMembers == 0 then
+        return
+    end
+    
+    local senderClass = nil
+    local isInRaid = false
+    
+    for i = 1, numRaidMembers do
+        local name, _, _, _, class = GetRaidRosterInfo(i)
+        if name == sender then
+            isInRaid = true
+            senderClass = SS_ConfigSpecs_ProperCase(class)
+            break
+        end
+    end
+    
+    if not isInRaid then
+        return
+    end
+    
+    -- Check for "-spec" alone (query current spec)
+    if string.lower(message) == "-spec" then
+        SS_ConfigSpecs_WhisperSpec_SendInfo(sender, senderClass)
+        return
+    end
+    
+    -- Parse message for "-spec <specname>"
+    local specName = string.match(message, "^%-spec%s+(.+)$")
+    if not specName then
+        return
+    end
+    
+    -- Find matching spec (case-insensitive)
+    local specs = SS_ConfigSpecs_ClassSpecs[senderClass]
+    if not specs then
+        return
+    end
+    
+    local matchedIndex = nil
+    for i = 1, table.getn(specs) do
+        if string.lower(specs[i]) == string.lower(specName) then
+            matchedIndex = i
+            break
+        end
+    end
+    
+    if matchedIndex then
+        -- Valid spec - update working memory
+        SS_ConfigSpecs_SelectedSpecs[sender] = matchedIndex
+		
+        -- Save to guild DB if sender is in guild
+        if SS_ConfigSpecs_IsInGuild(sender) then
+            SS_GuildSpecsDB[sender] = matchedIndex
+        end
+        
+        -- Update display if on Tab 5
+        if SS_CurrentTab == 5 then
+            SS_ConfigSpecs_UpdateDisplay()
+        end
+        
+        -- Send confirmation
+        SendChatMessage("Spec set to: " .. specs[matchedIndex], "WHISPER", nil, sender)
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00" .. sender .. " changed spec to " .. specs[matchedIndex] .. "|r")
+    else
+        -- Invalid spec - send error
+        
+        local specList = ""
+        for i = 1, table.getn(specs) do
+            if i > 1 then
+                specList = specList .. ", "
+            end
+            specList = specList .. specs[i]
+        end
+        
+        local errorMsg = "Invalid spec. Available specs to you: " .. specList .. ". Example: '-spec " .. specs[1] .. "'"
+        SendChatMessage(errorMsg, "WHISPER", nil, sender)
+    end
+end
+
+-- ============================================================================
+-- SHOW/HIDE TAB 5
+-- ============================================================================
+
+function SS_ConfigSpecs_ShowTab()
+    if SS_Tab5_ButtonPanel then SS_Tab5_ButtonPanel:Show() end
+    if SS_Tab5_WhisperSpecPanel then SS_Tab5_WhisperSpecPanel:Show() end
+    if SS_Tab5_RaidListPanel then SS_Tab5_RaidListPanel:Show() end
+    
+    -- Auto-load specs on first view
+    if SS_ConfigSpecs_AutoLoad then
+        SS_ConfigSpecs_AutoLoad()
+    end
+    
+    -- Update whisper spec UI
+    SS_ConfigSpecs_WhisperSpec_UpdateUI()
+end
+
+function SS_ConfigSpecs_HideTab()
+    if SS_Tab5_ButtonPanel then SS_Tab5_ButtonPanel:Hide() end
+    if SS_Tab5_WhisperSpecPanel then SS_Tab5_WhisperSpecPanel:Hide() end
+    if SS_Tab5_RaidListPanel then SS_Tab5_RaidListPanel:Hide() end
+end
+
+-- ============================================================================
 -- INITIALIZATION
 -- ============================================================================
 function SS_ConfigSpecs_Initialize()
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Config Specs module loaded!|r")
+    SS_ConfigSpecs_WhisperSpec_Initialize()
+--    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Config Specs module loaded!|r")
 end

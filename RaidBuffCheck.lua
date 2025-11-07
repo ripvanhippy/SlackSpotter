@@ -395,5 +395,5 @@ end
 -- INITIALIZATION
 -- ============================================================================
 function SS_RaidBuff_Initialize()
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Raid Buff Checking module loaded!|r")
+--    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Raid Buff Checking module loaded!|r")
 end

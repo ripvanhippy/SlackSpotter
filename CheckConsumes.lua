@@ -3,6 +3,8 @@
 -- Buff scanning and consume detection logic
 -- ============================================================================
 
+-- debug concoction: Concoction of the Emerald Mongoose "Increases magical damage dealt by spells and abilities by up to 15. Increases Agility by 25. Increases critical strike chance by 2%."
+
 -- ============================================================================
 -- HELPER: Build consumable lookup tables (run once on init)
 -- ============================================================================
@@ -454,5 +456,5 @@ end
 
 function SS_Check_Initialize()
     SS_Check_BuildLookupTables()
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Consume Checking module loaded!|r")
+--    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Consume Checking module loaded!|r")
 end

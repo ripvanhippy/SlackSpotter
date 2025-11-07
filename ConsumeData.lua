@@ -159,15 +159,15 @@ SS_ConsumeData_Groups = {
 -- CONCOCTIONS (TurtleWoW - 1 buff = 2 consumes)
 -- ============================================================================
 SS_ConsumeData_Concoctions = {
-    ["Concoction of Arcane Giant"] = {
+    ["Concoction of the Arcane Giant"] = {
         "Elixir of the Giants",
         "Greater Arcane Elixir"
     },
-    ["Concoction of Dreamwater"] = {
+    ["Concoction of the Dreamwater"] = {
         "Dreamtonic",
         "Winterfall Firewater"
     },
-    ["Concoction of Emerald Mongoose"] = {
+    ["Concoction of the Emerald Mongoose"] = {
         "Elixir of the Mongoose",
         "Dreamshard Elixir"
     }

@@ -62,7 +62,7 @@ function SS_Shoutouts_Initialize()
         SS_Shoutouts_WhisperTarget = SS_ShoutoutsDB.lastWhisperTarget
     end
     
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Shoutouts module loaded!|r")
+--    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter Shoutouts module loaded!|r")
 end
 
 -- ============================================================================
