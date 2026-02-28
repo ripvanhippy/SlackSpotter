@@ -8,14 +8,6 @@
 -- ============================================================================
 SS_CurrentTab = 1  -- Currently selected tab (1-6)
 --Selected raid buffs for checking
-SS_RaidBuffs_Selected = {
-    Thorns = false,
-    ShadowProtection = false,
-    EmeraldBlessing = false
-}
-
--- Protection potion list mode
-SS_ListEveryoneProtection = false
 
 -- Debug mode
 SS_DebugMode = false
@@ -49,6 +41,36 @@ function SS_InitializeFrame()
     
     -- Initialize raid tab highlights (default Kara40)
     SS_UpdateRaidTabHighlights()
+	
+	-- Style header tabs
+    local leftHeader = getglobal("SS_LeftTab_Header")
+    if leftHeader then
+        leftHeader:Disable()
+        leftHeader:LockHighlight()
+        leftHeader:SetAlpha(1.0)
+        local textRegion = SS_LeftTab_Header:GetFontString()
+if textRegion then
+    textRegion:SetTextColor(1.0, 0.5, 0.0)
+end
+
+    end
+    
+    local raidHeader = getglobal("SS_RaidTab_Header")
+    if raidHeader then
+        raidHeader:Disable()
+        raidHeader:LockHighlight()
+        raidHeader:SetAlpha(1.0)
+		local textRegion = SS_RaidTab_Header:GetFontString()
+if textRegion then
+    textRegion:SetTextColor(1.0, 0.5, 0.0)
+end
+
+    end
+	
+	-- Initialize left tab highlights
+    if SS_UpdateLeftTabHighlights then
+        SS_UpdateLeftTabHighlights()
+    end
     
     DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SlackSpotter loaded!|r Type /ss to open.")
 end
@@ -179,14 +201,20 @@ function SS_SelectTab(tabNum)
     -- Show selected tab content
     if tabNum == 1 then
         SS_ShowTab1Content()
+		-- Auto-refresh overview (includes raid list refresh)
+		if SS_Tab1_RefreshAndCheckAll then
+            SS_Tab1_RefreshAndCheckAll()
+		end
     elseif tabNum == 2 then
         -- Show Tab 2
         if SS_Shoutouts_ShowTab then
             SS_Shoutouts_ShowTab()
         end
     elseif tabNum == 3 then
-        if SS_Cooldowns_ShowTab then
-            SS_Cooldowns_ShowTab()
+        if SS_Tab3_CooldownPanel then SS_Tab3_CooldownPanel:Show() end
+        if SS_Tab3_CDTrackerPanel then SS_Tab3_CDTrackerPanel:Show() end
+        if SS_Cooldowns_UpdateDisplay then
+            SS_Cooldowns_UpdateDisplay()
         end
 	elseif tabNum == 4 then
         -- Show Tab 4 (Tactics)
@@ -194,6 +222,10 @@ function SS_SelectTab(tabNum)
             SS_Tactics_ShowTab()
         end
     elseif tabNum == 5 then
+		-- Auto-refresh raid list BEFORE showing tab
+        if SS_ConfigSpecs_RefreshRaid then
+            SS_ConfigSpecs_RefreshRaid()
+		end
         if SS_ConfigSpecs_ShowTab then
             SS_ConfigSpecs_ShowTab()
         end
@@ -211,24 +243,21 @@ function SS_SelectTab(tabNum)
         if SS_ConsumeConfig_UpdateDisplay then
             SS_ConsumeConfig_UpdateDisplay()
         end
-        if SS_ConsumeConfig_UpdateSpecButtons then
-            SS_ConsumeConfig_UpdateSpecButtons()
-        end
-        
-        -- Update display
-        if SS_ConsumeConfig_UpdateDisplay then
-            SS_ConsumeConfig_UpdateDisplay()
-        end
         
         -- Update Tab 4 boss buttons if raid changed (for next time Tab 4 is opened)
         if SS_Tactics_SyncRaidSelection and SS_ConsumeConfig_CurrentRaid then
             SS_Tactics_SyncRaidSelection(SS_ConsumeConfig_CurrentRaid)
         end
+		-- Update master/slave UI
+        if SS_ConsumeConfig_UpdateMasterSlaveUI then
+            SS_ConsumeConfig_UpdateMasterSlaveUI()
+        end
 	elseif tabNum == 7 then	
 	    -- Show Tab 7 Stats Tab
-		if SS_Cooldowns_ShowTab then
-			SS_Cooldowns_ShowTab()
-		end
+		SS_ShowTab7Content()
+
+		--PLACEHOLDER END
+		
 	elseif tabNum == 8 then	
 	    -- Show Tab 8 Help Tab Frame
 		SS_ShowTab8Content()
@@ -268,6 +297,11 @@ function SS_SelectRaid(raidName)
     if SS_Tactics_SyncRaidSelection then
         SS_Tactics_SyncRaidSelection(raidName)
     end
+	
+	-- Trigger sync if master
+    if SS_MasterSlave_IsMaster then
+        SS_MasterSlave_TriggerSync()
+    end
 end
 
 function SS_UpdateRaidTabHighlights()
@@ -294,7 +328,6 @@ function SS_HideAllTabContent()
     if SS_Tab1_RaidBuffCheckPanel then SS_Tab1_RaidBuffCheckPanel:Hide() end
     if SS_Tab1_ProtectionPotionPanel then SS_Tab1_ProtectionPotionPanel:Hide() end
 	if SS_Tab1_ConsumeButtonCheckPanel then SS_Tab1_ConsumeButtonCheckPanel:Hide() end
-    if SS_Tab1_StatsPanel then SS_Tab1_StatsPanel:Hide() end
     if SS_Tab1_RaidListPanel then SS_Tab1_RaidListPanel:Hide() end
     
     -- Hide Tab 2 panels
@@ -304,9 +337,8 @@ function SS_HideAllTabContent()
     if SS_Tab2_CountdownPanel then SS_Tab2_CountdownPanel:Hide() end
 	
 	-- Hide Tab 3 panels
-    if SS_Cooldowns_HideTab then
-        SS_Cooldowns_HideTab()
-    end
+    if SS_Tab3_CooldownPanel then SS_Tab3_CooldownPanel:Hide() end
+    if SS_Tab3_CDTrackerPanel then SS_Tab3_CDTrackerPanel:Hide() end
     
     -- Hide Tab 4 panels
     if SS_Tab4_BossPanel then SS_Tab4_BossPanel:Hide() end
@@ -326,6 +358,7 @@ function SS_HideAllTabContent()
     if SS_Tab6_ConsumeListPanel then SS_Tab6_ConsumeListPanel:Hide() end
 	
 	-- Hide Tab 7 panels
+	if SS_Tab7_StatsPanel then SS_Tab7_StatsPanel:Hide() end
 	
 	-- Hide Tab 8 panels
 	if SS_Tab8_HelpPanel then SS_Tab8_HelpPanel:Hide() end
@@ -336,280 +369,121 @@ function SS_ShowTab1Content()
     if SS_Tab1_RaidBuffCheckPanel then SS_Tab1_RaidBuffCheckPanel:Show() end
     if SS_Tab1_ProtectionPotionPanel then SS_Tab1_ProtectionPotionPanel:Show() end
     if SS_Tab1_ConsumeButtonCheckPanel then SS_Tab1_ConsumeButtonCheckPanel:Show() end
-    if SS_Tab1_StatsPanel then SS_Tab1_StatsPanel:Show() end
     if SS_Tab1_RaidListPanel then SS_Tab1_RaidListPanel:Show() end
 	
 	SS_Tab1_UpdateInfoLabels()
 end
 
--- ============================================================================
--- TAB 1: RAID BUFF CHECK PANEL FUNCTIONS (TOP-LEFT)
--- ============================================================================
-
-function SS_Tab1_RaidBuffCheckPanel_ThornsCheckbox_OnClick()
-    SS_RaidBuffs_Selected.Thorns = this:GetChecked()
-end
-
-function SS_Tab1_RaidBuffCheckPanel_ShadowProtCheckbox_OnClick()
-    SS_RaidBuffs_Selected.ShadowProtection = this:GetChecked()
-end
-
-function SS_Tab1_RaidBuffCheckPanel_EmeraldBlessCheckbox_OnClick()
-    SS_RaidBuffs_Selected.EmeraldBlessing = this:GetChecked()
-end
-
-function SS_Tab1_RaidBuffCheckPanel_RaidBuffCheckButton_OnClick()
-    local consumeResults, buffResults, raidInstance = SS_Tab1_RefreshAndCheckAll()
-    
-    -- Announce raid buffs only
-    SS_RaidBuffAnnounce_SendToRaid(buffResults)
-end
-
-function SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()
-    local consumeResults, buffResults, raidInstance = SS_Tab1_RefreshAndCheckAll()
-    
-    -- Announce consumes only
-    SS_Announce_SendToRaid(consumeResults, raidInstance)
+function SS_ShowTab7Content()
+    if SS_Tab7_StatsPanel then SS_Tab7_StatsPanel:Show() end
 end
 
 -- ============================================================================
--- HELPER: Check for Greater Protection Potions
+-- LEFT-SIDE SHORTCUT TAB FUNCTIONS
 -- ============================================================================
-function SS_CheckGreaterProtectionPotion(protectionType)
-    -- Get raid size
-    local numRaidMembers = GetNumRaidMembers()
-    local totalMembers = (numRaidMembers > 0) and numRaidMembers or (GetNumPartyMembers() + 1)
-    
-    local missingPlayers = {}
-    
-    -- Check each member
-    for i = 1, totalMembers do
-        local name, class, unitID
+
+function SS_LeftTab_ToggleWhisperSpec()
+    local checkbox = getglobal("SS_Tab5_WhisperSpecPanel_EnableCheckbox")
+    if checkbox then
+        local newState = not checkbox:GetChecked()
+        checkbox:SetChecked(newState)
+        SS_ConfigSpecs_WhisperSpecEnabled = newState
         
-        if numRaidMembers > 0 then
-            name, _, _, _, class = GetRaidRosterInfo(i)
-            class = SS_ConfigSpecs_ProperCase(class)
-            unitID = "raid" .. i
+        -- Save to DB
+        if not SS_GuildSpecsDB then
+            SS_GuildSpecsDB = {}
+        end
+        SS_GuildSpecsDB["_whisperSpecEnabled"] = newState
+        
+        -- Update Tab 5 UI
+        if SS_ConfigSpecs_WhisperSpec_UpdateUI then
+            SS_ConfigSpecs_WhisperSpec_UpdateUI()
+        end
+        
+        -- Update left tab highlight
+        SS_UpdateLeftTabHighlights()
+    end
+end
+
+function SS_LeftTab_ToggleCDTracker()
+    -- Toggle CD tracking for Tab 3 only (not RL Helper)
+    if SS_Cooldowns_Enabled then
+        SS_Cooldowns_Disable()
+    else
+        SS_Cooldowns_Enable()
+    end
+    
+    -- Update left tab highlight
+    SS_UpdateLeftTabHighlights()
+end
+
+function SS_LeftTab_ToggleRLHelper()
+    -- Check both windows state
+    local displayOpen = SS_RLHelper_IsOpen
+    local optionsOpen = SS_RLHelper_OptionsIsOpen
+    
+    if displayOpen and optionsOpen then
+        -- Both open → close both
+        if SS_RLHelper_Toggle then SS_RLHelper_Toggle() end
+        if SS_RLHelper_ToggleOptions then SS_RLHelper_ToggleOptions() end
+    elseif not displayOpen and not optionsOpen then
+        -- Both closed → open both
+        if SS_RLHelper_Toggle then SS_RLHelper_Toggle() end
+        if SS_RLHelper_ToggleOptions then SS_RLHelper_ToggleOptions() end
+    elseif displayOpen and not optionsOpen then
+        -- Display open, options closed → open options
+        if SS_RLHelper_ToggleOptions then SS_RLHelper_ToggleOptions() end
+    elseif not displayOpen and optionsOpen then
+        -- Options open, display closed → open display
+        if SS_RLHelper_Toggle then SS_RLHelper_Toggle() end
+    end
+end
+
+function SS_LeftTab_ToggleStatsRec()
+    SS_Stats_Toggle()
+    
+    -- Update left tab highlight
+    if SS_UpdateLeftTabHighlights then
+        SS_UpdateLeftTabHighlights()
+    end
+end
+
+function SS_UpdateLeftTabHighlights()
+    -- Whisper Spec tab
+    local wsTab = getglobal("SS_LeftTab_WhisperSpec")
+    if wsTab then
+        if SS_ConfigSpecs_WhisperSpecEnabled then
+            wsTab:SetAlpha(1.0)
+            wsTab:LockHighlight()
         else
-            if i == 1 then
-                name = UnitName("player")
-                _, class = UnitClass("player")
-                class = SS_ConfigSpecs_ProperCase(class)
-                unitID = "player"
-            else
-                name = UnitName("party" .. (i-1))
-                _, class = UnitClass("party" .. (i-1))
-                class = SS_ConfigSpecs_ProperCase(class)
-                unitID = "party" .. (i-1)
-            end
-        end
-        
-        if name and UnitIsConnected(unitID) then
-            local hasGreaterProt = false
-            
-            -- Scan buffs
-            for buffIndex = 1, 32 do
-                local buffTexture = UnitBuff(unitID, buffIndex)
-                if not buffTexture then break end
-                
-                -- Create tooltip if needed
-                if not SS_TooltipScanner then
-                    SS_TooltipScanner = CreateFrame("GameTooltip", "SS_TooltipScanner", nil, "GameTooltipTemplate")
-                    SS_TooltipScanner:SetOwner(WorldFrame, "ANCHOR_NONE")
-                end
-                
-                SS_TooltipScanner:ClearLines()
-                SS_TooltipScanner:SetUnitBuff(unitID, buffIndex)
-                local buffNameText = getglobal("SS_TooltipScannerTextLeft1")
-                local buffName = buffNameText and buffNameText:GetText()
-                
-                -- Check if it matches protection type
-                if buffName and string.find(buffName, protectionType) and string.find(buffName, "Protection") then
-                    -- Check tooltip for "Absorbs 1950" (Greater version)
-                    local isGreater = false
-                    for line = 1, SS_TooltipScanner:NumLines() do
-                        local lineText = getglobal("SS_TooltipScannerTextLeft" .. line)
-                        if lineText and lineText:GetText() then
-                            if string.find(lineText:GetText(), "Absorbs 1950") then
-                                isGreater = true
-                                break
-                            end
-                        end
-                    end
-                    
-                    if isGreater then
-                        hasGreaterProt = true
-                        break
-                    end
-                end
-            end
-            
-            if not hasGreaterProt then
-                table.insert(missingPlayers, {name = name, class = class})
-            end
+            wsTab:SetAlpha(0.6)
+            wsTab:UnlockHighlight()
         end
     end
     
-    -- Announce results
-    SS_Announce_ProtectionPotions(protectionType, missingPlayers)
-end
-
--- ============================================================================
--- TAB 1: PROTECTION POTION PANEL FUNCTIONS (MIDDLE-LEFT)
--- ============================================================================
-
-function SS_Tab1_ProtectionPotionPanel_ProtPotArcaneButton_OnClick()
-    SS_CheckGreaterProtectionPotion("Arcane")
-end
-
-function SS_Tab1_ProtectionPotionPanel_ProtPotFireButton_OnClick()
-    SS_CheckGreaterProtectionPotion("Fire")
-end
-
-function SS_Tab1_ProtectionPotionPanel_ProtPotFrostButton_OnClick()
-    SS_CheckGreaterProtectionPotion("Frost")
-end
-
-function SS_Tab1_ProtectionPotionPanel_ProtPotNatureButton_OnClick()
-    SS_CheckGreaterProtectionPotion("Nature")
-end
-
-function SS_Tab1_ProtectionPotionPanel_ProtPotShadowButton_OnClick()
-    SS_CheckGreaterProtectionPotion("Shadow")
-end
-
-function SS_Tab1_ProtectionPotionPanel_ProtPotHolyButton_OnClick()
-    SS_CheckGreaterProtectionPotion("Holy")
-end
-
-function SS_Tab1_ProtectionPotionPanel_ListEveryoneCheckbox_OnClick()
-    SS_ListEveryoneProtection = not SS_ListEveryoneProtection
-end
-
--- ============================================================================
--- TAB 1: STATS PANEL FUNCTIONS (BOTTOM-LEFT)
--- ============================================================================
-
-function SS_Tab1_StatsPanel_RepPlusButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Rep+ clicked (placeholder)")
-    -- TODO: Announce players with highest found consume count
-end
-
-function SS_Tab1_StatsPanel_RepMinusButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Rep- clicked (placeholder)")
-    -- TODO: Announce players with highest missing consume count
-end
-
-function SS_Tab1_StatsPanel_ResetButton_OnClick()
-    DEFAULT_CHAT_FRAME:AddMessage("Reset Stats clicked (placeholder)")
-    -- TODO: Reset all stats tracking
-end
-
--- ============================================================================
--- HELPER: Refresh raid data and check consumes + buffs
--- ============================================================================
-function SS_Tab1_RefreshAndCheckAll()
-    -- Auto-refresh Tab 5 specs first
-    if SS_ConfigSpecs_RefreshRaid then
-        SS_ConfigSpecs_RefreshRaid()
-    end
-    if SS_ConfigSpecs_AutoLoadSavedSpecs then
-        SS_ConfigSpecs_AutoLoadSavedSpecs()
-    end
-    
-    local raidInstance = SS_ConsumeConfig_CurrentRaid or "Kara40"
-    
-    -- Run consume check
-    local consumeResults = SS_Check_CheckEntireRaid(raidInstance)
-    
-    -- Run raid buff check
-    local buffResults = SS_RaidBuff_CheckEntireRaid()
-    
-    -- Merge results for display
-    for playerName, consumeData in pairs(consumeResults) do
-        local buffData = buffResults[playerName]
-        if buffData then
-            consumeData.buffsFound = buffData.buffsFound
-            consumeData.buffsRequired = buffData.buffsRequired
-            consumeData.buffsMissing = buffData.missing
-            consumeData.class = buffData.class
+    -- CD Tracker tab
+    local cdTab = getglobal("SS_LeftTab_CDTracker")
+    if cdTab then
+        if SS_Cooldowns_Enabled then
+            cdTab:SetAlpha(1.0)
+            cdTab:LockHighlight()
+        else
+            cdTab:SetAlpha(0.6)
+            cdTab:UnlockHighlight()
         end
     end
-    
-    -- Add players who have buff results but no consume results
-    for playerName, buffData in pairs(buffResults) do
-        if not consumeResults[playerName] then
-            consumeResults[playerName] = {
-                class = buffData.class,
-                spec = buffData.spec,
-                found = 0,
-                required = 0,
-                missing = {},
-                passed = true,
-                buffsFound = buffData.buffsFound,
-                buffsRequired = buffData.buffsRequired,
-                buffsMissing = buffData.missing
-            }
-        end
-    end
-    
-    -- Store merged results and display
-    SS_Display_RaidResults = consumeResults
-    SS_Display_UpdateRaidList()
-    
-	SS_Tab1_UpdateInfoLabels()
 	
-    return consumeResults, buffResults, raidInstance
-end
-
--- ============================================================================
--- UPDATE TAB 1 INFO LABELS
--- ============================================================================
-function SS_Tab1_UpdateInfoLabels()
-    local raidLabel = getglobal("SS_Tab1_ConsumeButtonCheckPanel_RaidLabel")
-    local specLabel = getglobal("SS_Tab1_ConsumeButtonCheckPanel_SpecLabel")
-    
-    if raidLabel then
-        raidLabel:SetText("Current Raid: " .. (SS_ConsumeConfig_CurrentRaid or "Kara40"))
-    end
-    
-    if specLabel then
-        local noSpecCount = 0
-        if SS_ConfigSpecs_RaidMembers then
-            for i = 1, table.getn(SS_ConfigSpecs_RaidMembers) do
-                local member = SS_ConfigSpecs_RaidMembers[i]
-                if member and not SS_ConfigSpecs_SelectedSpecs[member.name] then
-                    noSpecCount = noSpecCount + 1
-                end
-            end
+	-- Stats Recorder tab
+    local statsTab = getglobal("SS_LeftTab_StatsRec")
+    if statsTab then
+        if SS_Stats_Enabled then
+            statsTab:SetAlpha(1.0)
+            statsTab:LockHighlight()
+        else
+            statsTab:SetAlpha(0.6)
+            statsTab:UnlockHighlight()
         end
-        specLabel:SetText("Missing Specs: " .. noSpecCount)
     end
-end
-
--- ============================================================================
--- TAB 1: RAID LIST PANEL FUNCTIONS (RIGHT-SIDE)
--- ============================================================================
-
-function SS_Tab1_RaidListPanel_RefreshButton_OnClick()
-    local consumeResults, buffResults, raidInstance = SS_Tab1_RefreshAndCheckAll()
-    
-	-- Store results for display
-    SS_Display_RaidResults = consumeResults
-	
-    -- Show summary in chat
-    local totalPassed = 0
-    local totalChecked = 0
-    for _, data in pairs(consumeResults) do
-        totalChecked = totalChecked + 1
-        if data.passed then totalPassed = totalPassed + 1 end
-    end
-    
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00Check complete: " .. totalPassed .. "/" .. totalChecked .. " passed consumes|r")
-end
-
-function SS_Tab1_RaidListPanel_ScrollFrame_Update()
-    SS_Display_UpdateRaidList()
 end
 
 -- ============================================================================
@@ -650,6 +524,11 @@ SlashCmdList["SS"] = function(msg)
         end
     end
     
+	-- Try MasterSlave command handler first
+    if SS_MasterSlave_Command and SS_MasterSlave_Command(args) then
+        return
+    end
+	
     -- Try Shoutouts command handler first (for colored messages)
     if SS_Shoutouts_HandleCommand and SS_Shoutouts_HandleCommand(args) then
         return
@@ -695,6 +574,7 @@ SS_EventFrame:SetScript("OnEvent", function()
         -- Initialize all modules
         local modules = {
             {name = "MappingData", func = SS_MappingData_Initialize},
+			{name = "Overview", func = Tab1_Overview_Initialize},
             {name = "Shoutouts", func = SS_Shoutouts_Initialize},
             {name = "ConfigSpecs", func = SS_ConfigSpecs_Initialize},
             {name = "ConsumeConfig", func = SS_ConsumeConfig_Initialize},
@@ -703,8 +583,11 @@ SS_EventFrame:SetScript("OnEvent", function()
             {name = "RaidBuff", func = SS_RaidBuff_Initialize},
             {name = "Display", func = SS_Display_Initialize},
             {name = "Announcements", func = SS_Announce_Initialize},
-			{name = "Help", func = SS_Help_Initialize},
-			{name = "Cooldowns", func = SS_Cooldowns_Initialize}
+			{name = "RLHelper", func = SS_RLHelper_Initialize},
+			{name = "Cooldowns", func = SS_Cooldowns_Initialize},
+			{name = "MasterSlave", func = SS_MasterSlave_Initialize},
+			{name = "Stats", func = SS_Stats_Initialize},
+			{name = "Help", func = SS_Help_Initialize}
 			
         }
         

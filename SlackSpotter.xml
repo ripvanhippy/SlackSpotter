@@ -29,7 +29,7 @@
             </PushedTexture>
             <HighlightTexture file="Interface\Buttons\UI-Panel-Button-Highlight" alphaMode="ADD">
                 <Size>
-                    <AbsDimension x="85" y="50"/>
+                    <AbsDimension x="85" y="52"/>
                 </Size>
                 <Anchors>
                     <Anchor point="CENTER">
@@ -57,6 +57,52 @@
                 <Color r="1.0" g="1.0" b="1.0" a="1"/>
             </HighlightText>
         </Button>
+		
+			<!-- Left-Side Raid Tab Template -->
+        <Button name="SS_ShortcutTabTemplate" virtual="true">
+            <Size>
+                <AbsDimension x="75" y="52"/>
+            </Size>
+			<HitRectInsets>
+                <AbsInset left="5" right="0" top="5" bottom="10"/>
+            </HitRectInsets>
+            <NormalTexture file="Interface\SpellBook\SpellBook-SkillLineTab">
+                <TexCoords left="0.578125" right="0" top="0" bottom="1.0"/>
+            </NormalTexture>
+            <PushedTexture file="Interface\SpellBook\SpellBook-SkillLineTab">
+                <TexCoords left="0.578125" right="0" top="0" bottom="1.0"/>
+            </PushedTexture>
+            <HighlightTexture file="Interface\Buttons\UI-Panel-Button-Highlight" alphaMode="ADD">
+                <Size>
+                    <AbsDimension x="100" y="52"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="15" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </HighlightTexture>
+            <ButtonText name="$parentText">
+                <Anchors>
+                    <Anchor point="TOP">
+                        <Offset>
+                            <AbsDimension x="0" y="15"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </ButtonText>
+            <NormalFont inherits="GameFontNormalLarge" justifyH="CENTER"/>
+            <HighlightFont inherits="GameFontHighlightLarge" justifyH="CENTER"/>
+            <NormalText>
+                <Color r="0.7" g="0.7" b="0.7" a="1"/>
+            </NormalText>
+            <HighlightText>
+                <Color r="1.0" g="1.0" b="1.0" a="1"/>
+            </HighlightText>
+        </Button>
+
     
     <!-- Main Frame -->
 	<!-- 840.840 540.420 300.420 540.420 300.420 -->
@@ -337,12 +383,28 @@
             <!-- RIGHT-SIDE RAID TABS -->
             <!-- ========================================== -->
             
+			<!-- RIGHT HEADER TAB -->
+<Button name="SS_RaidTab_Header" inherits="SS_RaidTabTemplate" text="Raid:">
+    <Anchors>
+        <Anchor point="TOPRIGHT" relativeTo="SS_Frame" relativePoint="TOPRIGHT">
+            <Offset>
+                <AbsDimension x="-28" y="-135"/>
+            </Offset>
+        </Anchor>
+    </Anchors>
+    <Scripts>
+        <OnClick>
+            -- Header, do nothing
+        </OnClick>
+    </Scripts>
+</Button>
+			
             <!-- Kara40 Tab (FIRST) -->
             <Button name="SS_RaidTab_Kara40" inherits="SS_RaidTabTemplate" text="K40">
                 <Anchors>
-                    <Anchor point="TOPRIGHT" relativeTo="SS_Frame" relativePoint="TOPRIGHT">
+                    <Anchor point="TOP" relativeTo="SS_RaidTab_Header" relativePoint="BOTTOM">
                         <Offset>
-                            <AbsDimension x="-28" y="-135"/>
+                            <AbsDimension x="0" y="2"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -727,24 +789,6 @@
         <TileSize><AbsValue val="16"/></TileSize>
         <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
     </Backdrop>
-    <Layers>
-        <Layer level="OVERLAY">
-            <FontString name="SS_Tab1_ConsumeButtonCheckPanel_RaidLabel" inherits="GameFontNormalSmall" text="Current Raid: Kara40">
-                <Anchors>
-                    <Anchor point="TOPLEFT">
-                        <Offset><AbsDimension x="10" y="-10"/></Offset>
-                    </Anchor>
-                </Anchors>
-            </FontString>
-            <FontString name="SS_Tab1_ConsumeButtonCheckPanel_SpecLabel" inherits="GameFontNormalSmall" text="Missing Specs: 0">
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ConsumeButtonCheckPanel_RaidLabel" relativePoint="BOTTOMLEFT">
-                        <Offset><AbsDimension x="0" y="-2"/></Offset>
-                    </Anchor>
-                </Anchors>
-            </FontString>
-        </Layer>
-    </Layers>
     <Frames>
         <!-- Consume Check Button -->
         <Button name="SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton" inherits="UIPanelButtonTemplate" text="Main Consume Check">
@@ -756,108 +800,9 @@
             </Anchors>
             <Scripts><OnClick>SS_Tab1_RaidBuffCheckPanel_ConsumeCheckButton_OnClick()</OnClick></Scripts>
         </Button>
+		
     </Frames>
 </Frame>
-			
-			
-            <!-- ========================================== -->
-            <!-- TAB 1: STATS PANEL (BOTTOM-LEFT) -->
-            <!-- ========================================== -->
-            <Frame name="SS_Tab1_StatsPanel">
-                <Size>
-                    <AbsDimension x="275" y="255"/>
-                </Size>
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="SS_Tab1_ConsumeButtonCheckPanel" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                            <AbsDimension x="0" y="-10"/>
-                        </Offset>
-                    </Anchor>
-                </Anchors>
-                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-                    <EdgeSize><AbsValue val="16"/></EdgeSize>
-                    <TileSize><AbsValue val="16"/></TileSize>
-                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
-                </Backdrop>
-                <Layers>
-                    <Layer level="OVERLAY">
-                        <FontString name="SS_Tab1_StatsPanel_TotalChecksLabel" inherits="GameFontNormal" text="Total Checks: 0">
-                            <Anchors>
-                                <Anchor point="TOPLEFT">
-                                    <Offset><AbsDimension x="10" y="-10"/></Offset>
-                                </Anchor>
-                            </Anchors>
-                        </FontString>
-                        <FontString name="SS_Tab1_StatsPanel_TotalFoundLabel" inherits="GameFontNormal" text="Found: 0">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativeTo="SS_Tab1_StatsPanel_TotalChecksLabel" relativePoint="BOTTOMLEFT">
-                                    <Offset><AbsDimension x="0" y="-5"/></Offset>
-                                </Anchor>
-                            </Anchors>
-                        </FontString>
-                        <FontString name="SS_Tab1_StatsPanel_TotalMissingLabel" inherits="GameFontNormal" text="Missing: 0">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativeTo="SS_Tab1_StatsPanel_TotalFoundLabel" relativePoint="BOTTOMLEFT">
-                                    <Offset><AbsDimension x="0" y="-5"/></Offset>
-                                </Anchor>
-                            </Anchors>
-                        </FontString>
-                        <FontString name="SS_Tab1_StatsPanel_MostFailedLabel" inherits="GameFontNormal" text="Most Failed:">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativeTo="SS_Tab1_StatsPanel_TotalMissingLabel" relativePoint="BOTTOMLEFT">
-                                    <Offset><AbsDimension x="0" y="-10"/></Offset>
-                                </Anchor>
-                            </Anchors>
-                        </FontString>
-                        <FontString name="SS_Tab1_StatsPanel_MostFailedList" inherits="GameFontNormal" text="|cffff0000STATS PANEL STILL IN DEV|r">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativeTo="SS_Tab1_StatsPanel_MostFailedLabel" relativePoint="BOTTOMLEFT">
-                                    <Offset><AbsDimension x="0" y="-5"/></Offset>
-                                </Anchor>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
-                <Frames>
-                    <!-- Three buttons in horizontal row -->
-                    <Button name="SS_Tab1_StatsPanel_RepPlusButton" inherits="UIPanelButtonTemplate" text="Rep+">
-                        <Size><AbsDimension x="50" y="22"/></Size>
-                        <Anchors>
-                            <Anchor point="BOTTOMLEFT">
-                                <Offset><AbsDimension x="10" y="10"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_Tab1_StatsPanel_RepPlusButton_OnClick()</OnClick></Scripts>
-                    </Button>
-                    <Button name="SS_Tab1_StatsPanel_RepMinusButton" inherits="UIPanelButtonTemplate" text="Rep-">
-                        <Size><AbsDimension x="50" y="22"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab1_StatsPanel_RepPlusButton" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="4" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_Tab1_StatsPanel_RepMinusButton_OnClick()</OnClick></Scripts>
-                    </Button>
-                    <Button name="SS_Tab1_StatsPanel_ResetButton" inherits="UIPanelButtonTemplate" text="Reset Stats">
-                        <Size><AbsDimension x="72" y="22"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab1_StatsPanel_RepMinusButton" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="4" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_Tab1_StatsPanel_ResetButton_OnClick()</OnClick></Scripts>
-                    </Button>
-					<Button name="SS_Tab1_StatsPanel_TakeDataButton" inherits="UIPanelButtonTemplate" text="Take Data">
-                        <Size><AbsDimension x="71" y="22"/></Size>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="SS_Tab1_StatsPanel_ResetButton" relativePoint="RIGHT">
-                                <Offset><AbsDimension x="4" y="0"/></Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Scripts><OnClick>SS_Tab1_StatsPanel_TakeDataButton_OnClick()</OnClick></Scripts>
-                    </Button>
-                </Frames>
-            </Frame>
             
             <!-- ========================================== -->
             <!-- TAB 1: RAID LIST PANEL (RIGHT-SIDE) -->
@@ -988,7 +933,7 @@
             
             <!-- Message Panel -->
             <Frame name="SS_Tab2_MessagePanel" hidden="true">
-                <Size><AbsDimension x="350" y="285ffff"/></Size>
+                <Size><AbsDimension x="350" y="285"/></Size>
                 <Anchors><Anchor point="TOPLEFT" relativeTo="SS_Tab2_ColorPanel" relativePoint="BOTTOMLEFT">
                     <Offset><AbsDimension x="0" y="-10"/></Offset></Anchor></Anchors>
                 <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
@@ -1144,15 +1089,63 @@
             <!-- TAB 3: ASSIGNMENTS/COOLDOWNS -->
             <!-- ========================================== -->
             
-            <!-- Cooldown Panel -->
-            <Frame name="SS_Tab3_CooldownPanel" hidden="true">
+			<!-- CD Tracker Enable Panel -->
+            <Frame name="SS_Tab3_CDTrackerPanel" hidden="true">
                 <Size>
-                    <AbsDimension x="730" y="280"/>
+                    <AbsDimension x="180" y="280"/>
                 </Size>
                 <Anchors>
                     <Anchor point="TOPLEFT">
                         <Offset>
                             <AbsDimension x="55" y="-135"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+                    <EdgeSize><AbsValue val="16"/></EdgeSize>
+                    <TileSize><AbsValue val="16"/></TileSize>
+                    <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                </Backdrop>
+                <Frames>
+                    <CheckButton name="SS_Tab3_CDTrackerCheckbox" inherits="UICheckButtonTemplate">
+                        <Anchors>
+                            <Anchor point="TOP">
+                                <Offset><AbsDimension x="0" y="-40"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>
+                                SS_Cooldowns_Toggle()
+                                local tab1Checkbox = getglobal("SS_Tab1_RLHelperPanel_CDCheckbox")
+                                if tab1Checkbox then
+                                    tab1Checkbox:SetChecked(SS_Cooldowns_Enabled)
+                                end
+                            </OnClick>
+                        </Scripts>
+                    </CheckButton>
+                </Frames>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString inherits="GameFontNormalSmall" text="Enable|nCD|nTracker">
+                            <Anchors>
+                                <Anchor point="TOP">
+                                    <Offset><AbsDimension x="0" y="-80"/></Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+			
+            <!-- Cooldown Panel -->
+            <Frame name="SS_Tab3_CooldownPanel" hidden="true">
+                <Size>
+                    <AbsDimension x="650" y="280"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="SS_Tab3_CDTrackerPanel" relativePoint="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-5" y="0"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
@@ -1170,7 +1163,7 @@
                                 </Anchor>
                             </Anchors>
                         </FontString>
-                        <FontString name="SS_Tab3_CooldownPanel_ColumnHeaders" inherits="GameFontNormal" text="Player___________Spell_____________________Target_______________Time">
+                        <FontString name="SS_Tab3_CooldownPanel_ColumnHeaders" inherits="GameFontNormal" text="Player_________Spell___________________Target__________________________________Time">
                             <Anchors>
                                 <Anchor point="TOPLEFT">
                                     <Offset><AbsDimension x="15" y="-35"/></Offset>
@@ -1782,6 +1775,147 @@
 			</Frame>
 			
 <!-- ========================================== -->
+<!-- TAB 7: STATS PANEL -->
+<!-- ========================================== -->
+<Frame name="SS_Tab7_StatsPanel" hidden="true">
+    <Size>
+        <AbsDimension x="735" y="580"/>
+    </Size>
+    <Anchors>
+        <Anchor point="TOPLEFT">
+            <Offset>
+                <AbsDimension x="55" y="-135"/>
+            </Offset>
+        </Anchor>
+    </Anchors>
+    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+        <EdgeSize><AbsValue val="16"/></EdgeSize>
+        <TileSize><AbsValue val="16"/></TileSize>
+        <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+    </Backdrop>
+    <Layers>
+        <Layer level="OVERLAY">
+            <FontString name="SS_Tab7_StatsPanel_Header" inherits="GameFontNormalLarge" text="Statistics">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset><AbsDimension x="15" y="-15"/></Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+        </Layer>
+    </Layers>
+    <Scripts>
+        <OnShow>
+            SS_Tab7_OnShow()
+        </OnShow>
+    </Scripts>
+    <Frames>
+        <!-- Clear Stats Button -->
+        <Button name="SS_Tab7_ClearStatsButton" inherits="UIPanelButtonTemplate" text="Clear Stats">
+            <Size><AbsDimension x="120" y="25"/></Size>
+            <Anchors>
+                <Anchor point="TOPRIGHT">
+                    <Offset><AbsDimension x="-10" y="-10"/></Offset>
+                </Anchor>
+            </Anchors>
+            <Scripts>
+                <OnClick>SS_Tab7_ClearStats_OnClick()</OnClick>
+            </Scripts>
+        </Button>
+
+        <!-- ====== PROT POT STATS SECTION ====== -->
+<Frame name="SS_Tab7_ProtPotStatsFrame">
+    <Size><AbsDimension x="355" y="525"/></Size>
+            <Anchors>
+                <Anchor point="TOPLEFT">
+                    <Offset><AbsDimension x="10" y="-45"/></Offset>
+                </Anchor>
+            </Anchors>
+            <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+                <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                <TileSize><AbsValue val="16"/></TileSize>
+                <EdgeSize><AbsValue val="16"/></EdgeSize>
+            </Backdrop>
+            <Layers>
+                <Layer level="OVERLAY">
+                    <FontString name="SS_Tab7_ProtPotStatsTitle" inherits="GameFontNormalLarge" text="Missing Prot Pots">
+                        <Anchors>
+                            <Anchor point="TOP">
+                                <Offset><AbsDimension x="0" y="-10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
+            <Frames>
+                <ScrollFrame name="SS_Tab7_ProtPotStatsScrollFrame" inherits="UIPanelScrollFrameTemplate">
+    <Size><AbsDimension x="320" y="485"/></Size>
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset><AbsDimension x="-10" y="-35"/></Offset>
+                        </Anchor>
+                    </Anchors>
+                    <ScrollChild>
+                        <EditBox name="SS_Tab7_ProtPotStatsEditBox" multiline="true" autoFocus="false">
+    <Size><AbsDimension x="320" y="485"/></Size>
+                            <FontString inherits="ChatFontNormal"/>
+                            <Scripts>
+                                <OnEscapePressed>this:ClearFocus()</OnEscapePressed>
+                            </Scripts>
+                        </EditBox>
+                    </ScrollChild>
+                </ScrollFrame>
+            </Frames>
+        </Frame>
+
+        <!-- ====== CONSUME STATS SECTION ====== -->
+<Frame name="SS_Tab7_ConsumeStatsFrame">
+    <Size><AbsDimension x="355" y="525"/></Size>
+    <Anchors>
+        <Anchor point="LEFT" relativeTo="SS_Tab7_ProtPotStatsFrame" relativePoint="RIGHT">
+                    <Offset><AbsDimension x="5" y="0"/></Offset>
+                </Anchor>
+            </Anchors>
+            <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+                <BackgroundInsets><AbsInset left="4" right="4" top="4" bottom="4"/></BackgroundInsets>
+                <TileSize><AbsValue val="16"/></TileSize>
+                <EdgeSize><AbsValue val="16"/></EdgeSize>
+            </Backdrop>
+            <Layers>
+                <Layer level="OVERLAY">
+                    <FontString name="SS_Tab7_ConsumeStatsTitle" inherits="GameFontNormalLarge" text="Consume Stats">
+                        <Anchors>
+                            <Anchor point="TOP">
+                                <Offset><AbsDimension x="0" y="-10"/></Offset>
+                            </Anchor>
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
+            <Frames>
+                <ScrollFrame name="SS_Tab7_ConsumeStatsScrollFrame" inherits="UIPanelScrollFrameTemplate">
+    <Size><AbsDimension x="320" y="485"/></Size>
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset><AbsDimension x="-10" y="-35"/></Offset>
+                        </Anchor>
+                    </Anchors>
+                    <ScrollChild>
+                        <EditBox name="SS_Tab7_ConsumeStatsEditBox" multiline="true" autoFocus="false">
+    <Size><AbsDimension x="320" y="485"/></Size>
+                            <FontString inherits="ChatFontNormal"/>
+                            <Scripts>
+                                <OnEscapePressed>this:ClearFocus()</OnEscapePressed>
+                            </Scripts>
+                        </EditBox>
+                    </ScrollChild>
+                </ScrollFrame>
+            </Frames>
+        </Frame>
+    </Frames>
+</Frame>
+			
+<!-- ========================================== -->
 <!-- TAB 8: HELP PANEL -->
 <!-- ========================================== -->
 <Frame name="SS_Tab8_HelpPanel" hidden="true">
@@ -1821,22 +1955,107 @@
             </Anchors>
             <ScrollChild>
                 <EditBox name="SS_Tab8_HelpEditBox" multiline="true" autoFocus="false">
-    <Size><AbsDimension x="715" y="800"/></Size>
-    <FontString inherits="ChatFontNormal"/>
-    <Scripts>
-        <OnEscapePressed>this:ClearFocus()</OnEscapePressed>
-        <OnChar>return</OnChar>
-        <OnTextChanged>
-            if not SS_HelpTextLoaded then return end
-            this:SetText(SS_Help_OriginalText or "")
-            this:ClearFocus()
-        </OnTextChanged>
-    </Scripts>
-</EditBox>
+					<Size><AbsDimension x="715" y="800"/></Size>
+					<FontString inherits="ChatFontNormal"/>
+					<Scripts>
+						<OnEscapePressed>this:ClearFocus()</OnEscapePressed>
+						<OnChar>return</OnChar>
+						<OnTextChanged>
+							if not SS_HelpTextLoaded then return end
+							this:SetText(SS_Help_OriginalText or "")
+							this:ClearFocus()
+						</OnTextChanged>
+					</Scripts>
+				</EditBox>
             </ScrollChild>
         </ScrollFrame>
     </Frames>
 </Frame>
+
+<!-- ========================================== -->
+<!-- LEFT-SIDE SHORTCUT TABS -->
+<!-- ========================================== -->
+
+
+<!-- LEFT HEADER TAB -->
+<Button name="SS_LeftTab_Header" inherits="SS_ShortcutTabTemplate" text="Module:">
+    <Anchors>
+        <Anchor point="TOPLEFT" relativeTo="SS_Frame" relativePoint="TOPLEFT">
+            <Offset>
+                <AbsDimension x="-40" y="-135"/>
+            </Offset>
+        </Anchor>
+    </Anchors>
+    <Scripts>
+        <OnClick>
+            -- Header, do nothing
+        </OnClick>
+    </Scripts>
+</Button>
+
+<!-- Whisper Spec Tab -->
+<Button name="SS_LeftTab_WhisperSpec" inherits="SS_ShortcutTabTemplate" text="/wSpec">
+    <Anchors>
+        <Anchor point="TOP" relativeTo="SS_LeftTab_Header" relativePoint="BOTTOM">
+            <Offset>
+                <AbsDimension x="0" y="2"/>
+            </Offset>
+        </Anchor>
+    </Anchors>
+    <Scripts>
+        <OnClick>
+            SS_LeftTab_ToggleWhisperSpec()
+        </OnClick>
+    </Scripts>
+</Button>
+
+<!-- CD Tracker Tab -->
+<Button name="SS_LeftTab_CDTracker" inherits="SS_ShortcutTabTemplate" text="CDtrack">
+    <Anchors>
+        <Anchor point="TOP" relativeTo="SS_LeftTab_WhisperSpec" relativePoint="BOTTOM">
+            <Offset>
+                <AbsDimension x="0" y="2"/>
+            </Offset>
+        </Anchor>
+    </Anchors>
+    <Scripts>
+        <OnClick>
+            SS_LeftTab_ToggleCDTracker()
+        </OnClick>
+    </Scripts>
+</Button>
+
+<!-- RL Helper Tab -->
+<Button name="SS_LeftTab_RLHelper" inherits="SS_ShortcutTabTemplate" text="Mana">
+    <Anchors>
+        <Anchor point="TOP" relativeTo="SS_LeftTab_CDTracker" relativePoint="BOTTOM">
+            <Offset>
+                <AbsDimension x="0" y="2"/>
+            </Offset>
+        </Anchor>
+    </Anchors>
+    <Scripts>
+        <OnClick>
+            SS_LeftTab_ToggleRLHelper()
+        </OnClick>
+    </Scripts>
+</Button>
+
+<!-- Stats Recorder Tab -->
+<Button name="SS_LeftTab_StatsRec" inherits="SS_ShortcutTabTemplate" text="Stat REC">
+    <Anchors>
+        <Anchor point="TOP" relativeTo="SS_LeftTab_RLHelper" relativePoint="BOTTOM">
+            <Offset>
+                <AbsDimension x="0" y="2"/>
+            </Offset>
+        </Anchor>
+    </Anchors>
+    <Scripts>
+        <OnClick>
+            SS_LeftTab_ToggleStatsRec()
+        </OnClick>
+    </Scripts>
+</Button>
 
 
 

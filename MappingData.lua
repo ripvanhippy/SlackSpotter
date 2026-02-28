@@ -128,7 +128,81 @@ SS_ConsumeShortNames = {
     ["Danonzo's Tel'Abim Surprise"] = "Tel'Abim RAP",
     ["Major Troll's Blood Potion"] = "Troll's Blood",
     ["Empowering Herbal Salad"] = "Herb Salad",
-    ["Winterfall Firewater"] = "Firewater"
+    ["Sagefish Delight"] = "Sagefish",
+	["Winterfall Firewater"] = "Firewater"
+}
+
+-- ============================================================================
+-- ROLE CATEGORIZATION
+-- ============================================================================
+SS_RoleCategories = {
+    Tanks = {
+        ["WarriorTank"] = true,
+        ["PaladinTank"] = true,
+        ["DruidBear"] = true,
+        ["ShamanEnhTank"] = true
+    },
+    Healers = {
+        ["PaladinHoly"] = true,
+        ["ShamanResto"] = true,
+        ["DruidTree"] = true,
+        ["PriestDisc"] = true,
+        ["PriestHoly"] = true
+    },
+    DPS = {
+        ["WarriorDPS"] = true,
+        ["PaladinRetri"] = true,
+        ["HunterSurv"] = true,
+        ["HunterMM"] = true,
+        ["ShamanEnhDPS"] = true,
+        ["ShamanEleNat"] = true,
+        ["ShamanEleFire"] = true,
+        ["RogueDPS"] = true,
+        ["DruidCat"] = true,
+        ["DruidOwl"] = true,
+        ["PriestShadow"] = true,
+        ["WarlockShadow"] = true,
+        ["WarlockFire"] = true,
+        ["MageArcane"] = true,
+        ["MageFire"] = true,
+        ["MageFrost"] = true
+    }
+}
+
+-- ============================================================================
+-- TRACKED SPELLS for cooldowns
+-- ============================================================================
+SS_Cooldowns_TrackedSpells = {
+    -- Druid
+    ["Tranquility"] = {cooldown = 1800, class = "DRUID", type = "spell", icon = "Interface\\Icons\\Spell_Nature_Tranquility", multiTarget = true},
+    ["Challenging Roar"] = {cooldown = 600, class = "DRUID", type = "spell", icon = "Interface\\Icons\\Ability_Druid_ChallangingRoar", multiTarget = true},
+    ["Rebirth"] = {cooldown = 1800, class = "DRUID", type = "spell", icon = "Interface\\Icons\\Spell_Nature_Reincarnation", multiTarget = false},
+    ["Innervate"] = {cooldown = 360, class = "DRUID", type = "buff", icon = "Interface\\Icons\\Spell_Nature_Lightning", multiTarget = false},
+
+    -- Shaman
+    ["Spirit Link"] = {cooldown = 600, class = "SHAMAN", type = "buff", icon = "Interface\\Icons\\Spell_Nature_MagicImmunity", multiTarget = false},
+	
+	-- Paladin
+--    ["Divine Shield"] = {cooldown = 300, class = "PALADIN", type = "spell", icon = "Interface\\Icons\\Spell_Holy_DivineIntervention", multiTarget = false},
+--    ["Blessing of Protection"] = {cooldown = 300, class = "PALADIN", type = "buff", icon = "Interface\\Icons\\Spell_Holy_SealOfProtection", multiTarget = false},
+
+    -- Warrior
+    ["Challenging Shout"] = {cooldown = 600, class = "WARRIOR", type = "spell", icon = "Interface\\Icons\\Ability_BullRush", multiTarget = true},
+	["Shield Wall"] = {cooldown = 1800, class = "WARRIOR", type = "spell", icon = "Interface\\Icons\\Ability_Warrior_ShieldWall", multiTarget = false},
+	["Last Stand"] = {cooldown = 480, class = "WARRIOR", type = "spell", icon = "Interface\\Icons\\Spell_Holy_AshesToAshes", multiTarget = false},
+}
+
+-- ============================================================================
+-- COOLDOWNS PER SPEC (for RLHelper assignment)
+-- ============================================================================
+SS_Cooldowns_SpecCooldowns = {
+    ["ShamanResto"] = {"Spirit Link"},
+    ["DruidTree"] = {"Tranquility", "Rebirth", "Innervate"},
+    ["DruidOwl"] = {"Tranquility", "Rebirth", "Innervate"},
+    ["DruidBear"] = {"Challenging Roar", "Rebirth", "Innervate"},
+    ["WarriorTank"] = {"Shield Wall", "Challenging Shout", "Last Stand"},
+    ["PaladinTank"] = {"Divine Shield"},
+    ["PaladinHoly"] = {"Divine Shield", "Blessing of Protection"}
 }
 
 -- ============================================================================

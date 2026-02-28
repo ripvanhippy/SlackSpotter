@@ -27,6 +27,8 @@ SS_ConsumeConfig_RowHeight = 18
 
 -- Auto-load flag
 SS_ConsumeConfigLoadedThisSession = 0
+-- Master/Slave UI elements
+SS_ConsumeConfig_MasterSlaveLabel = nil
 
 -- ============================================================================
 -- SPEC TO ROLE MAPPING
@@ -223,6 +225,10 @@ end
 
 -- Select spec
 function SS_ConsumeConfig_SelectSpec(specName)
+-- Block if slave mode
+    if SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= UnitName("player") then
+        return
+    end
     -- Save current spec data before switching
     SS_ConsumeConfig_SaveCurrentSpecToMemory()
     
@@ -231,6 +237,10 @@ function SS_ConsumeConfig_SelectSpec(specName)
     SS_ConsumeConfig_UpdateSpecButtons()
     SS_ConsumeConfig_LoadSpecData()
     SS_ConsumeConfig_UpdateDisplay()
+	-- Trigger sync if master
+    if SS_MasterSlave_IsMaster then
+        SS_MasterSlave_TriggerSync()
+    end
 end
 
 -- Save current spec data to working memory
@@ -482,6 +492,10 @@ end
 -- Consume checkbox clicked
 function SS_ConsumeConfig_ConsumeCheckbox_OnClick(consumeName)
     -- Toggle checked state
+	-- Block if slave mode
+    if SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= UnitName("player") then
+        return
+    end
     if SS_ConsumeConfig_CheckedConsumes[consumeName] then
         SS_ConsumeConfig_CheckedConsumes[consumeName] = nil
     else
@@ -496,6 +510,11 @@ function SS_ConsumeConfig_ConsumeCheckbox_OnClick(consumeName)
 	
 	-- Save to WorkingMemory immediately
     SS_ConsumeConfig_SaveCurrentSpecToMemory()
+	
+	-- Trigger sync if master
+    if SS_MasterSlave_IsMaster then
+        SS_MasterSlave_TriggerSync()
+    end
 end
 
 -- Scroll functions
@@ -538,6 +557,10 @@ end
 
 -- Show All checkbox clicked
 function SS_ConsumeConfig_ShowAllCheckbox_OnClick()
+-- Block if slave mode
+    if SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= UnitName("player") then
+        return
+    end
     SS_ConsumeConfig_ShowAll = not SS_ConsumeConfig_ShowAll
     SS_ConsumeConfig_ScrollOffset = 0
     SS_ConsumeConfig_UpdateDisplay()
@@ -546,6 +569,11 @@ end
 -- Min Required checkbox clicked (1-4)
 function SS_ConsumeConfig_MinRequiredCheckbox_OnClick(checkboxNum)
     -- Mutually exclusive - uncheck others
+	-- Block if slave mode
+    if SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= UnitName("player") then
+        return
+    end
+	
     for i = 1, 4 do
         local cb = getglobal("SS_Tab6_MinRequiredCheckbox"..i)
         if cb then
@@ -566,6 +594,10 @@ function SS_ConsumeConfig_MinRequiredCheckbox_OnClick(checkboxNum)
 	
 	-- Save to WorkingMemory immediately
     SS_ConsumeConfig_SaveCurrentSpecToMemory()
+	-- Trigger sync if master
+    if SS_MasterSlave_IsMaster then
+        SS_MasterSlave_TriggerSync()
+    end
 end
 
 -- ============================================================================
@@ -574,6 +606,10 @@ end
 
 -- Save working memory to SavedVariables
 function SS_ConsumeConfig_Save()
+-- Block if slave mode
+    if SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= UnitName("player") then
+        return
+    end
     -- Save current UI state to working memory first
     SS_ConsumeConfig_SaveCurrentSpecToMemory()
     
@@ -607,6 +643,10 @@ end
 
 -- Load SavedVariables into working memory
 function SS_ConsumeConfig_Load()
+-- Block if slave mode
+    if SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= UnitName("player") then
+        return
+    end
     -- Save current UI state first
     SS_ConsumeConfig_SaveCurrentSpecToMemory()
     
@@ -650,6 +690,10 @@ end
 
 -- Delete current spec from working memory
 function SS_ConsumeConfig_Delete()
+-- Block if slave mode
+    if SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= UnitName("player") then
+        return
+    end
     -- Clear current UI state
     SS_ConsumeConfig_CheckedConsumes = {}
     SS_ConsumeConfig_MinRequired = 0
@@ -667,6 +711,10 @@ end
 
 -- Load presets into working memory
 function SS_ConsumeConfig_LoadPresets()
+-- Block if slave mode
+    if SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= UnitName("player") then
+        return
+    end
     -- Clear entire working memory
     SS_ConsumeConfig_WorkingMemory = {}
     
@@ -818,6 +866,109 @@ function SS_ConsumeConfig_UpdateSpecButtons()
             btn:SetAlpha(0.6)
         end
     end
+end
+
+-- ============================================================================
+-- MASTER/SLAVE UI UPDATE
+-- ============================================================================
+function SS_ConsumeConfig_UpdateMasterSlaveUI()
+    -- Create label if doesn't exist
+    if not SS_ConsumeConfig_MasterSlaveLabel then
+        local panel = getglobal("SS_Tab6_ControlPanel")
+        if panel then
+            SS_ConsumeConfig_MasterSlaveLabel = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            SS_ConsumeConfig_MasterSlaveLabel:SetPoint("TOP", panel, "TOP", 0, -10)
+            SS_ConsumeConfig_MasterSlaveLabel:SetWidth(350)
+            SS_ConsumeConfig_MasterSlaveLabel:SetJustifyH("CENTER")
+        end
+    end
+    
+    if not SS_ConsumeConfig_MasterSlaveLabel then return end
+    
+	--Update label text
+local myName = UnitName("player")
+if SS_MasterSlave_IsMaster then
+    -- I am master
+    local slaveCount = 0
+    for _ in pairs(SS_MasterSlave_SlaveNames) do
+        slaveCount = slaveCount + 1
+    end
+    
+    SS_ConsumeConfig_MasterSlaveLabel:SetText("|cff00ff00MASTER MODE|r (" .. slaveCount .. " slaves)")
+    SS_ConsumeConfig_MasterSlaveLabel:SetTextColor(0, 1, 0)
+    
+    -- Restore button alpha
+    local saveBtn = getglobal("SS_Tab6_SaveButton")
+    local loadBtn = getglobal("SS_Tab6_LoadButton")
+    local deleteBtn = getglobal("SS_Tab6_DeleteButton")
+    local presetsBtn = getglobal("SS_Tab6_LoadPresetsButton")
+    local showAllCB = getglobal("SS_Tab6_ShowAllCheckbox")
+    
+    if saveBtn then saveBtn:SetAlpha(1.0) end
+    if loadBtn then loadBtn:SetAlpha(1.0) end
+    if deleteBtn then deleteBtn:SetAlpha(1.0) end
+    if presetsBtn then presetsBtn:SetAlpha(1.0) end
+    if showAllCB then showAllCB:SetAlpha(1.0) end
+    
+elseif SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= myName then
+    -- I am slave
+    SS_ConsumeConfig_MasterSlaveLabel:SetText("|cffff8000SLAVE MODE|r - Master: " .. SS_MasterSlave_MasterName)
+    SS_ConsumeConfig_MasterSlaveLabel:SetTextColor(1, 0.5, 0)
+    
+    -- Grey out buttons and checkboxes
+    local saveBtn = getglobal("SS_Tab6_SaveButton")
+    local loadBtn = getglobal("SS_Tab6_LoadButton")
+    local deleteBtn = getglobal("SS_Tab6_DeleteButton")
+    local presetsBtn = getglobal("SS_Tab6_LoadPresetsButton")
+    local showAllCB = getglobal("SS_Tab6_ShowAllCheckbox")
+    
+    if saveBtn then saveBtn:SetAlpha(0.3) end
+    if loadBtn then loadBtn:SetAlpha(0.3) end
+    if deleteBtn then deleteBtn:SetAlpha(0.3) end
+    if presetsBtn then presetsBtn:SetAlpha(0.3) end
+    if showAllCB then showAllCB:SetAlpha(0.3) end
+    
+    -- Grey out spec buttons
+    if SS_ConsumeConfig_SpecButtons then
+        for _, btn in pairs(SS_ConsumeConfig_SpecButtons) do
+            btn:SetAlpha(0.3)
+        end
+    end
+    
+    -- Grey out min required checkboxes
+    for i = 1, 4 do
+        local cb = getglobal("SS_Tab6_MinRequiredCheckbox" .. i)
+        if cb then cb:SetAlpha(0.3) end
+    end
+    
+else
+    -- Local control
+    SS_ConsumeConfig_MasterSlaveLabel:SetText("")
+    
+    -- Restore all alpha
+    local saveBtn = getglobal("SS_Tab6_SaveButton")
+    local loadBtn = getglobal("SS_Tab6_LoadButton")
+    local deleteBtn = getglobal("SS_Tab6_DeleteButton")
+    local presetsBtn = getglobal("SS_Tab6_LoadPresetsButton")
+    local showAllCB = getglobal("SS_Tab6_ShowAllCheckbox")
+    
+    if saveBtn then saveBtn:SetAlpha(1.0) end
+    if loadBtn then loadBtn:SetAlpha(1.0) end
+    if deleteBtn then deleteBtn:SetAlpha(1.0) end
+    if presetsBtn then presetsBtn:SetAlpha(1.0) end
+    if showAllCB then showAllCB:SetAlpha(1.0) end
+    
+    if SS_ConsumeConfig_SpecButtons then
+        for _, btn in pairs(SS_ConsumeConfig_SpecButtons) do
+            btn:SetAlpha(0.9)
+        end
+    end
+    
+    for i = 1, 4 do
+        local cb = getglobal("SS_Tab6_MinRequiredCheckbox" .. i)
+        if cb then cb:SetAlpha(1.0) end
+    end
+end
 end
 
 -- ============================================================================

@@ -3,10 +3,11 @@
 ## Author: Gahanaho, Tel'Abim Horde
 ## Notes: Consume and buff checker with additional raidhelping modules built in. Type |cff00ff00/ss|r to open or use the |cff00ff00Minimap Button|r. Enjoy!
 ## Version: 0.47
-## SavedVariables: SS_ShoutoutsDB, SS_GuildSpecsDB, SS_ConsumeConfigDB
+## SavedVariables: SS_ShoutoutsDB, SS_GuildSpecsDB, SS_ConsumeConfigDB, SS_RLHelperDB, SS_StatsDB
 
 SlackSpotter.xml
 MappingData.lua
+Tab1_Overview.lua
 ConsumeData.lua
 ConsumePresets.lua
 ConfigSpecs.lua
@@ -19,5 +20,8 @@ Shoutouts.lua
 SS_TacticsData.lua
 SS_Tactics.lua
 SS_Cooldowns.lua
+SS_RLHelper.lua
+MasterSlave.lua
+SS_Stats.lua
 Help.lua
 SlackSpotter.lua

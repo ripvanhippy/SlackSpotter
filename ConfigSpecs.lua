@@ -26,6 +26,9 @@ SS_ConfigSpecs_WhisperSpecEnabled = false
 SS_ConfigSpecs_WhisperUnassignedEnabled = false
 SS_ConfigSpecs_WhisperSpecFrame = nil
 
+-- Master/Slave UI elements
+SS_ConfigSpecs_MasterSlaveLabel = nil
+
 -- ============================================================================
 -- CLASS SPECS DEFINITION
 -- ============================================================================
@@ -73,7 +76,10 @@ function SS_ConfigSpecs_RefreshRaid()
     SS_ConfigSpecs_RaidMembers = {}
     
     local numRaidMembers = GetNumRaidMembers()
+    local numPartyMembers = GetNumPartyMembers()
+    
     if numRaidMembers > 0 then
+        -- In raid
         for i = 1, numRaidMembers do
             local name, _, _, _, class = GetRaidRosterInfo(i)
             if name and class then
@@ -85,8 +91,32 @@ function SS_ConfigSpecs_RefreshRaid()
                 })
             end
         end
+    elseif numPartyMembers > 0 then
+        -- In party - add self first
+        local playerName = UnitName("player")
+        local _, englishClass = UnitClass("player")
+        local properClass = SS_ConfigSpecs_ProperCase(englishClass)
+        table.insert(SS_ConfigSpecs_RaidMembers, {
+            name = playerName,
+            class = properClass,
+            originalIndex = 1
+        })
+        
+        -- Add party members
+        for i = 1, numPartyMembers do
+            local name = UnitName("party" .. i)
+            local _, class = UnitClass("party" .. i)
+            if name and class then
+                local properClass = SS_ConfigSpecs_ProperCase(class)
+                table.insert(SS_ConfigSpecs_RaidMembers, {
+                    name = name,
+                    class = properClass,
+                    originalIndex = i + 1
+                })
+            end
+        end
     else
-        -- Solo or party
+        -- Solo - just add self
         local playerName = UnitName("player")
         local _, englishClass = UnitClass("player")
         local properClass = SS_ConfigSpecs_ProperCase(englishClass)
@@ -97,27 +127,25 @@ function SS_ConfigSpecs_RefreshRaid()
         })
     end
     
-		-- Sort by class order, then by name
-local classOrder = {
-    ["Warrior"] = 1, ["Paladin"] = 2, ["Hunter"] = 3, ["Shaman"] = 4,
-    ["Rogue"] = 5, ["Druid"] = 6, ["Priest"] = 7, ["Mage"] = 8, ["Warlock"] = 9
-}
-	
-	table.sort(SS_ConfigSpecs_RaidMembers, function(a, b)
-    local orderA = classOrder[a.class] or 99
-    local orderB = classOrder[b.class] or 99
+    -- Sort by class order, then by name
+    local classOrder = {
+        ["Warrior"] = 1, ["Paladin"] = 2, ["Hunter"] = 3, ["Shaman"] = 4,
+        ["Rogue"] = 5, ["Druid"] = 6, ["Priest"] = 7, ["Mage"] = 8, ["Warlock"] = 9
+    }
     
-    if orderA == orderB then
-        return a.name < b.name  -- Same class: sort by name
-    else
-        return orderA < orderB  -- Different class: sort by class order
-    end
-end)
-	
+    table.sort(SS_ConfigSpecs_RaidMembers, function(a, b)
+        local orderA = classOrder[a.class] or 99
+        local orderB = classOrder[b.class] or 99
+        
+        if orderA == orderB then
+            return a.name < b.name
+        else
+            return orderA < orderB
+        end
+    end)
+    
     SS_ConfigSpecs_ScrollOffset = 0
     SS_ConfigSpecs_UpdateDisplay()
-    
-    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00Loaded " .. table.getn(SS_ConfigSpecs_RaidMembers) .. " raid members.|r")
 end
 
 -- Auto-populate SelectedSpecs from saved guild specs
@@ -167,6 +195,10 @@ end
 -- ============================================================================
 function SS_ConfigSpecs_SaveGuildSpecs()
     local savedCount = 0
+	-- Block if slave mode
+    if SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= UnitName("player") then
+        return
+    end
     
     for i = 1, table.getn(SS_ConfigSpecs_RaidMembers) do
         local member = SS_ConfigSpecs_RaidMembers[i]
@@ -203,6 +235,11 @@ end
 -- SPEC CHECKBOX CLICK HANDLER
 -- ============================================================================
 function SS_ConfigSpecs_SpecCheckbox_OnClick(playerName, class, specIndex)
+    -- Block if slave mode
+    if SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= UnitName("player") then
+        return  -- Blocked
+    end
+    
     -- Toggle or select spec
     if SS_ConfigSpecs_SelectedSpecs[playerName] == specIndex then
         -- Deselect if clicking same spec
@@ -213,6 +250,11 @@ function SS_ConfigSpecs_SpecCheckbox_OnClick(playerName, class, specIndex)
     end
     
     SS_ConfigSpecs_UpdateDisplay()
+    
+    -- Trigger sync if master
+    if SS_MasterSlave_IsMaster then
+        SS_MasterSlave_TriggerSync()
+    end
 end
 
 -- ============================================================================
@@ -423,6 +465,11 @@ function SS_ConfigSpecs_WhisperSpec_ToggleCheckbox()
         
         -- Update button state
         SS_ConfigSpecs_WhisperSpec_UpdateUI()
+        
+        -- Update left tab
+        if SS_UpdateLeftTabHighlights then
+            SS_UpdateLeftTabHighlights()
+        end
     end
 end
 
@@ -662,12 +709,65 @@ function SS_ConfigSpecs_ShowTab()
     
     -- Update whisper spec UI
     SS_ConfigSpecs_WhisperSpec_UpdateUI()
+	-- Update master/slave UI
+    SS_ConfigSpecs_UpdateMasterSlaveUI()
 end
 
 function SS_ConfigSpecs_HideTab()
     if SS_Tab5_ButtonPanel then SS_Tab5_ButtonPanel:Hide() end
     if SS_Tab5_WhisperSpecPanel then SS_Tab5_WhisperSpecPanel:Hide() end
     if SS_Tab5_RaidListPanel then SS_Tab5_RaidListPanel:Hide() end
+end
+
+-- ============================================================================
+-- MASTER/SLAVE UI UPDATE
+-- ============================================================================
+function SS_ConfigSpecs_UpdateMasterSlaveUI()
+    -- Create label if doesn't exist
+    if not SS_ConfigSpecs_MasterSlaveLabel then
+        local panel = getglobal("SS_Tab5_ButtonPanel")
+        if panel then
+            SS_ConfigSpecs_MasterSlaveLabel = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            SS_ConfigSpecs_MasterSlaveLabel:SetPoint("BOTTOM", panel, "BOTTOM", 0, 5)
+            SS_ConfigSpecs_MasterSlaveLabel:SetWidth(160)
+            SS_ConfigSpecs_MasterSlaveLabel:SetJustifyH("CENTER")
+        end
+    end
+    
+    if not SS_ConfigSpecs_MasterSlaveLabel then return end
+    
+    -- Update label text
+    local myName = UnitName("player")
+    
+    if SS_MasterSlave_IsMaster then
+        -- I am master
+        local slaveCount = 0
+        for _ in pairs(SS_MasterSlave_SlaveNames) do
+            slaveCount = slaveCount + 1
+        end
+        
+        SS_ConfigSpecs_MasterSlaveLabel:SetText("|cff00ff00MASTER MODE|r (" .. slaveCount .. " slaves)")
+        SS_ConfigSpecs_MasterSlaveLabel:SetTextColor(0, 1, 0)
+    elseif SS_MasterSlave_MasterName and SS_MasterSlave_MasterName ~= myName then
+        -- I am slave
+        SS_ConfigSpecs_MasterSlaveLabel:SetText("|cffff8000SLAVE MODE|r - Master: " .. SS_MasterSlave_MasterName)
+        SS_ConfigSpecs_MasterSlaveLabel:SetTextColor(1, 0.5, 0)
+        
+        -- Grey out buttons
+        local refreshBtn = getglobal("SS_Tab5_ButtonPanel_RefreshButton")
+        local saveBtn = getglobal("SS_Tab5_ButtonPanel_SaveButton")
+        if refreshBtn then refreshBtn:SetAlpha(0.3) end
+        if saveBtn then saveBtn:SetAlpha(0.3) end
+    else
+        -- Local control
+        SS_ConfigSpecs_MasterSlaveLabel:SetText("")
+        
+        -- Restore button alpha
+        local refreshBtn = getglobal("SS_Tab5_ButtonPanel_RefreshButton")
+        local saveBtn = getglobal("SS_Tab5_ButtonPanel_SaveButton")
+        if refreshBtn then refreshBtn:SetAlpha(1.0) end
+        if saveBtn then saveBtn:SetAlpha(1.0) end
+    end
 end
 
 -- ============================================================================

@@ -56,7 +56,8 @@ SS_ConsumeData_Consumables = {
             {name = "Tender Wolf Steak", effect = "(12 sta/spi)", buffName = "Well Fed", tooltipKeyword = "Spirit"},
             {name = "Le Fishe Au Chocolat", effect = "(dodge/def)", buffName = "Well Fed", tooltipKeyword = "dodge"},
             {name = "Nightfin Soup", effect = "(8 mp5)", buffName = "Mana Regeneration", tooltipKeyword = "8 Mana every 5"},
-            {name = "Empowering Herbal Salad", effect = "(24 heal)", buffName = "Increased Healing Bonus"}
+            {name = "Empowering Herbal Salad", effect = "(24 heal)", buffName = "Increased Healing Bonus"},
+			{name = "Sagefish Delight", effect = "(6 mp5)", buffName = "Well Fed", tooltipKeyword = "6 Mana every 5"}
         }
     },
     {
@@ -150,7 +151,8 @@ SS_ConsumeData_Groups = {
             "Tender Wolf Steak",
             "Le Fishe Au Chocolat",
             "Nightfin Soup",
-            "Empowering Herbal Salad"
+            "Empowering Herbal Salad",
+			"Sagefish Delight"
         }
     }
 }
@@ -217,6 +219,7 @@ SS_ConsumeData_ConsumableRoles = {
     ["Le Fishe Au Chocolat"] = {"Tanks"},
     ["Nightfin Soup"] = {"Healers"},
     ["Empowering Herbal Salad"] = {"Healers"},
+	["Sagefish Delight"] = {"Healers"},
 
 --Alcohol
     ["Medivh's Merlot Blue"] = {"Healers", "Casters", "CastersNature", "CastersShadow", "CastersFire", "CastersFrost"},
@@ -227,8 +230,7 @@ SS_ConsumeData_ConsumableRoles = {
     ["Dreamtonic"] = {"Casters", "CastersNature", "CastersShadow", "CastersFire", "CastersFrost"},
     ["Juju Power"] = {"Physical", "Tanks"},
     ["Juju Might"] = {"Physical", "PhysRanged", "Tanks"},
-    ["Winterfall Firewater"] = {"Physical", "PhysRanged", "Tanks"},
-	["Battle Shout (TEST)"] = {"Physical"}
+    ["Winterfall Firewater"] = {"Physical", "PhysRanged", "Tanks"}
 }
 
 -- ============================================================================
@@ -275,6 +277,7 @@ SS_ConsumeData_IDMapping = {
     [47] = "Le Fishe Au Chocolat",
     [48] = "Nightfin Soup",
     [49] = "Empowering Herbal Salad",
+	[50] = "Sagefish Delight",
     
     -- Alcohol 60-69
     [60] = "Medivh's Merlot Blue",

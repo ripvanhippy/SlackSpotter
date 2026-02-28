@@ -19,37 +19,38 @@ SS_Cooldowns_ScrollOffset = 0
 SS_Cooldowns_MaxVisibleRows = 9
 SS_Cooldowns_RowHeight = 28
 
--- ============================================================================
--- CLASS COLORS
--- ============================================================================
-SS_Cooldowns_ClassColors = {
-    ["WARRIOR"] = {r = 0.78, g = 0.61, b = 0.43},
-    ["PALADIN"] = {r = 0.96, g = 0.55, b = 0.73},
-    ["HUNTER"] = {r = 0.67, g = 0.83, b = 0.45},
-    ["ROGUE"] = {r = 1.0, g = 0.96, b = 0.41},
-    ["PRIEST"] = {r = 1.0, g = 1.0, b = 1.0},
-    ["SHAMAN"] = {r = 0.0, g = 0.44, b = 0.87},
-    ["MAGE"] = {r = 0.41, g = 0.8, b = 0.94},
-    ["WARLOCK"] = {r = 0.58, g = 0.51, b = 0.79},
-    ["DRUID"] = {r = 1.0, g = 0.49, b = 0.04}
-}
+-- Enabled state
+SS_Cooldowns_Enabled = false
+SS_Cooldowns_EventFrame = nil
 
 -- ============================================================================
--- TRACKED SPELLS
+-- HELPER: Get cooldowns for a spec
 -- ============================================================================
-SS_Cooldowns_TrackedSpells = {
-    -- Druid
-    ["Tranquility"] = {cooldown = 1800, class = "DRUID", type = "spell", icon = "Interface\\Icons\\Spell_Nature_Tranquility", multiTarget = true},
-    ["Challenging Roar"] = {cooldown = 600, class = "DRUID", type = "spell", icon = "Interface\\Icons\\Ability_Druid_ChallangingRoar", multiTarget = true},
-    ["Rebirth"] = {cooldown = 1800, class = "DRUID", type = "spell", icon = "Interface\\Icons\\Spell_Nature_Reincarnation", multiTarget = false},
-    ["Innervate"] = {cooldown = 360, class = "DRUID", type = "buff", icon = "Interface\\Icons\\Spell_Nature_Lightning", multiTarget = false},
+function SS_Cooldowns_GetSpecCooldowns(specName)
+    return SS_Cooldowns_SpecCooldowns[specName] or {}
+end
 
-    -- Shaman
-    ["Spirit Link"] = {cooldown = 600, class = "SHAMAN", type = "buff", icon = "Interface\\Icons\\Spell_Nature_MagicImmunity", multiTarget = false},
-
-    -- Warrior
-    ["Challenging Shout"] = {cooldown = 600, class = "WARRIOR", type = "spell", icon = "Interface\\Icons\\Ability_BullRush", multiTarget = true},
-}
+-- ============================================================================
+-- HELPER: Get all unique tracked cooldown names
+-- ============================================================================
+function SS_Cooldowns_GetAllCooldownNames()
+    local names = {}
+    local seen = {}
+    
+    for specName, cdList in pairs(SS_Cooldowns_SpecCooldowns) do
+        for i = 1, table.getn(cdList) do
+            local cdName = cdList[i]
+            if not seen[cdName] then
+                table.insert(names, cdName)
+                seen[cdName] = true
+            end
+        end
+    end
+    
+    -- Sort alphabetically
+    table.sort(names)
+    return names
+end
 
 -- ============================================================================
 -- HELPER FUNCTIONS
@@ -122,11 +123,10 @@ function SS_Cooldowns_CreateRow(rowIndex)
     
     if not row then
         row = CreateFrame("Frame", rowName, parent)
-        row:SetWidth(700)
+        row:SetWidth(550)
         row:SetHeight(SS_Cooldowns_RowHeight)
         row:SetPoint("TOPLEFT", parent, "TOPLEFT", 5, -(rowIndex-1) * SS_Cooldowns_RowHeight - 5)
         
-        -- Background
         row:SetBackdrop({
             bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
             edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
@@ -138,43 +138,37 @@ function SS_Cooldowns_CreateRow(rowIndex)
         row:SetBackdropColor(0.15, 0.15, 0.15, 0.6)
         row:SetBackdropBorderColor(0.3, 0.3, 0.3, 0.8)
         
-        -- Player name
         row.playerText = row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         row.playerText:SetPoint("TOPLEFT", row, "TOPLEFT", 5, -3)
-        row.playerText:SetWidth(100)
+        row.playerText:SetWidth(90)
         row.playerText:SetJustifyH("LEFT")
         
-        -- Spell icon
         row.iconFrame = CreateFrame("Frame", nil, row)
         row.iconFrame:SetWidth(18)
         row.iconFrame:SetHeight(18)
-        row.iconFrame:SetPoint("TOPLEFT", row, "TOPLEFT", 110, -3)
+        row.iconFrame:SetPoint("TOPLEFT", row, "TOPLEFT", 100, -3)
         
         row.icon = row.iconFrame:CreateTexture(nil, "ARTWORK")
         row.icon:SetAllPoints(row.iconFrame)
         row.icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
         
-        -- Spell name
         row.spellText = row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         row.spellText:SetPoint("LEFT", row.iconFrame, "RIGHT", 5, 0)
-        row.spellText:SetWidth(120)
+        row.spellText:SetWidth(110)
         row.spellText:SetJustifyH("LEFT")
         row.spellText:SetTextColor(1.0, 0.82, 0.0, 1)
         
-        -- Target text
         row.targetText = row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        row.targetText:SetPoint("TOPLEFT", row, "TOPLEFT", 265, -3)
-        row.targetText:SetWidth(80)
+        row.targetText:SetPoint("TOPLEFT", row, "TOPLEFT", 240, -3)
+        row.targetText:SetWidth(70)
         row.targetText:SetJustifyH("LEFT")
         row.targetText:SetTextColor(0.5, 0.9, 0.5, 1)
         
-        -- Timer text
         row.timerText = row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         row.timerText:SetPoint("TOPRIGHT", row, "TOPRIGHT", -5, -3)
         row.timerText:SetWidth(60)
         row.timerText:SetJustifyH("RIGHT")
         
-        -- Remove button
         row.removeButton = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
         row.removeButton:SetWidth(50)
         row.removeButton:SetHeight(16)
@@ -190,9 +184,8 @@ function SS_Cooldowns_CreateRow(rowIndex)
         end)
         row.removeButton:Hide()
         
-        -- Progress bar background
         row.barBg = CreateFrame("Frame", nil, row)
-        row.barBg:SetWidth(694)
+        row.barBg:SetWidth(544)
         row.barBg:SetHeight(6)
         row.barBg:SetPoint("BOTTOM", row, "BOTTOM", 0, 2)
         row.barBg:SetBackdrop({
@@ -206,7 +199,6 @@ function SS_Cooldowns_CreateRow(rowIndex)
         row.barBg:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
         row.barBg:SetBackdropBorderColor(0.3, 0.3, 0.3, 0.8)
         
-        -- Progress bar
         row.bar = CreateFrame("StatusBar", nil, row.barBg)
         row.bar:SetPoint("TOPLEFT", row.barBg, "TOPLEFT", 2, -2)
         row.bar:SetPoint("BOTTOMRIGHT", row.barBg, "BOTTOMRIGHT", -2, 2)
@@ -275,7 +267,7 @@ function SS_Cooldowns_UpdateDisplay()
             row.cooldownKey = data.player .. ":" .. data.spell
             
             -- Set player name with class color
-            local color = SS_Cooldowns_ClassColors[data.class] or {r = 0.5, g = 0.5, b = 0.5}
+            local color = SS_ClassColors[data.class] or {r = 0.5, g = 0.5, b = 0.5}
             row.playerText:SetText(data.player)
             row.playerText:SetTextColor(color.r, color.g, color.b, 1)
             
@@ -292,7 +284,7 @@ function SS_Cooldowns_UpdateDisplay()
             -- Set target text
             if data.target and data.target ~= "" and data.spellType == "buff" then
                 row.targetText:SetText(data.target)
-                local targetColor = SS_Cooldowns_ClassColors[data.targetClass] or {r = 0.5, g = 0.5, b = 0.5}
+                local targetColor = SS_ClassColors[data.targetClass] or {r = 0.5, g = 0.5, b = 0.5}
                 row.targetText:SetTextColor(targetColor.r, targetColor.g, targetColor.b, 1)
             else
                 row.targetText:SetText("-")
@@ -342,7 +334,9 @@ end
 
 function SS_Cooldowns_AddCooldown(playerName, spellName, target)
     local spellData = SS_Cooldowns_TrackedSpells[spellName]
-    if not spellData then return end
+    if not spellData then 
+        return 
+    end
     
     local cleanPlayerName = SS_Cooldowns_StripRealmName(playerName)
     local cleanTarget = target and SS_Cooldowns_StripRealmName(target) or nil
@@ -384,69 +378,92 @@ end
 
 -- ============================================================================
 -- PARSE COMBAT LOG
+-- Patterns:
+-- - SELF_GAIN: "You gain SpellName (rank)." - Detects: Tranquility, Innervate
+-- - AFFLICTED: "Target is afflicted by SpellName (rank)." - Detects: Challenging Roar
+-- - TARGET_GAIN: "Target gains SpellName from Player." - Detects: Innervate on others
+-- - SELF_CAST: "You begin to cast SpellName." - Detects: Rebirth cast start
+-- - FRIENDLY_CAST: "Player begins to cast SpellName." - Detects: friendly cooldowns
 -- ============================================================================
-
 function SS_Cooldowns_ParseCombatLog(msg)
+    -- Early exit: Only parse if message contains tracked spell
+    local hasTrackedSpell = false
+    for spellName, _ in pairs(SS_Cooldowns_TrackedSpells) do
+        if string.find(msg, spellName) then
+            hasTrackedSpell = true
+            break
+        end
+    end
+    if not hasTrackedSpell then return end
+    
     local player, spell, target
-    local foundPattern = nil
     
-    -- Check for spell hits/crits
-    local _, _, p1, s1, t1 = string.find(msg, "(.+)'s (.+) hits (.+) for")
+    -- Pattern 1: "You gain SpellName (rank)."
+    local _, _, s1 = string.find(msg, "You gain (.+)%.")
+    if s1 then
+        spell = string.gsub(s1, " %(%d+%)$", "")
+        player = UnitName("player")
+        if SS_Cooldowns_TrackedSpells[spell] then
+            SS_Cooldowns_AddCooldown(player, spell, nil)
+        end
+        return
+    end
+    
+    -- Pattern 2: "Target is afflicted by SpellName (rank)."
+    local _, _, t1, s1 = string.find(msg, "(.+) is afflicted by (.+)%.")
+    if t1 then
+        spell = string.gsub(s1, " %(%d+%)$", "")
+        player = UnitName("player")
+        target = t1
+        if SS_Cooldowns_TrackedSpells[spell] then
+            SS_Cooldowns_AddCooldown(player, spell, target)
+        end
+        return
+    end
+    
+    -- Pattern 3: "PlayerName gains SpellName (rank)."
+    local _, _, p1, s1 = string.find(msg, "(.+) gains (.+)%.")
     if p1 then
-        player, spell, target = p1, s1, t1
-        foundPattern = "hit"
+        spell = string.gsub(s1, " %(%d+%)$", "")
+        player = p1
+        if SS_Cooldowns_TrackedSpells[spell] then
+            SS_Cooldowns_AddCooldown(player, spell, nil)
+        end
+        return
     end
     
-    if not player then
-        _, _, p1, s1, t1 = string.find(msg, "(.+)'s (.+) crits (.+) for")
-        if p1 then
-            player, spell, target = p1, s1, t1
-            foundPattern = "crit"
+    -- Pattern 4: "Target gains SpellName from PlayerName."
+    local _, _, t1, s1, p1 = string.find(msg, "(.+) gains (.+) from (.+)%.")
+    if p1 then
+        spell = string.gsub(s1, " %(%d+%)$", "")
+        player = p1
+        target = t1
+        if SS_Cooldowns_TrackedSpells[spell] then
+            SS_Cooldowns_AddCooldown(player, spell, target)
         end
+        return
     end
     
-    if not player then
-        _, _, p1, s1 = string.find(msg, "(.+) begins to cast (.+)%.")
-        if p1 then
-            player, spell = p1, s1
-            foundPattern = "begincast"
+    -- Pattern 5: "You begin to cast SpellName."
+    local _, _, s1 = string.find(msg, "You begin to cast (.+)%.")
+    if s1 then
+        spell = string.gsub(s1, " %(%d+%)$", "")
+        player = UnitName("player")
+        if SS_Cooldowns_TrackedSpells[spell] then
+            SS_Cooldowns_AddCooldown(player, spell, nil)
         end
+        return
     end
     
-    if not player then
-        _, _, p1, s1 = string.find(msg, "(.+) casts (.+)%.")
-        if p1 then
-            player, spell = p1, s1
-            foundPattern = "cast"
+    -- Pattern 6: "PlayerName begins to cast SpellName."
+    local _, _, p1, s1 = string.find(msg, "(.+) begins to cast (.+)%.")
+    if p1 then
+        spell = string.gsub(s1, " %(%d+%)$", "")
+        player = p1
+        if SS_Cooldowns_TrackedSpells[spell] then
+            SS_Cooldowns_AddCooldown(player, spell, nil)
         end
-    end
-    
-    if not player then
-        _, _, t1, s1, p1 = string.find(msg, "(.+) gains (.+) from (.+)%.")
-        if p1 then
-            target, spell, player = t1, s1, p1
-            foundPattern = "gainsfrom"
-        end
-    end
-    
-    if player and spell and SS_Cooldowns_TrackedSpells[spell] then
-        local spellData = SS_Cooldowns_TrackedSpells[spell]
-        
-        if spellData.type == "buff" then
-            if foundPattern == "gainsfrom" and target and target ~= "" and player ~= target then
-                SS_Cooldowns_AddCooldown(player, spell, target)
-            end
-        else
-            if spellData.multiTarget then
-                if foundPattern == "cast" or foundPattern == "begincast" then
-                    SS_Cooldowns_AddCooldown(player, spell, target)
-                end
-            else
-                if foundPattern == "hit" or foundPattern == "crit" or foundPattern == "cast" or foundPattern == "begincast" then
-                    SS_Cooldowns_AddCooldown(player, spell, target)
-                end
-            end
-        end
+        return
     end
 end
 
@@ -473,14 +490,21 @@ function SS_Cooldowns_CreateUpdateFrame()
     SS_Cooldowns_UpdateFrame.timeSinceLastUpdate = 0
     
     SS_Cooldowns_UpdateFrame:SetScript("OnUpdate", function()
+        -- Only update if Tab 3 is open AND cooldowns exist
+        if SS_CurrentTab ~= 3 then return end
+        
+        local hasCooldowns = false
+        for _ in pairs(SS_Cooldowns_Tracked) do
+            hasCooldowns = true
+            break
+        end
+        if not hasCooldowns then return end
+        
         this.timeSinceLastUpdate = this.timeSinceLastUpdate + arg1
         
-        if this.timeSinceLastUpdate >= 0.1 then
+        if this.timeSinceLastUpdate >= 0.5 then
             this.timeSinceLastUpdate = 0
-            
-            if SS_CurrentTab == 3 then
-                SS_Cooldowns_UpdateDisplay()
-            end
+            SS_Cooldowns_UpdateDisplay()
         end
     end)
 end
@@ -512,22 +536,111 @@ function SS_Cooldowns_Initialize()
         SS_Cooldowns_Tracked = SS_CooldownsDB
     end
     
-    -- Create update frame
+    -- Create update frame (always running for display updates)
     SS_Cooldowns_CreateUpdateFrame()
     
-    -- Register combat log events
-    local eventFrame = CreateFrame("Frame")
-    eventFrame:RegisterEvent("CHAT_MSG_SPELL_SELF_BUFF")
-    eventFrame:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_BUFF")
-    eventFrame:RegisterEvent("CHAT_MSG_SPELL_PARTY_BUFF")
-    eventFrame:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS")
-    eventFrame:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS")
-    eventFrame:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS")
-    eventFrame:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE")
-    eventFrame:RegisterEvent("CHAT_MSG_SPELL_PARTY_DAMAGE")
-    eventFrame:RegisterEvent("CHAT_MSG_SPELL_SELF_DAMAGE")
-    
-    eventFrame:SetScript("OnEvent", function()
-        SS_Cooldowns_ParseCombatLog(arg1)
+    -- Create event frame but don't register yet (disabled by default)
+    SS_Cooldowns_EventFrame = CreateFrame("Frame")
+    SS_Cooldowns_EventFrame:SetScript("OnEvent", function()
+        if event == "CHAT_MSG_SPELL_SELF_DAMAGE" or 
+           event == "CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE" or 
+           event == "CHAT_MSG_SPELL_PARTY_DAMAGE" or
+           event == "CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS" or
+           event == "CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS" or
+           event == "CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS" or
+           event == "CHAT_MSG_SPELL_CREATURE_VS_CREATURE_BUFF" or
+           event == "CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE" or
+           event == "CHAT_MSG_SPELL_PERIODIC_CREATURE_DAMAGE" then
+            SS_Cooldowns_ParseCombatLog(arg1)
+        end
     end)
+end
+
+-- ============================================================================
+-- ENABLE/DISABLE TRACKING
+-- ============================================================================
+function SS_Cooldowns_Enable()
+    if SS_Cooldowns_Enabled then return end
+    
+    SS_Cooldowns_Enabled = true
+	SS_RLHelperDB.cdTrackerEnabled = true
+    
+    if SS_Cooldowns_EventFrame then
+        SS_Cooldowns_EventFrame:RegisterEvent("CHAT_MSG_SPELL_SELF_DAMAGE")
+        SS_Cooldowns_EventFrame:RegisterEvent("CHAT_MSG_SPELL_FRIENDLYPLAYER_DAMAGE")
+        SS_Cooldowns_EventFrame:RegisterEvent("CHAT_MSG_SPELL_PARTY_DAMAGE")
+        SS_Cooldowns_EventFrame:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_SELF_BUFFS")
+        SS_Cooldowns_EventFrame:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_PARTY_BUFFS")
+        SS_Cooldowns_EventFrame:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_FRIENDLYPLAYER_BUFFS")
+        SS_Cooldowns_EventFrame:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_CREATURE_BUFF")
+        SS_Cooldowns_EventFrame:RegisterEvent("CHAT_MSG_SPELL_CREATURE_VS_SELF_DAMAGE")
+        SS_Cooldowns_EventFrame:RegisterEvent("CHAT_MSG_SPELL_PERIODIC_CREATURE_DAMAGE")
+    end
+    
+    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00Slackspotter: [Tracking of important cooldowns enabled]|r")
+    
+	-- Sync checkboxes
+    local tab3Checkbox = getglobal("SS_Tab3_CDTrackerCheckbox")
+    if tab3Checkbox then
+        tab3Checkbox:SetChecked(true)
+    end
+    
+    -- Enable CD checkboxes
+    if SS_RLHelper_UpdateCDCheckboxStates then
+        SS_RLHelper_UpdateCDCheckboxStates()
+    end
+	
+	-- Update left tab
+    if SS_UpdateLeftTabHighlights then
+        SS_UpdateLeftTabHighlights()
+    end
+end
+
+function SS_Cooldowns_Disable()
+    if not SS_Cooldowns_Enabled then return end
+    
+    SS_Cooldowns_Enabled = false
+    SS_RLHelperDB.cdTrackerEnabled = false
+    
+    if SS_Cooldowns_EventFrame then
+        SS_Cooldowns_EventFrame:UnregisterAllEvents()
+    end
+    
+    DEFAULT_CHAT_FRAME:AddMessage("|cffff8000Slackspotter: [Tracking of important cooldowns disabled]|r")
+    
+    -- Sync checkboxes
+    local tab3Checkbox = getglobal("SS_Tab3_CDTrackerCheckbox")
+    if tab3Checkbox then
+        tab3Checkbox:SetChecked(false)
+    end
+    
+    local cdList = {}
+    for cdName, _ in pairs(SS_Cooldowns_TrackedSpells) do
+        table.insert(cdList, cdName)
+    end
+    
+    for i = 1, table.getn(cdList) do
+        local cdName = cdList[i]
+        local checkboxName = "SS_Tab1_RLHelperPanel_CD_" .. string.gsub(cdName, " ", "")
+        local checkbox = getglobal(checkboxName)
+        
+        if checkbox then
+            checkbox:Disable()
+            checkbox:SetAlpha(0.3)
+            -- DO NOT clear checked state - keep checkbox:SetChecked() calls removed
+        end
+    end
+	
+	-- Update left tab
+    if SS_UpdateLeftTabHighlights then
+        SS_UpdateLeftTabHighlights()
+    end
+end
+
+function SS_Cooldowns_Toggle()
+    if SS_Cooldowns_Enabled then
+        SS_Cooldowns_Disable()
+    else
+        SS_Cooldowns_Enable()
+    end
 end
